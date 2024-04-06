@@ -1,90 +1,14 @@
 <section class="admin-panel">
 
-    <header>
-
-    </header>
+    <header></header>
 
     <app-sidebar></app-sidebar>
 
     <main>
-        <div class="location-sec-bdy">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="loc-heading">
-                        <h3>Location </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="search-sec-bdy">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-sm-12">
-                        <div class="d-flex  search-filter-main" role="search">
-                            <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
-                            <input class="form-control" type="search" placeholder="Search here . . ."
-                                aria-label="Search">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 text-end">
-                        <a href="add-location-new.html" class="btn btn-create ">
-                            <i class="fa-solid fa fa-plus"></i> Add Location </a>
-                    </div>
-                </div>
-            </div>
-            <div class="table-wrapper">
-                <div class="table-responsive">
-                    <table class="table table-tamplate-style">
-                        <thead>
-                            <tr>
-                                <th scope="col">List Of Location
-                                </th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone Number</th>
-                                <th scope="col">Address </th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+        <!-- @defer{ -->
+        <!-- <app-location-detail *ngIf="current_status.location == 0"></app-location-detail>
 
-                                <td class="fonts-n3">
-                                    <span class="txt-tb"></span>
-                                </td>
-                                <td class="fonts-n3">
-                                    <span class="txt-tb"></span>
-                                </td>
-                                <td class="font15"></td>
-                                <td class="font15"></td>
-                                <td class="subjecttd"> </td>
-                                <td class="status-font"></td>
-                                <td class="action_button">
-                                    <div class="actiondelete-button">
-                                        <!-- <a href="#">
-                                            <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
-                                            <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
-                                          </a>
-                                          <a href="#">
-                                            <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
-                                            <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
-                                          </a> -->
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="text-center">
-                                <td colspan="7">
-                                    <button class="btn btn-add-doc"> Please Add Location </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
+        <app-user-detail *ngIf="current_status.location"></app-user-detail> -->
+        <!-- } -->
     </main>
-    <button class="toggle-btn" onclick="toggleAside()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
 </section>

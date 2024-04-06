@@ -11,7 +11,9 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'create-organization', component: CreateOrganizationComponent },
-  { path: 'create-user-location', loadChildren: () => import('./create-user-location/create-user-location.module').then(m => m.CreateUserLocationModule) }
+  { path: 'create-user-location', loadChildren: () => import('./create-user-location/create-user-location.module').then(m => m.CreateUserLocationModule) },
+  { path: 'location-detail', loadChildren: () => import('./location-detail/location-detail.module').then(m => m.LocationDetailModule) },
+  { path: 'user-detail', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailModule) }
 ];
 
 @NgModule({

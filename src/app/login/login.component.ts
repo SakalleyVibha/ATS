@@ -43,7 +43,7 @@ export class LoginComponent {
         }
 
         if (res['data'].is_owner == true) {
-          this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/location' : '/create-organization')]);
+          this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
         } else {
 
         }
