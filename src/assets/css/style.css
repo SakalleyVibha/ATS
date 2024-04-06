@@ -1479,3 +1479,24 @@ table.table.table-tamplate-style.table-user tbody tr td.font15.location-items-bd
     white-space: unset;
     min-width: 281px;
 }
+
+/* Swapnil Sharma - Validation error */
+.required-txt-error {
+    font-size: 11px;
+    color: #e93434;
+    margin-top: 3px;
+    /* text-transform: capitalize; */
+    font-weight: 500;
+}
+
+/* Swapnil Sharma - password eye */
+.password {
+    position: relative;
+}
+span.fa.fa-fw.field-icon.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    opacity: 0.8;
+    color: #aaaaaa;
+}
