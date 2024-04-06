@@ -1,0 +1,33 @@
+<section class="email-wrapper">
+    <div class="email-form-body">
+        <div class="email-formin-body">
+            <div class="email-inner">
+                <div class="login-logo">
+                    <h1>ATS Covetus</h1>
+                </div>
+                <div class="login-md-content">
+                    <div class="email-heading">
+                        <h2>Verify your email<span class="email-image"> </span></h2>
+                        <p *ngIf="email_add">Account activation link sent to your email
+                            address: <span class="your-emailid">{{email_add}}</span> Please follow the
+                            link inside to continue.</p>
+                    </div>
+                    <div class="login-form-wrap">
+                        <form class="row  align-items-center">
+                            <div class="col-12">
+                                <a type="submit" class="btn btn-sign-in" routerLink="/login">Verify</a>
+                            </div>
+                            <div class="col-lg-12">
+                                <p class="new-on">Didn't get the mail?
+                                    <a href="#" type="submit" class="btn btn-link">Resend</a>
+                                </p>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

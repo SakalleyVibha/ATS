@@ -1,0 +1,95 @@
+@media only screen and (max-width: 1440px){
+.row.dash-cart-row .col {
+    max-width: 33%;
+    flex: 1 0 33%;
+}
+}
+@media only screen and (max-width: 1280px){
+.create-form-body::before{
+	left: -48px;
+}
+}
+
+@media only screen and (max-width: 1200px){
+.create-form-body{
+	    max-width: 88%;
+    margin: auto;
+}
+}
+@media only screen and (max-width: 1024px){
+    .row.dash-cart-row .col {
+    max-width: 50%;
+    flex: 1 0 50%;
+}
+}
+  @media (max-width: 768px) {
+        header {
+            left: 0;
+            width: 100%; /* Make header take full width */
+        }
+        aside {
+            left: -260px; /* Hide the aside menu initially */
+        }
+        main {
+            margin-left: 0; /* Reset margin for main content */
+        }
+        .toggle-btn {
+            display: block; /* Display the toggle button in mobile view */
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1100; /* Ensure button is above other content */
+        }
+    }
+@media only screen and (max-width: 767px){
+section.create-wrapper{
+	padding: 69px 20px 30px 20px;
+}
+}
+@media only screen and (max-width: 580px){
+.row.dash-cart-row .col {
+    max-width: 100%;
+    flex: 1 0 100%;
+}
+.create-form-body::after{
+    right: -38px;
+}
+}
+@media only screen and (max-width: 480px){
+.login-form-body{
+	padding: 50px 20px;
+	max-width: 370px;
+	background-size: cover;
+}
+.login-heading >h2{
+	font-size: 19px;
+}
+p.new-on{
+	flex-wrap: wrap;
+}
+.email-formin-body::before{
+	left: -37px;
+    width: 120px;
+    height: 120px;
+}
+.email-formin-body::after{
+	 width: 120px;
+    height: 120px;
+    right: -29px;
+    bottom: -46px;
+}
+.email-formin-body{
+	max-width: 300px;
+    margin: auto;
+}
+.create-heading-txt h3{
+    font-size: 14px;
+}
+.create-logo >h1 {
+    font-size: 9px;
+    font-weight: 700;
+}
+.create-inner{
+    padding: 17px 17px;
+}
+}
