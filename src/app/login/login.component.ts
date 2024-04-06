@@ -14,7 +14,7 @@ export class LoginComponent {
   public login: FormGroup;
   ispasswordshow: boolean = false;
   allRoles: any[] = [];
-
+  
   constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
