@@ -6,9 +6,10 @@
 
     <main>
         <!-- @defer{ -->
-        <!-- <app-location-detail *ngIf="current_status.location == 0"></app-location-detail>
+        <app-location-detail
+            *ngIf="(current_status.location == 0 && current_status.user == 0) || (current_status.location == 0 && current_status.user == 1)"></app-location-detail>
 
-        <app-user-detail *ngIf="current_status.location"></app-user-detail> -->
+        <app-user-detail *ngIf="(current_status.location == 1 && current_status.user == 0)"></app-user-detail>
         <!-- } -->
     </main>
 </section>

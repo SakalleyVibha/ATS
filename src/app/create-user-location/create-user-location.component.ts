@@ -35,8 +35,8 @@ export class CreateUserLocationComponent {
 
   getClientList(acc_id: number) {
     this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      this.current_status.location = res['totalItems'] > 0;
-      console.log('this.current_status.user: ', this.current_status.location);
+      this.current_status.user = res['totalItems'] > 0;
+      console.log('this.current_status.user: ', this.current_status.user);
     });
   }
 

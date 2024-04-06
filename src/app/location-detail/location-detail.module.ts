@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { LocationDetailRoutingModule } from './location-detail-routing.module';
 import { LocationDetailComponent } from './location-detail.component';
+import { ManageLocationComponent } from './manage-location/manage-location.component';
 
 
 @NgModule({
   declarations: [
-    LocationDetailComponent
+    LocationDetailComponent,
+    ManageLocationComponent
   ],
   imports: [
     CommonModule,
