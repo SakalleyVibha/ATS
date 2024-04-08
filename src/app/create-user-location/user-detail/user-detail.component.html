@@ -1,0 +1,108 @@
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading">
+                <h3>User List </h3>
+            </div>
+        </div>
+    </div>
+    <div class="search-sec-bdy">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-sm-12">
+                <div class="d-flex  search-filter-main" role="search">
+                    <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
+                    <input class="form-control" type="search" placeholder="Search here . . ." aria-label="Search">
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12 text-end">
+                <a href="#" class="btn btn-create " routerLink="add-user">
+                    <i class="fa-solid fa fa-plus"></i> Add User </a>
+            </div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table class="table table-tamplate-style">
+                <thead>
+                    <tr>
+                        <th scope="col">Name of User</th>
+                        <th scope="col">Created Date</th>
+                        <th scope="col">Last Updated</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
+
+                        <td class="fonts-n3">
+                            <span class="txt-tb"></span>
+                        </td>
+                        <td class="fonts-n3">
+                            <span class="txt-tb"></span>
+                        </td>
+                        <td class="font15"></td>
+                        <td class="font15"></td>
+                        <td class="subjecttd"> </td>
+                        <td class="status-font"></td>
+                        <td class="action_button">
+                            <div class="actiondelete-button"> -->
+                                <!-- <a href="#">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
+                                    <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
+                                  </a>
+                                  <a href="#">
+                                    <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
+                                    <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
+                                  </a> -->
+                            <!-- </div>
+                        </td>
+                    </tr> -->
+                    <!-- <tr *ngIf="user_list"> -->
+                    <tr *ngFor="let user of user_list; let i = index">
+                                   
+                        <td class="fonts-n3 user-img-desc">
+                          <!-- <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1" class="user_img"></span> -->
+                          <span class="image-user-name">{{user?.f_name}} {{user?.l_name}}</span>
+                        </td>
+                        <td class="fonts-n3">
+                          <span class="txt-tb">{{user?.created_at | date:'dd-MM-yyyy'}}</span>
+                        </td>
+                        <td class="fonts-n3">
+                          <span class="txt-tb">{{user?.last_login_datetime ? user?.last_login_datetime : 'NA' }}</span>
+                        </td>
+                        
+                        <td class="font15 location-items-bdy">
+                        <!-- <span class="location-items">Placeholderville</span><span class="location-items">Faketown</span><span class="location-items">Pretendia</span><span class="location-items">Imaginary Junction </span> -->
+                        <span class="location-items">{{user?.street}}, {{user?.city}}, {{user?.country}}</span></td>
+                        
+                        
+                        <td class="status-font background-grey-table">
+                          <div class="statuslabel completed-bages" *ngIf="user?.status == 1">Active </div>
+                          <div class="statuslabel completed-bages" *ngIf="user?.status == 0">Deactive </div>
+                        </td>
+                        <td class="action_button">
+                          <div class="actiondelete-button">
+                            <a  routerLink="edit-user" [queryParams]="{id: user.id}">
+                              <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
+                              <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
+                            </a>
+                            <!-- <a href="#">
+                              <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
+                              <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
+                            </a> -->
+                          </div>
+                        </td>
+                      </tr>
+                    <tr class="text-center" *ngIf="user_list == false">
+                        <td colspan="7">
+                            <button class="btn btn-add-doc" routerLink="add-user"> Please Add Documents </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
