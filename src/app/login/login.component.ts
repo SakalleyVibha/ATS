@@ -14,7 +14,7 @@ export class LoginComponent {
   public login: FormGroup;
   ispasswordshow: boolean = false;
   allRoles: any[] = [];
-  
+
   constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -32,20 +32,21 @@ export class LoginComponent {
 
     this.api.allPostMethod("application/login", this.login.value).subscribe((res: any) => {
       if (!res.error) {
-        console.log('res: ', res);
+        let which_role: any;
+        let role_idx: any;
         let roleInfo = res['data'].roleInfo;
         if (roleInfo && roleInfo.length > 0) {
-          let which_role = roleInfo[0].role_master;
-          let role_idx = this.allRoles.find((f: any) => f.id == which_role.id && f.name == which_role.name);
+          which_role = roleInfo[0].role_master;
+          role_idx = this.allRoles.find((f: any) => f.id == which_role.id && f.name == which_role.name);
           if (role_idx != undefined) {
             localStorage.setItem('role', JSON.stringify(role_idx));
           }
         }
 
-        if (res['data'].is_owner == true) {
+        if (res['data'].is_owner == true || role_idx.name == 'Admin') {
           this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
         } else {
-
+          this.router.navigate([res['data'].is_tempPassword == false ? '/password-change' : '/dashboard-detail']);
         }
 
         localStorage.setItem('token', res.data['token']);

@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateOrganizationComponent } from './create-organization/create-organization.component';
+import { PasswordChangeComponent } from './password-change/password-change.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CreateOrganizationComponent } from './create-organization/create-organi
     LoginComponent,
     SignupComponent,
     VerifyEmailComponent,
-    CreateOrganizationComponent
+    CreateOrganizationComponent,
+    PasswordChangeComponent
   ],
   imports: [
     BrowserModule,
