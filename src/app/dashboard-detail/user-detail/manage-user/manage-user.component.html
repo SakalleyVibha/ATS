@@ -1,1 +1,398 @@
-<p>manage-user works!</p>
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading clb">
+                <h3>{{ editUser ? 'Edit' : 'Create' }} User List </h3>
+
+            </div>
+        </div>
+    </div>
+    <div class="create-md-content">
+        <div class="create-form-wrap">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="create-form-he">
+                        <h2>General Information</h2>
+                    </div>
+                </div>
+            </div>
+
+            <form [formGroup]="userForm">
+
+                <div class="row">
+
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">First Name*</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="f_name"
+                                    placeholder="Enter first name">
+                                <div *ngIf="formData['f_name'].invalid && (formData['f_name'].touched || formData['f_name'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['f_name'].errors?.['required']">
+                                        First name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['f_name'].errors?.['minlength']">
+                                        First name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['f_name'].errors?.['pattern']">
+                                        First name required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Last Name*</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="l_name"
+                                    placeholder="Enter last name">
+                                <div *ngIf="formData['l_name'].invalid && (formData['l_name'].touched || formData['l_name'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['l_name'].errors?.['required']">
+                                        Last name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['l_name'].errors?.['minlength']">
+                                        Valid last name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['l_name'].errors?.['pattern']">
+                                        Last name required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Alias Name</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="alias"
+                                    placeholder="Enter alias">
+                                <div *ngIf="formData['alias'].invalid && (formData['alias'].touched || formData['alias'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['alias'].errors?.['required']">
+                                        Alias required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['alias'].errors?.['pattern']">
+                                        Valid alias required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Role*</label>
+                            <div class="form-group">
+                                <select class="form-control" formControlName="role_id" (change)="selectRole($event)">
+                                    <option hidden disabled value="">Select role</option>
+                                    <!-- For loop for roles -->
+                                    <option *ngFor="let role of user_roles" [value]="role?.id">{{role?.name}}</option>
+                                </select>
+                                <div *ngIf="formData['role_id'].invalid && (formData['role_id'].touched || formData['role_id'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['role_id'].errors?.['required']">
+                                        Select role for user
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4"
+                        *ngIf="selected_details.role != 1 && (user_location && user_location.length > 0)">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Location *</label>
+                            <div class="form-group">
+                                <select class="form-control" formControlName="location_id"
+                                    (change)="selectLocation($event)">
+                                    <option hidden disabled value="">Select location</option>
+                                    <!-- Apply location for loop -->
+                                    <option *ngFor="let location of user_location" [value]="location?.id">
+                                        {{location?.name}}</option>
+                                </select>
+                                <div *ngIf="formData['location_id'].invalid && (formData['location_id'].touched || formData['location_id'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['location_id'].errors?.['required']">
+                                        Select location for user
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4"
+                        *ngIf="(selected_details.role == 3 || selected_details.role == 4)&& (client_list && client_list.length > 0)">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Client*</label>
+                            <div class="form-group">
+                                <select class="form-control" formControlName="client_id">
+                                    <option hidden disabled value="">Select client</option>
+                                    <!-- Apply client for loop -->
+                                    <option *ngFor="let client of client_list" [value]="client?.id">{{client?.name}}
+                                    </option>
+                                </select>
+                                <div *ngIf="formData['client_id'].invalid && (formData['client_id'].touched || formData['client_id'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['client_id'].errors?.['required']">
+                                        Select client for user
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- </form>
+          </div>
+          <div class="create-form-wrap"> -->
+
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Contact Information</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <form > -->
+
+                <div class="row">
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Email*</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="email"
+                                    placeholder="Enter email address">
+                                <div *ngIf="formData['email'].invalid && (formData['email'].touched || formData['email'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['email'].errors?.['required']">
+                                        Email required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['email'].errors?.['email']">
+                                        Valid email required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Website</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" formControlName="website" id="autoSizingInput"
+                                    placeholder="Enter website">
+                                <div *ngIf="formData['website'].invalid && (formData['website'].touched || formData['website'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['website'].errors?.['required']">
+                                        Website required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['website'].errors?.['pattern']">
+                                        Valid website required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Mobile</label>
+                            <div class="form-group">
+                                <input type="tel" class="form-control" id="autoSizingInput" formControlName="mobile"
+                                    placeholder="Enter mobile number">
+                                <div *ngIf="formData['mobile'].invalid && (formData['mobile'].touched || formData['mobile'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['mobile'].errors?.['required']">
+                                        Mobile number required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['mobile'].errors?.['pattern']">
+                                        Valid mobile number required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Fax</label>
+                            <div class="form-group">
+                                <input type="tel" class="form-control" id="autoSizingInput" formControlName="fax"
+                                    placeholder="Enter fax number">
+                                <div *ngIf="formData['fax'].invalid && (formData['fax'].touched || formData['fax'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['fax'].errors?.['required']">
+                                        Fax required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['fax'].errors?.['pattern']">
+                                        Fax should be numbers
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="formData['fax'].errors?.['minlength'] || formData['fax'].errors?.['maxlength']">
+                                        Valid fax required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Phone number</label>
+                            <div class="form-group">
+                                <input type="tel" class="form-control" id="autoSizingInput" formControlName="phone"
+                                    placeholder="Enter phone number">
+                                <div *ngIf="formData['phone'].invalid && (formData['phone'].touched || formData['phone'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['phone'].errors?.['required']">
+                                        Phone number required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['phone'].errors?.['pattern']">
+                                        Valid phone number required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Date of Birth</label>
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="autoSizingInput" [max]="maxDOB"
+                                    formControlName="dob">
+                                <div *ngIf="formData['dob'].invalid && (formData['dob'].touched || formData['dob'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['dob'].errors?.['required']">
+                                        Date of birth required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- </form> -->
+                <!-- </div>
+          <div class="create-form-wrap"> -->
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Address Infomation</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <form > -->
+
+                <div class="row">
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Street</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="street"
+                                    placeholder="Enter street">
+                                <div *ngIf="formData['street'].invalid && (formData['street'].touched || formData['street'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['street'].errors?.['required']">
+                                        Street required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['street'].errors?.['pattern']">
+                                        Valid street required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">State</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="state"
+                                    placeholder="Enter state">
+                                <div *ngIf="formData['state'].invalid && (formData['state'].touched || formData['state'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['state'].errors?.['required']">
+                                        State required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['state'].errors?.['pattern']">
+                                        Valid state required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">City</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="city"
+                                    placeholder="Enter city">
+                                <div *ngIf="formData['city'].invalid && (formData['city'].touched || formData['city'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['city'].errors?.['required']">
+                                        City required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['city'].errors?.['pattern']">
+                                        Valid city required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Zip</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="zip"
+                                    placeholder="Ente zip">
+                                <div *ngIf="formData['zip'].invalid && (formData['zip'].touched || formData['zip'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['zip'].errors?.['required']">
+                                        Zip required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['zip'].errors?.['pattern']">
+                                        Zip required numbers
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="formData['zip'].errors?.['minlength'] || formData['zip'].errors?.['maxlength']">
+                                        Valid zip required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Country</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="country"
+                                    placeholder="Enter country">
+                                <div *ngIf="formData['country'].invalid && (formData['country'].touched || formData['country'].dirty || isFormValid)"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['country'].errors?.['required']">
+                                        Country required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['country'].errors?.['pattern']">
+                                        Valid country required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="form-group-btn-center">
+                            <a (click)="editUser ? onEditUser() :onSubmit()" class="btn btn-theme">{{ editUser ? 'Edit'
+                                : 'Save'}}</a>
+                            <a routerLink="/create-user-location/user-detail" class="btn btn-theme-two">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>

@@ -4,10 +4,12 @@ import { CreateUserLocationComponent } from './create-user-location.component';
 
 const routes: Routes = [{
   path: '', component: CreateUserLocationComponent,
-  children:[
-    { path:'location-detail', loadChildren: () => import('./location-detail/location-detail.module').then(m => m.LocationDetailModule)},
-    { path:'user-detail', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailModule)}
-  ]},
+  children: [
+    { path: '', loadChildren: () => import('./location-detail/location-detail.module').then(m => m.LocationDetailModule) },
+    { path: 'location-detail', loadChildren: () => import('./location-detail/location-detail.module').then(m => m.LocationDetailModule) },
+    { path: 'user-detail', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailModule) }
+  ]
+},
 ];
 
 @NgModule({
