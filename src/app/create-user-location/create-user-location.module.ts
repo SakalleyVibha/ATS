@@ -4,19 +4,24 @@ import { CommonModule } from '@angular/common';
 import { CreateUserLocationRoutingModule } from './create-user-location-routing.module';
 import { CreateUserLocationComponent } from './create-user-location.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { UserDetailComponent } from '../user-detail/user-detail.component';
-import { LocationDetailComponent } from '../location-detail/location-detail.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule } from '../core/core.module';
+import { LocationDetailModule } from './location-detail/location-detail.module';
+import { UserDetailModule } from './user-detail/user-detail.module';
 
 @NgModule({
   declarations: [
     CreateUserLocationComponent,
-    SidebarComponent,
-    UserDetailComponent,
-    LocationDetailComponent
+    SidebarComponent
   ],
   imports: [
     CommonModule,
-    CreateUserLocationRoutingModule
-  ]
+    CoreModule,
+    ReactiveFormsModule,
+    FormsModule,
+    CreateUserLocationRoutingModule,
+    LocationDetailModule,
+    UserDetailModule
+  ],
 })
 export class CreateUserLocationModule { }
