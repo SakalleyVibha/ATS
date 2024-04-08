@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-manage-location',

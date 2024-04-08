@@ -29,7 +29,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Address </th>
-                        <th scope="col">Website</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -51,8 +51,9 @@
                             <span class="txt-tb">{{client.city}}, {{client.country}}</span>
                         </td>
                         <td class="status-font background-grey-table">
-                            <div class="statuslabel completed-bages">{{client.website}} </div>
-                        </td>
+                            <div class="statuslabel completed-bages" *ngIf="client?.status == 1">Active </div>
+                            <div class="statuslabel completed-bages" *ngIf="client?.status == 0">Deactive </div>
+                          </td>
                         <td class="action_button">
                             <div class="actiondelete-button">
                                 <a routerLink="edit" [queryParams]="{id: client.id}">

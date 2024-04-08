@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { DashboardDetailRoutingModule } from './dashboard-detail-routing.module';
 import { DashboardDetailComponent } from './dashboard-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule } from '../core/core.module';
 
 
 @NgModule({
@@ -13,7 +15,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   ],
   imports: [
     CommonModule,
-    DashboardDetailRoutingModule
+    CoreModule,
+    ReactiveFormsModule,
+    FormsModule,
+    DashboardDetailRoutingModule,
   ]
 })
 export class DashboardDetailModule { }
