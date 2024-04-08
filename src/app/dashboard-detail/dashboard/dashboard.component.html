@@ -1,0 +1,82 @@
+<section style="background-color: #eee;">
+    <div class="d-flex justify-content-center h3 pt-4">
+        Account
+    </div>
+    <div class="container py-5 d-flex justify-content-evenly"
+        [ngClass]="{'d-flex' : !accountDetail, 'justify-content-evenly' : !accountDetail}">
+        @if(!accountDetail){
+        @if(is_owner == true || role_permission?.name == 'Admin'){
+        <div>
+            Could you please take a moment to add an account? It would greatly help streamline our process. Thank you.
+        </div>
+        <div>
+            <div class="">
+                <button type="button" class="btn btn-primary" [routerLink]="'add'">
+                    + Add
+                </button>
+            </div>
+        </div>
+        } @else {
+        <div>
+            You don't have rights to add or edit account.
+        </div>
+        }
+        }
+        <div class="row" *ngIf="accountDetail">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <!-- <button type="button" class="border border-primary btn btn-light" style="width: 70px;"
+                        routerLink="edit" [queryParams]="{id: accountDetail.id}">Edit</button> -->
+                    <div class="card-body text-center">
+                        <img [src]="accountDetail.logo" alt="avatar" class="rounded-circle img-fluid"
+                            style="width: 150px;">
+                        <h5 class="my-3">{{accountDetail.name}}</h5>
+                        <p class="text-muted mb-1">{{accountDetail.about}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{accountDetail.name}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Phone</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{accountDetail.phone}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Mobile</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{accountDetail.mobile}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{accountDetail.street}}, {{accountDetail.city}},
+                                    {{accountDetail.state}}, {{accountDetail.country}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
