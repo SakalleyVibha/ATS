@@ -8,7 +8,7 @@ import { CommonApiService } from '../../core/services/common-api.service';
 })
 export class LocationDetailComponent {
   is_owner: any;
-  locationList: any;
+  location_list: any;
 
   constructor(private api: CommonApiService) {
     let shareData: any = localStorage.getItem("Shared_Data");
@@ -22,8 +22,8 @@ export class LocationDetailComponent {
   getLocation(acc_id: number) {
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
       if (res['data']) {
-        this.locationList = res['data'];
-        console.log('this.locationList: ', this.locationList);
+        this.location_list = res['data'];
+        // console.log('this.locationList: ', this.location_list);
         // this.whichBtn = 'Account';
       }
     })
