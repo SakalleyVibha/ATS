@@ -25,7 +25,7 @@ export class DashboardComponent {
   }
 
   getAccount(shareData: any) {
-    this.api.allgetMethod('accounts/account').subscribe((res: any) => {
+    this.api.allgetMethod('accounts/account',{}).subscribe((res: any) => {
       this.is_owner = shareData?.is_owner;
       if (!res['data']) {
         console.log("Add Account");

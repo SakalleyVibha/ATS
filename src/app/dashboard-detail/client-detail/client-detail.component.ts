@@ -20,8 +20,12 @@ export class ClientDetailComponent {
   ngOnInit() { }
 
   getClientList(acc_id: number) {
-    this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      this.clientList = res['data'];
+    this.api.allPostMethod('clients/clientlist', { account_id: 0, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+      if(res.error == true){
+        this.clientList = false;
+      }else{
+        this.clientList = res['data'];
+      }
     });
   }
 
