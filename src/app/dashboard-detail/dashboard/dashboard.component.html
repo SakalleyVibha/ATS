@@ -24,9 +24,9 @@
         }
         <div class="row" *ngIf="accountDetail">
             <div class="col-lg-4">
+                <!-- <button type="button" class="border border-primary btn btn-light" style="width: 70px;" routerLink="edit"
+                    [queryParams]="{id: accountDetail.id}">Edit</button> -->
                 <div class="card mb-4">
-                    <!-- <button type="button" class="border border-primary btn btn-light" style="width: 70px;"
-                        routerLink="edit" [queryParams]="{id: accountDetail.id}">Edit</button> -->
                     <div class="card-body text-center">
                         <img [src]="accountDetail.logo" alt="avatar" class="rounded-circle img-fluid"
                             style="width: 150px;">

@@ -9,11 +9,16 @@ import { CommonApiService } from '../../core/services/common-api.service';
 export class LocationDetailComponent {
   is_owner: any;
   location_list: any;
+  current_role: any;
 
   constructor(private api: CommonApiService) {
+    this.current_role = localStorage.getItem('role');
+    this.current_role = JSON.parse(this.current_role);
+    console.log('this.current_role: ', this.current_role);
     let shareData: any = localStorage.getItem("Shared_Data");
     shareData = JSON.parse(shareData);
-    this.is_owner = shareData?.is_owner;
+    this.is_owner = false;
+    // shareData?.is_owner
     this.getLocation(shareData?.account_id);
   }
 

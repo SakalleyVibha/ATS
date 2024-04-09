@@ -35,20 +35,17 @@ export class LoginComponent {
         let which_role: any;
         let role_idx: any;
         let roleInfo = res['data'].roleInfo;
-        if (roleInfo && roleInfo.length > 0) {
-          which_role = roleInfo[0].role_master;
-          role_idx = this.allRoles.find((f: any) => f.id == which_role.id && f.name == which_role.name);
-          if (role_idx != undefined) {
-            localStorage.setItem('role', JSON.stringify(role_idx));
-          }
-        }
+        // if (roleInfo && roleInfo.length > 0) {
+        //   which_role = roleInfo[0].role_master;
+        //   role_idx = this.allRoles.find((f: any) => f.id == which_role.id && f.name == which_role.name);
+        //   if (role_idx != undefined) {
+        //     localStorage.setItem('role', JSON.stringify(role_idx));
+        //   }
+        // }
 
-        if (res['data'].is_owner == true || role_idx.name == 'Admin') {
-          this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
-        } else {
-          this.router.navigate([res['data'].is_tempPassword == false ? '/password-change' : '/dashboard-detail']);
-        }
-
+        localStorage.setItem('role', JSON.stringify({
+          id: 1, name: "Admin"
+        }));
         localStorage.setItem('token', res.data['token']);
         localStorage.setItem('Shared_Data', JSON.stringify({
           is_email_valid: res.data['is_email_verified'],
@@ -60,7 +57,11 @@ export class LoginComponent {
         }));
         this.toast.success("Login successfully", "Valid user", { timeOut: 500, closeButton: true }).onHidden.subscribe(() => {
           this.login.reset();
-          // this.router.navigate(['/dashboard']);
+          if (res['data'].is_owner == true || role_idx.name == 'Admin') {
+            this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
+          } else {
+            this.router.navigate([res['data'].is_tempPassword == false ? '/password-change' : '/dashboard-detail']);
+          }
         });
 
       } else {
