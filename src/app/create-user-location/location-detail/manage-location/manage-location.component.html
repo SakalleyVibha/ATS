@@ -50,8 +50,8 @@
                                 <label  for="inlineFormInputGroupUsername">Logo</label>
                                 <div class="form-group">
                                     <div class="form">
-                                        <div class="file-upload-wrapper" data-text="Select your file!">
-                                          <input name="file-upload-field" type="file" class="file-upload-field" formControlName="logo" value="">
+                                        <div class="file-upload-wrapper" [attr.data-text]="logoName != '' ? logoName : 'Select your file!'" >
+                                          <input name="file-upload-field" type="file" class="file-upload-field" formControlName="logo" value="" (change)="convertImageToBase64($event)" >
                                         </div>
                                     </div>
                                     <div *ngIf="formData['logo'].invalid && (formData['logo'].dirty || formData['logo'].touched || isFormValid)" class="required-txt-error">
