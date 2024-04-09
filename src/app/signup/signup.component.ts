@@ -70,6 +70,7 @@ export class SignupComponent {
     this.api.allPostMethod("users/signup", formCopy).subscribe((res: any) => {
       if (!res.error) {
         this.toastr.success("Sign up done successfully","",{timeOut:5000,closeButton:true}).onHidden.subscribe(()=>{
+          this.router.navigate(['/login']);
         });
       }else{
         this.toastr.error("Something went wrong, Please try again later","",{closeButton:true,timeOut:5000});

@@ -5,7 +5,7 @@
                 <div class="create-inner">
                     <div class="create-heading-bdy">
                         <div class="create-heading-txt">
-                            <h3>Create User List</h3>
+                            <h3>Sign Up</h3>
                         </div>
                         <div class="create-logo">
                             <h1>ATS Covetus</h1>
@@ -20,13 +20,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <form [formGroup]="signUp">
+                            <form [formGroup]="signUp" autocomplete="off">
                                 <div class="row">
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
                                             <label for="inlineFormInputGroupUsername">First Name*</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
+                                                <input type="text" class="form-control" id="autoSizingInput" autocomplete="new-password"
                                                     placeholder="Enter first name" formControlName="f_name">
                                                     <div *ngIf="formField['f_name'].invalid && (formField['f_name'].touched || formField['f_name'].dirty || isFormValid)" class="required-txt-error">
                                                         <ng-container *ngIf="formField['f_name'].errors?.['required']">
@@ -80,7 +80,7 @@
                                         <div class="form-group-wrap">
                                           <label for="alias">Alias Name</label>
                                           <div class="form-group">
-                                            <input type="text" class="form-control" id="alias" formControlName="alias"
+                                            <input type="text" class="form-control" id="alias" formControlName="alias" autocomplete="new-password"
                                               placeholder="Enter alias">
                                             <div
                                               *ngIf="formField['alias'].invalid && (formField['alias'].touched || formField['alias'].dirty || isFormValid)"
@@ -99,7 +99,7 @@
                                         <div class="form-group-wrap">
                                             <label for="password">Password*</label>
                                             <div class="form-group password">
-                                                <input [type]="ispasswordshow ? 'text':'password'" class="form-control" id="password" placeholder="Enter password"
+                                                <input [type]="ispasswordshow ? 'text':'password'" class="form-control" id="password" placeholder="Enter password" autocomplete="new-password"
                                                     formControlName="password">
                                                     <span toggle="#password-field" class="fa fa-fw  field-icon toggle-password">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="#000" *ngIf="ispasswordshow" (click)="ispasswordshow = !ispasswordshow">
@@ -127,7 +127,7 @@
                                         <div class="form-group-wrap">
                                             <label for="confirmpassword">Confirm Password*</label>
                                             <div class="form-group password">
-                                                <input [type]="isconfrmpassshow ? 'text':'password'" class="form-control" id="confirmpassword" placeholder="Enter confirm password" formControlName="confirmpassword">
+                                                <input [type]="isconfrmpassshow ? 'text':'password'" class="form-control" id="confirmpassword" placeholder="Enter confirm password" formControlName="confirmpassword" autocomplete="new-password">
                                                 <span toggle="#password-field" class="fa fa-fw  field-icon toggle-password">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="#000" *ngIf="isconfrmpassshow" (click)="isconfrmpassshow = !isconfrmpassshow">
                                                     <path d="M9 5.15C11.5841 5.15 13.8886 6.641 15.0136 9C13.8886 11.359 11.5909 12.85 9 12.85C6.40909 12.85 4.11136 11.359 2.98636 9C4.11136 6.641 6.41591 5.15 9 5.15ZM9 3.75C5.59091 3.75 2.67955 5.927 1.5 9C2.67955 12.073 5.59091 14.25 9 14.25C12.4091 14.25 15.3205 12.073 16.5 9C15.3205 5.927 12.4091 3.75 9 3.75ZM9 7.25C9.94091 7.25 10.7045 8.034 10.7045 9C10.7045 9.966 9.94091 10.75 9 10.75C8.05909 10.75 7.29545 9.966 7.29545 9C7.29545 8.034 8.05909 7.25 9 7.25ZM9 5.85C7.30909 5.85 5.93182 7.264 5.93182 9C5.93182 10.736 7.30909 12.15 9 12.15C10.6909 12.15 12.0682 10.736 12.0682 9C12.0682 7.264 10.6909 5.85 9 5.85Z" fill="#000000"></path>
@@ -166,7 +166,7 @@
                                         <div class="form-group-wrap">
                                             <label for="email">Email*</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="email"
+                                                <input type="text" class="form-control" id="email" autocomplete="new-password"
                                                     placeholder="Enter email address" formControlName="email">
                                                     <div *ngIf="formField['email'].invalid && (formField['email'].touched || formField['email'].dirty || isFormValid)" class="required-txt-error">
                                                         <ng-container *ngIf="formField['email'].errors?.['required']">

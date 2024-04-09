@@ -42,6 +42,10 @@ export class CreateOrganizationComponent {
     }
     this.organizationForm.value.logo = this.fileTypeBase64;
     this.serviceApi.allPostMethod("accounts/account",this.organizationForm.value).subscribe((response:any)=>{
+      let shareData:any = localStorage.getItem('Shared_Data');
+      shareData = JSON.parse(shareData);
+      shareData.account_id = response['data']?.id;
+      localStorage.setItem("Shared_Data",JSON.stringify(shareData));
       if(response.message){
         this.toastr.success("Form Submitted","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
           this.router.navigate(['/create-user-location']);
