@@ -20,36 +20,133 @@
                                     </div>
                                 </div>
                             </div>
-                            <form>
+                            <form [formGroup]="signUp">
                                 <div class="row">
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
                                             <label for="inlineFormInputGroupUsername">First Name*</label>
                                             <div class="form-group">
                                                 <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="Smith">
+                                                    placeholder="Enter first name" formControlName="f_name">
+                                                    <div *ngIf="formField['f_name'].invalid && (formField['f_name'].touched || formField['f_name'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['f_name'].errors?.['required']">
+                                                            First name required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['f_name'].errors?.['minlength']">
+                                                            Name must contain atleast 2 characters
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['f_name'].errors?.['pattern']">
+                                                            Valid name required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Last Name*</label>
+                                            <label for="last_name">Last Name*</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="Smith">
+                                                <input type="text" class="form-control" id="last_name"
+                                                    placeholder="Enter last name" formControlName="l_name">
+                                                    <div *ngIf="formField['l_name'].invalid && (formField['l_name'].touched || formField['l_name'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['l_name'].errors?.['required']">
+                                                            Last name required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['l_name'].errors?.['minlength']">
+                                                            Name must contain 2 characters
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['l_name'].errors?.['pattern']">
+                                                            Valid name required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Date of Birth</label>
+                                            <label for="dob">Date of Birth</label>
                                             <div class="form-group">
-                                                <input type="Date" class="form-control" id="autoSizingInput"
-                                                    placeholder="Smith">
+                                                <input type="Date" class="form-control" id="dob" [max]="maxDOB"
+                                                    formControlName="dob">
+                                                    <div *ngIf="formField['dob'].invalid && (formField['dob'].touched || formField['dob'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['dob'].errors?.['required']">
+                                                            Date of birth required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                                        <div class="form-group-wrap">
+                                          <label for="alias">Alias Name</label>
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" id="alias" formControlName="alias"
+                                              placeholder="Enter alias">
+                                            <div
+                                              *ngIf="formField['alias'].invalid && (formField['alias'].touched || formField['alias'].dirty || isFormValid)"
+                                              class="required-txt-error">
+                                              <ng-container *ngIf="formField['alias'].errors?.['required']">
+                                                Alias required
+                                              </ng-container>
+                                              <ng-container *ngIf="formField['alias'].errors?.['pattern']">
+                                                Valid alias required
+                                              </ng-container>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                                        <div class="form-group-wrap">
+                                            <label for="password">Password*</label>
+                                            <div class="form-group password">
+                                                <input [type]="ispasswordshow ? 'text':'password'" class="form-control" id="password" placeholder="Enter password"
+                                                    formControlName="password">
+                                                    <span toggle="#password-field" class="fa fa-fw  field-icon toggle-password">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="#000" *ngIf="ispasswordshow" (click)="ispasswordshow = !ispasswordshow">
+                                                        <path d="M9 5.15C11.5841 5.15 13.8886 6.641 15.0136 9C13.8886 11.359 11.5909 12.85 9 12.85C6.40909 12.85 4.11136 11.359 2.98636 9C4.11136 6.641 6.41591 5.15 9 5.15ZM9 3.75C5.59091 3.75 2.67955 5.927 1.5 9C2.67955 12.073 5.59091 14.25 9 14.25C12.4091 14.25 15.3205 12.073 16.5 9C15.3205 5.927 12.4091 3.75 9 3.75ZM9 7.25C9.94091 7.25 10.7045 8.034 10.7045 9C10.7045 9.966 9.94091 10.75 9 10.75C8.05909 10.75 7.29545 9.966 7.29545 9C7.29545 8.034 8.05909 7.25 9 7.25ZM9 5.85C7.30909 5.85 5.93182 7.264 5.93182 9C5.93182 10.736 7.30909 12.15 9 12.15C10.6909 12.15 12.0682 10.736 12.0682 9C12.0682 7.264 10.6909 5.85 9 5.85Z" fill="#000000"></path>
+                                                        </svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="18" height="15" *ngIf="!ispasswordshow" (click)="ispasswordshow = !ispasswordshow">
+                                                            <path d="M23.271,9.419A15.866,15.866,0,0,0,19.9,5.51l2.8-2.8a1,1,0,0,0-1.414-1.414L18.241,4.345A12.054,12.054,0,0,0,12,2.655C5.809,2.655,2.281,6.893.729,9.419a4.908,4.908,0,0,0,0,5.162A15.866,15.866,0,0,0,4.1,18.49l-2.8,2.8a1,1,0,1,0,1.414,1.414l3.052-3.052A12.054,12.054,0,0,0,12,21.345c6.191,0,9.719-4.238,11.271-6.764A4.908,4.908,0,0,0,23.271,9.419ZM2.433,13.534a2.918,2.918,0,0,1,0-3.068C3.767,8.3,6.782,4.655,12,4.655A10.1,10.1,0,0,1,16.766,5.82L14.753,7.833a4.992,4.992,0,0,0-6.92,6.92l-2.31,2.31A13.723,13.723,0,0,1,2.433,13.534ZM15,12a3,3,0,0,1-3,3,2.951,2.951,0,0,1-1.285-.3L14.7,10.715A2.951,2.951,0,0,1,15,12ZM9,12a3,3,0,0,1,3-3,2.951,2.951,0,0,1,1.285.3L9.3,13.285A2.951,2.951,0,0,1,9,12Zm12.567,1.534C20.233,15.7,17.218,19.345,12,19.345A10.1,10.1,0,0,1,7.234,18.18l2.013-2.013a4.992,4.992,0,0,0,6.92-6.92l2.31-2.31a13.723,13.723,0,0,1,3.09,3.529A2.918,2.918,0,0,1,21.567,13.534Z"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <div *ngIf="formField['password'].invalid && (formField['password'].touched || formField['password'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['password'].errors?.['required']">
+                                                            Password required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['password'].errors?.['pattern']">
+                                                            Password must be contain atleast 1 number, 1 uppercase, and 1 lowercase letter
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['password'].errors?.['minlength']">
+                                                            Password length atleast of 8 characters
+                                                        </ng-container>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                                        <div class="form-group-wrap">
+                                            <label for="confirmpassword">Confirm Password*</label>
+                                            <div class="form-group password">
+                                                <input [type]="isconfrmpassshow ? 'text':'password'" class="form-control" id="confirmpassword" placeholder="Enter confirm password" formControlName="confirmpassword">
+                                                <span toggle="#password-field" class="fa fa-fw  field-icon toggle-password">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="#000" *ngIf="isconfrmpassshow" (click)="isconfrmpassshow = !isconfrmpassshow">
+                                                    <path d="M9 5.15C11.5841 5.15 13.8886 6.641 15.0136 9C13.8886 11.359 11.5909 12.85 9 12.85C6.40909 12.85 4.11136 11.359 2.98636 9C4.11136 6.641 6.41591 5.15 9 5.15ZM9 3.75C5.59091 3.75 2.67955 5.927 1.5 9C2.67955 12.073 5.59091 14.25 9 14.25C12.4091 14.25 15.3205 12.073 16.5 9C15.3205 5.927 12.4091 3.75 9 3.75ZM9 7.25C9.94091 7.25 10.7045 8.034 10.7045 9C10.7045 9.966 9.94091 10.75 9 10.75C8.05909 10.75 7.29545 9.966 7.29545 9C7.29545 8.034 8.05909 7.25 9 7.25ZM9 5.85C7.30909 5.85 5.93182 7.264 5.93182 9C5.93182 10.736 7.30909 12.15 9 12.15C10.6909 12.15 12.0682 10.736 12.0682 9C12.0682 7.264 10.6909 5.85 9 5.85Z" fill="#000000"></path>
+                                                    </svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="18" height="15" *ngIf="!isconfrmpassshow" (click)="isconfrmpassshow = !isconfrmpassshow">
+                                                        <path d="M23.271,9.419A15.866,15.866,0,0,0,19.9,5.51l2.8-2.8a1,1,0,0,0-1.414-1.414L18.241,4.345A12.054,12.054,0,0,0,12,2.655C5.809,2.655,2.281,6.893.729,9.419a4.908,4.908,0,0,0,0,5.162A15.866,15.866,0,0,0,4.1,18.49l-2.8,2.8a1,1,0,1,0,1.414,1.414l3.052-3.052A12.054,12.054,0,0,0,12,21.345c6.191,0,9.719-4.238,11.271-6.764A4.908,4.908,0,0,0,23.271,9.419ZM2.433,13.534a2.918,2.918,0,0,1,0-3.068C3.767,8.3,6.782,4.655,12,4.655A10.1,10.1,0,0,1,16.766,5.82L14.753,7.833a4.992,4.992,0,0,0-6.92,6.92l-2.31,2.31A13.723,13.723,0,0,1,2.433,13.534ZM15,12a3,3,0,0,1-3,3,2.951,2.951,0,0,1-1.285-.3L14.7,10.715A2.951,2.951,0,0,1,15,12ZM9,12a3,3,0,0,1,3-3,2.951,2.951,0,0,1,1.285.3L9.3,13.285A2.951,2.951,0,0,1,9,12Zm12.567,1.534C20.233,15.7,17.218,19.345,12,19.345A10.1,10.1,0,0,1,7.234,18.18l2.013-2.013a4.992,4.992,0,0,0,6.92-6.92l2.31-2.31a13.723,13.723,0,0,1,3.09,3.529A2.918,2.918,0,0,1,21.567,13.534Z"></path>
+                                                    </svg>
+                                                </span>
+                                                    <div *ngIf="formField['confirmpassword'].invalid && (formField['confirmpassword'].touched || formField['confirmpassword'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['confirmpassword'].errors?.['required']">
+                                                            Confirm password required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['confirmpassword'].errors?.['confirmpassword']">
+                                                            Confirm password and Password doesn't match
+                                                        </ng-container>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                             <!-- </form>
@@ -67,46 +164,86 @@
                                 <div class="row">
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Email*</label>
+                                            <label for="email">Email*</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="smithexample.com">
+                                                <input type="text" class="form-control" id="email"
+                                                    placeholder="Enter email address" formControlName="email">
+                                                    <div *ngIf="formField['email'].invalid && (formField['email'].touched || formField['email'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['email'].errors?.['required']">
+                                                            Email required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['email'].errors?.['email']">
+                                                            Valid email required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Website</label>
+                                            <label for="website">Website</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="evergreenv.com">
+                                                <input type="text" class="form-control" id="website"
+                                                    placeholder="Enter website" formControlName="website">
+                                                    <div *ngIf="formField['website'].invalid && (formField['website'].touched || formField['website'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['website'].errors?.['required']">
+                                                            Website required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['website'].errors?.['pattern']">
+                                                            Valid website required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Mobile</label>
+                                            <label for="mobile">Mobile</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="(555) 555-5555">
+                                                <input type="text" class="form-control" id="mobile"
+                                                    placeholder="Enter mobile number" formControlName="mobile">
+                                                    <div *ngIf="formField['mobile'].invalid && (formField['mobile'].touched || formField['mobile'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['mobile'].errors?.['required']">
+                                                            Mobile number required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['mobile'].errors?.['pattern']">
+                                                            Valid mobile number required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Fax</label>
+                                            <label for="fax">Fax</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="(555) 123-4567">
+                                                <input type="text" class="form-control" id="fax"
+                                                    placeholder="Enter fax number" formControlName="fax">
+                                                    <div *ngIf="formField['fax'].invalid && (formField['fax'].touched || formField['fax'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['fax'].errors?.['pattern']">
+                                                            Fax required numbers only
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['fax'].errors?.['minlength'] || formField['fax'].errors?.['maxlength']">
+                                                            Valid fax required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Phone number</label>
+                                            <label for="phone_number">Phone number</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="+91 12345 67890">
+                                                <input type="text" class="form-control" id="phone_number"
+                                                    placeholder="Enter phone number" formControlName="phone">
+                                                    <div *ngIf="formField['phone'].invalid && (formField['phone'].touched || formField['phone'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['phone'].errors?.['required']">
+                                                            Phone number required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['phone'].errors?.['pattern']">
+                                                            Valid phone number required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -127,52 +264,95 @@
                                 <div class="row">
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Street</label>
+                                            <label for="street">Street</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="123, Main Street,">
+                                                <input type="text" class="form-control" id="street"
+                                                    placeholder="Enter street" formControlName="street">
+                                                    <div *ngIf="formField['street'].invalid && (formField['street'].touched || formField['street'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['street'].errors?.['required']">
+                                                            Street required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['street'].errors?.['pattern']">
+                                                            Valid street required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">State</label>
+                                            <label for="state">State</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="Karnataka">
+                                                <input type="text" class="form-control" id="state"
+                                                    placeholder="Enter state" formControlName="state" >
+                                                    <div *ngIf="formField['state'].invalid && (formField['state'].touched || formField['state'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['state'].errors?.['required']">
+                                                            State required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['state'].errors?.['pattern']">
+                                                            Valid state required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">City</label>
+                                            <label for="city">City</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="Indore">
+                                                <input type="text" class="form-control" id="city"
+                                                    placeholder="Enter city" formControlName="city" >
+                                                    <div *ngIf="formField['city'].invalid && (formField['city'].touched || formField['city'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['city'].errors?.['required']">
+                                                            City required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['city'].errors?.['pattern']">
+                                                            Valid city required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Zip</label>
+                                            <label for="zip">Zip</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="560001">
+                                                <input type="text" class="form-control" id="zip"
+                                                    placeholder="Enter zip" formControlName="zip">
+                                                    <div *ngIf="formField['zip'].invalid && (formField['zip'].touched || formField['zip'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['zip'].errors?.['required']">
+                                                            Zip required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['zip'].errors?.['pattern']">
+                                                            Zip contain numbers only
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['zip'].errors?.['minlength'] || formField['zip'].errors?.['maxlength']">
+                                                            Zip should be of 6 digit
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4 col-md-4 col-xl-4">
                                         <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Country</label>
+                                            <label for="country">Country</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="autoSizingInput"
-                                                    placeholder="India">
+                                                <input type="text" class="form-control" id="country"
+                                                    placeholder="Enter country" formControlName="country">
+                                                    <div *ngIf="formField['country'].invalid && (formField['country'].touched || formField['country'].dirty || isFormValid)" class="required-txt-error">
+                                                        <ng-container *ngIf="formField['country'].errors?.['required']">
+                                                            Country required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="formField['country'].errors?.['pattern']">
+                                                            Valid country required
+                                                        </ng-container>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-12">
                                         <div class="form-group-btn">
-                                            <a href="email-screen.html" class="btn btn-theme">Next</a>
+                                            <a (click)="submitSignUp()" class="btn btn-theme">Save</a>
                                         </div>
                                     </div>
                                 </div>

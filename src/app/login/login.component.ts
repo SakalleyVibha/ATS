@@ -70,7 +70,7 @@ export class LoginComponent {
   }
 
   getAllRoles() {
-    this.api.allgetMethod('role/roles').subscribe((res: any) => {
+    this.api.allgetMethod('role/roles',{}).subscribe((res: any) => {
       if (!res['error']) {
         this.allRoles = res['data'];
       }

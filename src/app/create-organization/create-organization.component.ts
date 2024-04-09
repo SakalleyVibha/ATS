@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CommonApiService } from '../core/services/common-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-organization',
@@ -13,8 +14,9 @@ export class CreateOrganizationComponent {
   organizationForm:FormGroup;
   isFieldsValid:boolean = false;
   fileTypeBase64!: ArrayBuffer | any;
+  logoName:string = '';
 
-  constructor(private formBuild:FormBuilder,private toastr:ToastrService,private serviceApi:CommonApiService){
+  constructor(private formBuild:FormBuilder,private router:Router,private toastr:ToastrService,private serviceApi:CommonApiService){
     this.organizationForm = this.formBuild.group({
       name: ['',[Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       about:['',[Validators.required, Validators.maxLength(150) ,Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -41,7 +43,9 @@ export class CreateOrganizationComponent {
     this.organizationForm.value.logo = this.fileTypeBase64;
     this.serviceApi.allPostMethod("accounts/account",this.organizationForm.value).subscribe((response:any)=>{
       if(response.message){
-        this.toastr.success("Form Submitted","",{closeButton:true,timeOut:5000});
+        this.toastr.success("Form Submitted","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.router.navigate(['/create-user-location']);
+        });
       }else{
         this.toastr.error("Something went wrong","",{timeOut:5000,closeButton:true});
       }
@@ -49,6 +53,7 @@ export class CreateOrganizationComponent {
   }
 
   convertImageToBase64(file_event: any) {
+    this.logoName = file_event?.target?.files[0]?.name
     const reader = new FileReader();
     reader.readAsDataURL(file_event.srcElement.files[0]);
     reader.onload = () => {
