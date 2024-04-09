@@ -78,7 +78,7 @@ export class ManageUserComponent {
   }
 
   selectLocation(event: any) {
-    this.client_list = this.client_list.filter((f: any) => f.location_id == event.target.value);
+    this.client_list = this.client_list?.filter((f: any) => f.location_id == event.target.value);
   }
 
   getUserRole(acc_id: number) {

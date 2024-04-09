@@ -25,18 +25,16 @@ export class DashboardComponent {
   }
 
   getAccount(shareData: any) {
+    console.log('shareData: ', shareData);
+    shareData.account_id = 29;
     this.api.allgetMethod('accounts/account').subscribe((res: any) => {
       this.is_owner = shareData?.is_owner;
-      if (!res['data']) {
-        console.log("Add Account");
-        // this.whichBtn = 'Account';
+      if (res['data']) {
+        this.accountDetail = res['data'].find((data: any) => data.id == shareData.account_id);
+        console.log('res[data]: ', res['data']);
+        console.log('this.accountDetail: ', this.accountDetail);
       } else {
-        // if (res['data'].length == 1) {
-        localStorage.setItem('Shared_Data', JSON.stringify({ ...shareData, account_id: res['data'][0].id }));
-        this.accountDetail = res['data'][0];
-        console.log("Add Location");
-        // this.whichBtn = 'Location';
-        // }
+
       }
     })
   }

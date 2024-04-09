@@ -24,24 +24,23 @@
                 </li>
                 <li>
                     <div class="dropdown btn-group">
-                        <a routerLink="user-detail"><img src="assets/images/side-icon/client.svg"
-                                class="img-side-icon">User </a>
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown btn-group">
                         <a routerLink="client-detail"><img src="assets/images/side-icon/client.svg"
                                 class="img-side-icon">Client
                         </a>
                     </div>
                 </li>
+                <li>
+                    <div class="dropdown btn-group">
+                        <a routerLink="user-detail"><img src="assets/images/side-icon/client.svg"
+                                class="img-side-icon">User </a>
+                    </div>
+                </li>
             </ul>
         </div>
 
-        <div class="skip-btn logout">
+        <div class="skip-btn logout" (click)="onLogout()">
             <a class="btn btn-theme">
-                <button id="skip-btn" style="border: 0px; background-color: transparent; color : #fff"
-                    (click)="onLogout()">Log Out</button>
+                <button id="skip-btn" style="border: 0px; background-color: transparent; color : #fff">Log Out</button>
             </a>
         </div>
 

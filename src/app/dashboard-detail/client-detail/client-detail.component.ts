@@ -9,8 +9,13 @@ import { CommonApiService } from '../../core/services/common-api.service';
 export class ClientDetailComponent {
 
   clientList: any;
+  current_role: any;
 
   constructor(private api: CommonApiService) {
+
+    this.current_role = localStorage.getItem('role');
+    this.current_role = JSON.parse(this.current_role);
+    console.log('this.current_role: ', this.current_role);
 
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
