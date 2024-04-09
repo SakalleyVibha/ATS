@@ -14,7 +14,7 @@
           <input class="form-control" type="search" placeholder="Search here . . ." aria-label="Search">
         </div>
       </div>
-      <div class="col-lg-6 col-sm-12 text-end" *ngIf="current_role.id == 1 || is_owner === true">
+      <div class="col-lg-6 col-sm-12 text-end" *ngIf="current_role?.id == 1 || is_owner === true">
         <a class="btn btn-create " routerLink="add-location">
           <i class="fa-solid fa fa-plus"></i> Add Location </a>
       </div>
@@ -58,7 +58,7 @@
             <td class="action_button">
               <div class="actiondelete-button">
                 <a routerLink="edit-location" [queryParams]="{id:location.id}"
-                  *ngIf="current_role.id != 3 && current_role.id != 4">
+                  *ngIf="current_role?.id != 3 && current_role?.id != 4">
                   <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                   <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                 </a>

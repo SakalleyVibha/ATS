@@ -13,12 +13,12 @@ import { Router } from '@angular/router';
 export class SignupComponent {
 
   signUp: FormGroup;
-  isFormValid:boolean = false;
+  isFormValid: boolean = false;
   ispasswordshow: boolean = false;
-  isconfrmpassshow:boolean = false;
+  isconfrmpassshow: boolean = false;
   maxDOB: any;
 
-  constructor(private fb: FormBuilder, private api: CommonApiService,private toastr:ToastrService,private router:Router) {
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router) {
     this.signUp = this.fb.group({
       f_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       l_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -26,16 +26,16 @@ export class SignupComponent {
       dob: ['', [Validators.required]],
 
       email: ['', [Validators.required, Validators.email]],
-      website: ['',[Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
+      website: ['', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
       phone: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-      fax: ['',[,Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
+      fax: ['', [, Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
 
       street: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       city: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       state: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      zip: ['', [Validators.pattern('^[0-9]*$'),Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+      zip: ['', [Validators.pattern('^[0-9]*$'), Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       password: ['', [Validators.required, Validators.pattern('(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=]).*$'), Validators.minLength(8)]],
       confirmpassword: ['', [Validators.required]],
     },
@@ -44,12 +44,12 @@ export class SignupComponent {
       } as AbstractControlOptions)
   }
 
-  ngOnInit(){
+  ngOnInit() {
     let date = new Date();
     this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${date.getDate() - 1}` : date.getDate() - 1}`;
-     this.signUp.get('password')?.valueChanges.subscribe( (res) =>{
+    this.signUp.get('password')?.valueChanges.subscribe((res) => {
       let cnfrmPass = this.signUp.value?.confirmpassword;
-      if(cnfrmPass != '' && cnfrmPass == res){
+      if (cnfrmPass != '' && cnfrmPass == res) {
         this.signUp.controls['confirmpassword']?.updateValueAndValidity();
       }
     });
@@ -58,7 +58,7 @@ export class SignupComponent {
   get formField() { return this.signUp.controls }
 
   submitSignUp() {
-    if(this.signUp.invalid){
+    if (this.signUp.invalid) {
       this.isFormValid = true;
       return;
     }
@@ -69,11 +69,11 @@ export class SignupComponent {
 
     this.api.allPostMethod("users/signup", formCopy).subscribe((res: any) => {
       if (!res.error) {
-        this.toastr.success("Sign up done successfully","",{timeOut:5000,closeButton:true}).onHidden.subscribe(()=>{
+        this.toastr.success("Sign up done successfully", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
           this.router.navigate(['/login']);
         });
-      }else{
-        this.toastr.error("Something went wrong, Please try again later","",{closeButton:true,timeOut:5000});
+      } else {
+        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 });
       }
     });
   }

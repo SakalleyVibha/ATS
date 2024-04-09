@@ -17,8 +17,7 @@ export class LocationDetailComponent {
     console.log('this.current_role: ', this.current_role);
     let shareData: any = localStorage.getItem("Shared_Data");
     shareData = JSON.parse(shareData);
-    this.is_owner = false;
-    // shareData?.is_owner
+    this.is_owner = shareData?.is_owner;
     this.getLocation(shareData?.account_id);
   }
 
