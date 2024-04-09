@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder,FormGroup,Validators } from '@angular/forms';
+import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -45,6 +45,7 @@ export class ManageLocationComponent {
       id = paramMap.id;
       if(id != null && id != undefined){
         this.editLocation = true;
+        this.addLocationForm.setControl('id' , new FormControl(Number(id)));
       }
     });
 
@@ -53,6 +54,8 @@ export class ManageLocationComponent {
   get formData() { return this.addLocationForm.controls }
 
   onSubmit(){
+    this.addLocationForm.value.logo = this.fileTypeBase64;
+
     if(this.addLocationForm.invalid){
       this.isFormValid = true;
       return;
@@ -71,7 +74,16 @@ export class ManageLocationComponent {
   }
 
   onEditForm(){
+    this.addLocationForm.value.logo = this.fileTypeBase64;
 
+    if(this.addLocationForm.invalid){
+      this.isFormValid = true;
+      return;
+    }
+
+    this.api.allPostMethod("locations/updatelocation",this.addLocationForm.value).subscribe((updateLocationResponse:any)=>{
+      console.log("After Location Update : ",updateLocationResponse);
+    });
   }
 
   convertImageToBase64(file_event: any) {

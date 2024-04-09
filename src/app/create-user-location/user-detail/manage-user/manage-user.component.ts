@@ -82,7 +82,7 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allgetMethod("role/roles").subscribe((roles: any) => {
+    this.api.allgetMethod("role/roles",{}).subscribe((roles: any) => {
       if (roles.data.length > 0) {
         this.user_roles = roles.data;
       }

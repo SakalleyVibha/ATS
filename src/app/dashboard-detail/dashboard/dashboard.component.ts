@@ -25,9 +25,7 @@ export class DashboardComponent {
   }
 
   getAccount(shareData: any) {
-    console.log('shareData: ', shareData);
-    shareData.account_id = 29;
-    this.api.allgetMethod('accounts/account').subscribe((res: any) => {
+    this.api.allgetMethod('accounts/account', {}).subscribe((res: any) => {
       this.is_owner = shareData?.is_owner;
       if (res['data']) {
         this.accountDetail = res['data'].find((data: any) => data.id == shareData.account_id);

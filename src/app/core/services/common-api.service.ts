@@ -19,7 +19,7 @@ export class CommonApiService {
     return this.http.post(`${environment.base_URL}/${endpoint}`, data);
   }
 
-  allgetMethod(endpoint: string) {
-    return this.http.get(`${environment.base_URL}/${endpoint}`);
+  allgetMethod(endpoint: string,Data:any) {
+    return this.http.get(`${environment.base_URL}/${endpoint}`,Data);
   }
 }

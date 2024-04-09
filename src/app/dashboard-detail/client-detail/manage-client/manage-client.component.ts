@@ -48,16 +48,25 @@ export class ManageClientComponent {
       account_id:Number(shareData.account_id)
     });
     this.getLocationList(shareData.account_id);
+  }
+  
+  get formData() { return this.client_Form.controls }
+  
+  ngOnInit(){
     this.activeRouter.queryParams.subscribe((isClientId:any)=>{
-      if(isClientId.id != null || isClientId.id != undefined ){
+      let id_param = isClientId.id;
+      if(id_param != null || id_param != undefined ){
         this.clientEdit = true
+        let data ={
+          id: Number(id_param)
+        };
+        this.api.allgetMethod("clients/client", data).subscribe((res:any)=>{
+          console.log(res);
+        })
       }
     });
+
   }
-
-  get formData() { return this.client_Form.controls }
-
-  ngOnInit(){}
 
   getLocationList(acc_id:number){
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
@@ -94,7 +103,12 @@ export class ManageClientComponent {
   }
 
   onEditClient(){
-    
+    this.client_Form.value.logo = this.fileTypeBase64;
+
+    if(this.client_Form.invalid){
+      this.isFieldsValid = true;
+      return;
+    }
   }
 
   convertImageToBase64(file_event: any) {
