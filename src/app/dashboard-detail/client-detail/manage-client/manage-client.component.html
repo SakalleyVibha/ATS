@@ -24,13 +24,13 @@
                     </div>
                 </div>
             </div>
-            <form [formGroup]="client_Form" >
+            <form [formGroup]="client_Form" autocomplete="off" >
                 <div class="row">
                     <div class="col-6 col-lg-4 col-md-4 col-xl-4">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">Name*</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter Name" formControlName="name">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter Name" formControlName="name" autocomplete="new-password" >
                                 <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid))" class="required-txt-error">
                                     <ng-container *ngIf="formData['name'].errors?.['required']">
                                         Name required
@@ -134,9 +134,6 @@
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter fax number" formControlName="fax">
                                 <div *ngIf="(formData['fax'].invalid && (formData['fax'].touched || formData['fax'].dirty || isFieldsValid))" class="required-txt-error">
-                                    <ng-container *ngIf="formData['fax'].errors?.['required']">
-                                        Fax required
-                                    </ng-container>
                                     <ng-container *ngIf="formData['fax'].errors?.['pattern']">
                                         Valid fax required
                                     </ng-container>
@@ -203,7 +200,7 @@
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">POC Email</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter proof email" formControlName="poc_email">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter proof email" formControlName="poc_email" autocomplete="new-password" >
                                 <div *ngIf="(formData['poc_email'].invalid && (formData['poc_email'].touched || formData['poc_email'].dirty || isFieldsValid))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_email'].errors?.['required']">
                                         Proof email required
@@ -253,9 +250,6 @@
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter proof fax" formControlName="poc_fax">
                                 <div *ngIf="(formData['poc_fax'].invalid && (formData['poc_fax'].touched || formData['poc_fax'].dirty || isFieldsValid))" class="required-txt-error">
-                                    <ng-container *ngIf="formData['poc_fax'].errors?.['required']">
-                                        Proof fax required
-                                    </ng-container>
                                     <ng-container *ngIf="formData['poc_fax'].errors?.['pattern']">
                                         Valid proof fax required
                                     </ng-container>

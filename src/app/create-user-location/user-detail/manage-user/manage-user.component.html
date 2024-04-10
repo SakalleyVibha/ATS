@@ -230,9 +230,6 @@
                 <div
                   *ngIf="formData['fax'].invalid && (formData['fax'].touched || formData['fax'].dirty || isFormValid)"
                   class="required-txt-error">
-                  <ng-container *ngIf="formData['fax'].errors?.['required']">
-                    Fax required
-                  </ng-container>
                   <ng-container *ngIf="formData['fax'].errors?.['pattern']">
                     Fax should be numbers
                   </ng-container>

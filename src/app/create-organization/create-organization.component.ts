@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CommonApiService } from '../core/services/common-api.service';
 import { Router } from '@angular/router';
-
+import { CommunicateService } from '../core/services/communicate.service';
 @Component({
   selector: 'app-create-organization',
   templateUrl: './create-organization.component.html',
@@ -16,14 +16,14 @@ export class CreateOrganizationComponent {
   fileTypeBase64!: ArrayBuffer | any;
   logoName:string = '';
 
-  constructor(private formBuild:FormBuilder,private router:Router,private toastr:ToastrService,private serviceApi:CommonApiService){
+  constructor(private formBuild:FormBuilder,private router:Router,private toastr:ToastrService,private serviceApi:CommonApiService,private communicate:CommunicateService){
     this.organizationForm = this.formBuild.group({
       name: ['',[Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       about:['',[Validators.required, Validators.maxLength(150) ,Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       website: ['', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
       phone: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-      fax: ['', [Validators.required,Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
+      fax: ['', [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
       street:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       city:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       country:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -36,6 +36,7 @@ export class CreateOrganizationComponent {
   get formData() { return this.organizationForm.controls }
 
   onSubmit(){
+    this.communicate.isLoaderLoad.next(true);
     if(this.organizationForm.invalid) {
       this.isFieldsValid = true;
       return
@@ -47,11 +48,15 @@ export class CreateOrganizationComponent {
       shareData.account_id = response['data']?.id;
       localStorage.setItem("Shared_Data",JSON.stringify(shareData));
       if(response.message){
+        this.organizationForm.reset();
         this.toastr.success("Form Submitted","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/create-user-location']);
         });
       }else{
-        this.toastr.error("Something went wrong","",{timeOut:5000,closeButton:true});
+        this.toastr.error("Something went wrong","",{timeOut:5000,closeButton:true}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     })
   }

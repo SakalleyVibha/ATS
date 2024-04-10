@@ -4,6 +4,7 @@ import { ConfirmedValidator } from '../shared/confirm.validator';
 import { CommonApiService } from '../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { CommunicateService } from '../core/services/communicate.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,7 +19,7 @@ export class SignupComponent {
   isconfrmpassshow: boolean = false;
   maxDOB: any;
 
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router) {
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router,private communicate : CommunicateService) {
     this.signUp = this.fb.group({
       f_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       l_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -46,7 +47,7 @@ export class SignupComponent {
 
   ngOnInit() {
     let date = new Date();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${date.getDate() - 1}` : date.getDate() - 1}`;
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? date.getDate() - 1 : `0${date.getDate() - 1}`}`;
     this.signUp.get('password')?.valueChanges.subscribe((res) => {
       let cnfrmPass = this.signUp.value?.confirmpassword;
       if (cnfrmPass != '' && cnfrmPass == res) {
@@ -62,6 +63,7 @@ export class SignupComponent {
       this.isFormValid = true;
       return;
     }
+    this.communicate.isLoaderLoad.next(true);
     let date = this.convertDate(this.signUp.value.dob);
     this.signUp.patchValue({ dob: date });
     const formCopy = Object.assign({}, this.signUp.getRawValue());
@@ -70,10 +72,13 @@ export class SignupComponent {
     this.api.allPostMethod("users/signup", formCopy).subscribe((res: any) => {
       if (!res.error) {
         this.toastr.success("Sign up done successfully", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
+          this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/login']);
         });
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 });
+        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);          
+        });
       }
     });
   }

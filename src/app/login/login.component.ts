@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonApiService } from '../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { CommunicateService } from '../core/services/communicate.service';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +15,8 @@ export class LoginComponent {
   public login: FormGroup;
   ispasswordshow: boolean = false;
   allRoles: any[] = [];
-
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router) {
+  isFieldValid:boolean = false;
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router,private communicate:CommunicateService) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -29,7 +30,11 @@ export class LoginComponent {
   }
 
   onSubmit() {
-
+    if(this.login.invalid){
+      this.isFieldValid = true;
+      return
+    }
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("application/login", this.login.value).subscribe((res: any) => {
       if (!res.error) {
         let which_role: any;
@@ -57,6 +62,7 @@ export class LoginComponent {
         }));
         this.toast.success("Login successfully", "Valid user", { timeOut: 500, closeButton: true }).onHidden.subscribe(() => {
           this.login.reset();
+          this.communicate.isLoaderLoad.next(false);
           if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
             this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
           } else {

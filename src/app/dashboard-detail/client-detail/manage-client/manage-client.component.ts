@@ -3,6 +3,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommunicateService } from '../../../core/services/communicate.service';
 
 @Component({
   selector: 'app-manage-client',
@@ -19,7 +20,7 @@ export class ManageClientComponent {
   clientEdit:boolean = false;
   isFieldShow:boolean = false;
 
-  constructor(private api:CommonApiService,private formbuilder:FormBuilder,private router:Router,private toastr:ToastrService,private activeRouter:ActivatedRoute){
+  constructor(private api:CommonApiService,private formbuilder:FormBuilder,private router:Router,private toastr:ToastrService,private activeRouter:ActivatedRoute,private communicate:CommunicateService){
     let shareData: any = localStorage.getItem("Shared_Data");
     shareData = JSON.parse(shareData);
     // this.client_Form.value.account_id = shareData.account_id;
@@ -29,14 +30,14 @@ export class ManageClientComponent {
       logo:['',[Validators.required]],
       mobile: ['',[Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       phone: ['',[Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-      fax: ['',[Validators.required,Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
+      fax: ['',[Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
       about: ['',[Validators.required, Validators.maxLength(150), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
 
       poc_name: ['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       poc_email: ['',[Validators.required,Validators.email]],
       poc_phone: ['',[Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       poc_mobile: ['',[Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-      poc_fax: ['',[Validators.required,Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
+      poc_fax: ['',[Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
 
       street: ['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       state: ['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -85,7 +86,7 @@ export class ManageClientComponent {
       this.isFieldsValid = true;
       return
     }
-
+    this.communicate.isLoaderLoad.next(true);
     this.client_Form.patchValue({
       location_id: Number(this.client_Form.value.location_id),
     })
@@ -93,11 +94,15 @@ export class ManageClientComponent {
     this.api.allPostMethod("clients/client",this.client_Form.value).subscribe((afterAdd:any)=>{
       console.log(afterAdd);
       if(afterAdd.message){
+        this.client_Form.reset();
         this.toastr.success("Client created successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/dashboard-detail/client-detail']);
         })
       }else{
-        this.toastr.error("Something went wrong, Try again later","",{closeButton:true,timeOut:5000});
+        this.toastr.error("Something went wrong, Try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     })
   }

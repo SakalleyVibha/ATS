@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommunicateService } from '../../../core/services/communicate.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -20,7 +21,7 @@ export class ManageUserComponent {
   editUser: boolean = false;
   selected_details: any;
 
-  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute) {
+  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute,private communicate:CommunicateService) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
 
@@ -37,7 +38,7 @@ export class ManageUserComponent {
       website: new FormControl('', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
       mobile: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
-      fax: new FormControl('', [Validators.required, Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
+      fax: new FormControl('', [ Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
 
       street: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
       city: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
@@ -58,7 +59,7 @@ export class ManageUserComponent {
   ngOnInit() {
     // this.getUserRole();
     let date = new Date();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${date.getDate() - 1}` : date.getDate() - 1}`;
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? date.getDate() - 1 : `0${date.getDate() - 1}` }`;
     this.activeRouter.queryParams.subscribe((params: any) => {
       if (params.id != null || params.id != undefined) {
         this.editUser = true;
@@ -107,6 +108,7 @@ export class ManageUserComponent {
       return
     }
     let date = '';
+    this.communicate.isLoaderLoad.next(true);
     date = this.convertDate(this.userForm.value.dob);
     console.log(date);
     this.userForm.patchValue({
@@ -119,11 +121,15 @@ export class ManageUserComponent {
     console.log(this.userForm.value);
     this.api.allPostMethod("users/addUser", this.userForm.value).subscribe((response: any) => {
       if (response.error == false) {
+        this.userForm.reset();
         this.toastr.success("User added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.router.navigate(['/create-user-location/user-detail']);
+          this.communicate.isLoaderLoad.next(false);
+          this.router.navigate(['/dashboard-detail/user-detail']);
         });
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 });
+        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     })
   }
