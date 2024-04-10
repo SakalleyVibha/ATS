@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { Router } from '@angular/router';
+import { CommunicateService } from '../../core/services/communicate.service';
 
 @Component({
   selector: 'app-location-detail',
@@ -12,7 +13,7 @@ export class LocationDetailComponent {
   current_role: any;
   is_owner: boolean | undefined;
 
-  constructor(private api: CommonApiService, private router: Router) {
+  constructor(private api: CommonApiService, private router: Router,private communicate:CommunicateService) {
     this.current_role = localStorage.getItem('role');
     this.current_role = JSON.parse(this.current_role);
     console.log('this.current_role: ', this.current_role);
@@ -24,6 +25,7 @@ export class LocationDetailComponent {
   }
 
   getLocationList(acc_id: number) {
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
       if (res.data.length > 0) {
         this.location_list = res.data;
@@ -31,6 +33,7 @@ export class LocationDetailComponent {
       } else {
         this.location_list = false
       }
+      this.communicate.isLoaderLoad.next(false);
     });
   }
 }

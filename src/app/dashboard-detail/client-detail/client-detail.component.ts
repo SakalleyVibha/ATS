@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonApiService } from '../../core/services/common-api.service';
+import { CommunicateService } from '../../core/services/communicate.service';
 
 @Component({
   selector: 'app-client-detail',
@@ -11,7 +12,7 @@ export class ClientDetailComponent {
   clientList: any;
   current_role: any;
 
-  constructor(private api: CommonApiService) {
+  constructor(private api: CommonApiService,private communicate:CommunicateService) {
 
     this.current_role = localStorage.getItem('role');
     this.current_role = JSON.parse(this.current_role);
@@ -25,12 +26,14 @@ export class ClientDetailComponent {
   ngOnInit() { }
 
   getClientList(acc_id: number) {
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
       if(res.error == true){
         this.clientList = false;
       }else{
         this.clientList = res['data'];
       }
+      this.communicate.isLoaderLoad.next(false);
     });
   }
 

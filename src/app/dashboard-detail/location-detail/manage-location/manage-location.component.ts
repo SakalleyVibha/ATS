@@ -3,6 +3,7 @@ import { FormBuilder,FormControl,FormGroup,Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CommunicateService } from '../../../core/services/communicate.service';
 @Component({
   selector: 'app-manage-location',
   templateUrl: './manage-location.component.html',
@@ -15,7 +16,7 @@ export class ManageLocationComponent {
   logoName:string = '';
   fileTypeBase64!: ArrayBuffer | any;
   
-  constructor(private api:CommonApiService,private formBuilder:FormBuilder,private router:Router,private activatedRoute: ActivatedRoute,private toastr:ToastrService){
+  constructor(private api:CommonApiService,private formBuilder:FormBuilder,private router:Router,private activatedRoute: ActivatedRoute,private toastr:ToastrService,private communicate:CommunicateService){
     this.addLocationForm = this.formBuilder.group({
     name: ['',[Validators.required,Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
     about:['',[Validators.required,Validators.maxLength(150), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -23,7 +24,7 @@ export class ManageLocationComponent {
     website:['',[Validators.required,Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
     phone:['',[Validators.required,, Validators.pattern('[6-9][0-9]{12}')]],
     mobile:['',[Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-    fax:['',[Validators.required,Validators.required,Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
+    fax:['',[Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
     street:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
     city:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
     country:['',[Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
@@ -60,15 +61,19 @@ export class ManageLocationComponent {
       this.isFormValid = true;
       return;
     }
-
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("locations/location",this.addLocationForm.value).subscribe((resp_location:any)=>{
       console.log("After add location : ",resp_location);
       if(resp_location.message){
+        this.addLocationForm.reset();
         this.toastr.success("Location added succesfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-          this.router.navigate(['/create-user-location/location-detail']);
+          this.communicate.isLoaderLoad.next(false);
+          this.router.navigate(['/dashboard-detail/location-detail']);
         });
       }else{
-        this.toastr.error("Something went wrong, Please try again later","",{closeButton:true,timeOut:5000});
+        this.toastr.error("Something went wrong, Please try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     });
   }
@@ -80,9 +85,20 @@ export class ManageLocationComponent {
       this.isFormValid = true;
       return;
     }
-
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("locations/updatelocation",this.addLocationForm.value).subscribe((updateLocationResponse:any)=>{
       console.log("After Location Update : ",updateLocationResponse);
+      this.addLocationForm.reset();
+      if(updateLocationResponse?.error != false){
+        this.toastr.success("Location updated","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+          this.router.navigate(['/dashboard-detail/location-detail']);
+        })
+      }else{
+        this.toastr.error("Location not updated, Please try again later !","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
+      }
     });
   }
 

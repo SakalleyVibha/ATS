@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CommunicateService } from './core/services/communicate.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'ATSSys';
+  constructor(private communicate:CommunicateService,private loader:NgxUiLoaderService){}
+  ngOnInit(){
+    this.communicate.isLoaderLoad.subscribe((res:any)=>{
+      if(res == true){
+        this.loader.start();
+      }else{
+        this.loader.stop();
+      }
+    })
+  }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonApiService } from '../../core/services/common-api.service';
+import { CommunicateService } from '../../core/services/communicate.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,7 @@ export class DashboardComponent {
   is_owner: any;
   role_permission: any;
 
-  constructor(private api: CommonApiService) {
+  constructor(private api: CommonApiService,private communicate:CommunicateService) {
     this.role_permission = localStorage.getItem("role");
     this.role_permission = JSON.parse(this.role_permission);
   }
@@ -25,6 +26,7 @@ export class DashboardComponent {
   }
 
   getAccount(shareData: any) {
+    this.communicate.isLoaderLoad.next(true);
     this.api.allgetMethod('accounts/account', {}).subscribe((res: any) => {
       this.is_owner = shareData?.is_owner;
       if (res['data']) {
@@ -32,8 +34,8 @@ export class DashboardComponent {
         console.log('res[data]: ', res['data']);
         console.log('this.accountDetail: ', this.accountDetail);
       } else {
-
       }
+      this.communicate.isLoaderLoad.next(false);
     })
   }
 

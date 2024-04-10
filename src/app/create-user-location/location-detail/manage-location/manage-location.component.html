@@ -149,9 +149,6 @@
                                 <div class="form-group">
                                     <input type="tel" class="form-control" id="autoSizingInput" formControlName="fax" placeholder="Enter fax number">
                                     <div *ngIf="formData['fax'].invalid && (formData['fax'].dirty || formData['fax'].touched || isFormValid)" class="required-txt-error">
-                                        <ng-container *ngIf="formData['fax'].errors?.['required']">
-                                            Fax required
-                                        </ng-container>
                                         <ng-container *ngIf="formData['fax'].errors?.['pattern']">
                                             Valid fax required
                                         </ng-container>
