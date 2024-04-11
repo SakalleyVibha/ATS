@@ -33,8 +33,8 @@ export class ClientDetailComponent {
       }else{
         this.clientList = res['data'];
       }
-      this.communicate.isLoaderLoad.next(false);
     });
+    this.communicate.isLoaderLoad.next(false);
   }
 
 }

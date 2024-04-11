@@ -52,6 +52,7 @@ export class ManageUserComponent {
     });
 
     this.getUserRole(user_data.account_id);
+    this.forEditData(user_data.account_id);
   }
 
   get formData() { return this.userForm.controls }
@@ -59,12 +60,8 @@ export class ManageUserComponent {
   ngOnInit() {
     // this.getUserRole();
     let date = new Date();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? date.getDate() - 1 : `0${date.getDate() - 1}` }`;
-    this.activeRouter.queryParams.subscribe((params: any) => {
-      if (params.id != null || params.id != undefined) {
-        this.editUser = true;
-      }
-    });
+    let today = date.getDate();
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}` }`;
   }
 
   selectRole(event: any) {
@@ -134,11 +131,64 @@ export class ManageUserComponent {
     })
   }
 
+  forEditData(acc_id:any){
+    this.activeRouter.queryParams.subscribe((params: any) => {
+      if (params.id != null || params.id != undefined) {
+        let data = {
+          id: Number(params.id),
+          account_id:acc_id
+        }
+        this.communicate.isLoaderLoad.next(true);
+        this.api.allPostMethod("users/getUser",data).subscribe((editData:any)=>{
+          let editableData = editData['data'][1];
+          this.userForm.patchValue({
+            f_name: editableData?.f_name,
+            l_name: editableData?.l_name,
+            alias: editableData?.alias,
+            dob:  editableData?.dob,
+            email: editableData?.email,
+            website:  editableData?.website,
+            phone: editableData?.phone,
+            mobile: editableData?.mobile,
+            fax:  editableData?.fax,      
+            street: editableData?.street, 
+            state: editableData?.state,
+            zip: editableData?.zip,
+            city: editableData?.city,
+            country: editableData?.country,
+          });
+          this.userForm.addControl("id",new FormControl(editableData?.id));
+         this.userForm.removeControl('role_id');
+         this.userForm.removeControl('client_id');
+         this.userForm.removeControl('location_id');
+          this.communicate.isLoaderLoad.next(false);
+          console.log(editData['data'][1]);
+        })
+        this.editUser = true;
+      }
+    });
+  }
+
   onEditUser() {
     if (this.userForm.invalid) {
       this.isFormValid = true;
       return
     }
+    this.communicate.isLoaderLoad.next(true);
+    // this.userForm.value = {...this.userForm.value, id : }
+    this.api.allPostMethod("users/updateUserProfile",this.userForm.value).subscribe((res:any)=>{
+      console.log("After User update : ",res);
+      if(res && res?.error == false){
+        this.toastr.success("User profile update successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+          this.router.navigate(['/dashboard-detail/user-detail']);
+        });
+      }else{
+        this.toastr.error("Something went wrong. Try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe((res:any)=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
+      }
+    })
   }
 
   convertDate(dateString: string) {

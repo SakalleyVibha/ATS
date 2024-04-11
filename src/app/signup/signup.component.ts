@@ -47,7 +47,8 @@ export class SignupComponent {
 
   ngOnInit() {
     let date = new Date();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? date.getDate() - 1 : `0${date.getDate() - 1}`}`;
+    let today = date.getDate();
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}`}`;
     this.signUp.get('password')?.valueChanges.subscribe((res) => {
       let cnfrmPass = this.signUp.value?.confirmpassword;
       if (cnfrmPass != '' && cnfrmPass == res) {

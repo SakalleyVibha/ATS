@@ -27,7 +27,7 @@ export class LocationDetailComponent {
   getLocationList(acc_id: number) {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
+      if (res.data && res.data.length > 0) {
         this.location_list = res.data;
         this.router.navigate(['/create-user-location/user-detail']);
       } else {
