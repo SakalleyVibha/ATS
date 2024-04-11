@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonApiService } from '../core/services/common-api.service';
 import { Router } from '@angular/router';
 import { ConfirmedValidator } from '../shared/confirm.validator';
-
+import { CommunicateService } from '../core/services/communicate.service';
 @Component({
   selector: 'app-password-change',
   templateUrl: './password-change.component.html',
@@ -16,8 +16,9 @@ export class PasswordChangeComponent {
   isconfirmpasswordshow: boolean = false;
   ispasswordshow: boolean = false;
   isPasswordReset: boolean = false;
-
-  constructor(private fb: FormBuilder, private toast: ToastrService, private commonApi: CommonApiService, private router: Router) {
+  isFieldsValid:boolean = false;
+  
+  constructor(private fb: FormBuilder, private toast: ToastrService, private commonApi: CommonApiService, private router: Router,private communicate:CommunicateService) {
     let shareData: any = localStorage.getItem('Shared_Data');
     shareData = JSON.parse(shareData);
     this.changeTempPasswordForm = this.fb.group({
@@ -31,22 +32,39 @@ export class PasswordChangeComponent {
 
   get formData() { return this.changeTempPasswordForm.controls }
 
+  ngOnInit() {
+    this.changeTempPasswordForm.get('password')?.valueChanges.subscribe((res:any) => {
+      let cnfrmPass = this.changeTempPasswordForm.value?.confirmpassword;
+      if (cnfrmPass != '' && cnfrmPass == res) {
+        this.changeTempPasswordForm.controls['confirmpassword']?.updateValueAndValidity();
+      }
+    });
+  }
+
   resetPassword() {
+    if(this.changeTempPasswordForm.invalid){
+      this.isFieldsValid = true;
+      return;
+    }
+    this.communicate.isLoaderLoad.next(true);
     let formData = Object.assign({}, this.changeTempPasswordForm.value);
     delete formData.confirmpassword
     this.commonApi.allPostMethod('users/changeUsersPassword', formData).subscribe((res: any) => {
       console.log("After Change Password : ", res);
+      this.changeTempPasswordForm.reset();
       if (res.message) {
         this.isPasswordReset = true;
-        this.toast.success("Password updated successfully", "Done", {
+        this.toast.success("Password updated successfully", "", {
           closeButton: true,
-          timeOut: 2000
+          timeOut: 5000
         }).onHidden.subscribe(() => {
           localStorage.clear();
+          this.communicate.isLoaderLoad.next(false)
           this.router.navigate(['/login']);
         });
       } else {
-        this.toast.error("Unable to update password try again later.", "Something went wrong", { closeButton: true, timeOut: 500 }).onHidden.subscribe(() => {
+        this.toast.error("Something went wrong, Unable to update password try again later.", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
+          this.communicate.isLoaderLoad.next(false)
           this.changeTempPasswordForm.reset();
         });
       }

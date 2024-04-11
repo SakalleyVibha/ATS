@@ -25,14 +25,13 @@ export class UserDetailComponent {
   getUserList(account_id: number) {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("users/getUserList", { account_id: account_id, pageNumber: 1, pageSize: 10 }).subscribe((getUser: any) => {
-      if (getUser.data.length > 0) {
+      if (getUser.data && getUser.data.length > 0) {
         this.user_list = getUser.data;
-        this.communicate.isLoaderLoad.next(false);
         this.router.navigate(['/dashboard-detail'])
       } else {
-        this.communicate.isLoaderLoad.next(false);
         this.user_list = false;
       }
+      this.communicate.isLoaderLoad.next(false);
     })
   }
 }

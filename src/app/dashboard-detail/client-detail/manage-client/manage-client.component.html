@@ -45,7 +45,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" >
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" *ngIf="!clientEdit">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">Location Name*</label>
                             <div class="form-group">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" *ngIf="!clientEdit">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">logo*</label>
                             <div class="form-group">

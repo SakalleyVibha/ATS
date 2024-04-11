@@ -66,12 +66,14 @@ export class LoginComponent {
           if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
             this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
           } else {
-            this.router.navigate([res['data'].is_tempPassword == false ? '/password-change' : '/dashboard-detail']);
+            this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail']);
           }
         });
 
       } else {
-        this.toast.error(res.error, "Something", { timeOut: 1000 });
+        this.toast.error(res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     });
   }

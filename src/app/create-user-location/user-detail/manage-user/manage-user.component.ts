@@ -58,8 +58,9 @@ export class ManageUserComponent {
   ngOnInit() {
     // this.getUserRole();
     let date = new Date();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ?  date.getDate() - 1 : `0${date.getDate() - 1}` }`;
-    this.activeRouter.queryParams.subscribe((params: any) => {
+    let today = date.getDate();
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}` }`;
+     this.activeRouter.queryParams.subscribe((params: any) => {
       if (params.id != null || params.id != undefined) {
         this.editUser = true;
       }
@@ -84,17 +85,17 @@ export class ManageUserComponent {
 
   getUserRole(acc_id: number) {
     this.api.allgetMethod("role/roles",{}).subscribe((roles: any) => {
-      if (roles.data.length > 0) {
+      if (roles.data && roles.data.length > 0) {
         this.user_roles = roles.data;
       }
     });
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
+      if (res.data && res.data.length > 0) {
         this.user_location = res.data;
       }
     });
     this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
+      if (res.data && res.data.length > 0) {
         this.client_list = res.data;
       }
     })

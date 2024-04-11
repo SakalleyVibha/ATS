@@ -27,13 +27,14 @@ export class LocationDetailComponent {
   getLocation(acc_id: number) {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+      console.log(acc_id," && ",res);
       if (res['data']) {
         this.location_list = res['data'];
         // console.log('this.locationList: ', this.location_list);
         // this.whichBtn = 'Account';
       }
-      this.communicate.isLoaderLoad.next(false);
     })
+    this.communicate.isLoaderLoad.next(false);
   }
 
 }
