@@ -80,7 +80,7 @@ export class ManageClientComponent {
         };
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("clients/getclient", data).subscribe((res: any) => {
-          let editableData = res['data'][1];
+          let editableData = res['data'];
           console.log(editableData);
           this.client_Form.patchValue({
             name: editableData?.name,
