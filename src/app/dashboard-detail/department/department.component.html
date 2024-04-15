@@ -11,7 +11,7 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="d-flex  search-filter-main" role="search">
                     <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
-                    <input class="form-control" type="search" placeholder="Search here . . ." aria-label="Search">
+                    <input class="form-control" type="search" [(ngModel)]="searchDepartment" (ngModelChange)="searchValue.next($event)" placeholder="Search here . . ." aria-label="Search">
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12 text-end">

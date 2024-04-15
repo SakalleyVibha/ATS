@@ -11,7 +11,7 @@
        <div class="col-lg-6 col-sm-12">
           <div class="d-flex  search-filter-main" role="search">
              <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
-             <input class="form-control" type="search" placeholder="Search here . . ." aria-label="Search">
+             <input class="form-control" type="search" [(ngModel)]="searchIndustry" (ngModelChange)="this.searchValue.next($event)" placeholder="Search here . . ." aria-label="Search">
           </div>
        </div>
        <div class="col-lg-6 col-sm-12 text-end">
@@ -50,8 +50,8 @@
                                     <span class="txt-tb">{{industry?.poc_email}}</span>
                                   </td> 
                                   <td class="status-font background-grey-table">
-                                    <div class="statuslabel completed-bages" *ngIf="industry?.status == true">Active </div>
-                                    <div class="statuslabel completed-bages" *ngIf="industry?.status == false">Deactive </div>
+                                    <div class="statuslabel completed-bages" *ngIf="industry?.status == 1">Active </div>
+                                    <div class="statuslabel completed-bages" *ngIf="industry?.status == 0">Deactive </div>
                                   </td>
                                   <td class="action_button">
                                     <div class="actiondelete-button">

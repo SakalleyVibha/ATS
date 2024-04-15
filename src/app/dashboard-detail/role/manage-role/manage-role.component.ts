@@ -14,9 +14,10 @@ export class ManageRoleComponent {
   roleForm:FormGroup;
   isFormValid:boolean = false;
   isEditForm:boolean = false;
-  clientList:any;
+  clientList:Array<any>= [];
   industryList: any;
   departmentList: any;
+  isActive:boolean = true;
   
   constructor(private api:CommonApiService,private router:Router,private communicate:CommunicateService,private formBuild:FormBuilder,private toastr:ToastrService,private activeRouter:ActivatedRoute){
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -28,6 +29,7 @@ export class ManageRoleComponent {
       client_id: new FormControl('',[Validators.required]),
       industry_id:new FormControl('',[Validators.required]),
       department_id:new FormControl('',[Validators.required]),
+      status: new FormControl(''),
       // poc_name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
       // poc_email: new FormControl('',[Validators.required,Validators.email]),
       // poc_phone: new FormControl('',[Validators.required,Validators.pattern('[6-9][0-9]{12}')]),
@@ -36,7 +38,7 @@ export class ManageRoleComponent {
       description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)])
     });
     this.communicate.isLoaderLoad.next(true);
-    this.getClientList(user_data?.account_id);
+    this.getClientList(user_data?.account_id); 
    
     this.getEditData(user_data?.account_id);
   }
@@ -100,6 +102,7 @@ export class ManageRoleComponent {
             name: editData.name,
             description: editData.description,
           });
+          this.isActive = editData.status;
           this.roleForm.addControl("id",new FormControl(editData?.id));
           this.roleForm.removeControl("industry_id")
           this.roleForm.removeControl("client_id")
@@ -119,6 +122,7 @@ export class ManageRoleComponent {
       client_id: Number(this.roleForm.value.client_id),
       industry_id: Number(this.roleForm.value.industry_id),
       department_id: Number(this.roleForm.value.department_id),
+      status: Number(this.isActive)
     });
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('job-role/addjobRole',this.roleForm.value).subscribe((response:any)=>{
@@ -140,7 +144,9 @@ export class ManageRoleComponent {
       this.isFormValid = true
       return
     }
-
+    this.roleForm.patchValue({
+      status: Number(this.isActive)
+    })
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("job-role/updatejobRole",this.roleForm.value).subscribe((res:any)=>{
       if(res.data[0] == true){
