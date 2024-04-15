@@ -7,7 +7,7 @@
             <div class="inactact-pop-bdy">
                 <label class="form-check-label inactive-txt">inactive</label>
                <div class="form-check form-switch">                          
-                  <input class="form-check-input " type="checkbox" role="switch" checked="">
+                  <input class="form-check-input" [(ngModel)]="isActive" type="checkbox" role="switch" checked="">
                   <label class="form-check-label active-txt">Active</label>
                </div>
              </div>
@@ -51,7 +51,7 @@
                 <label  for="inlineFormInputGroupUsername">Client</label>
                   <div class="form-group">
                     <select class="form-control" formControlName="client_id">
-                        <option hidden value="" selected *ngIf="clientList.length == 0">No record found</option>
+                        <option hidden value="" selected *ngIf="clientList?.length == 0">No record found</option>
                         <option hidden value="" selected >Select client name</option>
                       <option *ngFor="let client of clientList;" [value]="client?.id" >{{client?.name}}</option>
                     </select>
@@ -184,7 +184,7 @@
             </div>
              <div class="col-xl-12">
               <div class="form-group-btn-center">
-                <a  class="btn btn-theme" (click)="isEditForm ? onEditForm() : onSubmitForm()" [class.disable]="clientList?.length == 0" >{{isEditForm ? 'Edit' : 'Save' }}</a>
+                <a  class="btn btn-theme" (click)="isEditForm ? onEditForm() : onSubmitForm()" [class.disable]="clientList && clientList.length == 0" >{{isEditForm ? 'Edit' : 'Save' }}</a>
                 <a routerLink="/dashboard-detail/industry" class="btn btn-theme-two">Cancel</a>
               </div>
             </div>
