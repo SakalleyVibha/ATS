@@ -80,7 +80,7 @@ export class ManageClientComponent {
         };
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("clients/getclient", data).subscribe((res: any) => {
-          let editableData = res['data'];
+          let editableData = res['data'][1];
           console.log(editableData);
           this.client_Form.patchValue({
             name: editableData?.name,
@@ -146,7 +146,6 @@ export class ManageClientComponent {
     this.communicate.isLoaderLoad.next(true);
     console.log(this.client_Form.value);
     this.api.allPostMethod("clients/updateclient", this.client_Form.value).subscribe((res: any) => {
-      console.log("After client update : ", res);
       if (res && res?.message) {
         this.toastr.success("Client update successfully !!", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
