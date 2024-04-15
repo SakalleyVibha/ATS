@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
+import { ToastrService } from 'ngx-toastr';
+import { FormControl, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-location-detail',
@@ -9,32 +12,82 @@ import { CommunicateService } from '../../core/services/communicate.service';
 })
 export class LocationDetailComponent {
   is_owner: any;
-  location_list: any;
+  location_list: any[] = [];
   current_role: any;
+  reqObj: any;
+  totalItems: number = 0;
 
-  constructor(private api: CommonApiService,private communicate:CommunicateService) {
+  searchByKey: FormGroup = new FormGroup({
+    keyword: new FormControl()
+  });
+
+
+  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
     this.current_role = localStorage.getItem('role');
     this.current_role = JSON.parse(this.current_role);
-    console.log('this.current_role: ', this.current_role);
+
     let shareData: any = localStorage.getItem("Shared_Data");
     shareData = JSON.parse(shareData);
     this.is_owner = shareData?.is_owner;
-    this.getLocation(shareData?.account_id);
+    this.reqObj = {
+      account_id: shareData?.account_id,
+      pageNumber: 1,
+      pageSize: 10
+    };
+
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    let obs = this.searchByKey.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe(data => {
+        if (data['keyword'] && data['keyword'].length > 2) {
+          this.location_list = [];
+          this.reqObj['keyword'] = data['keyword'];
+          this.getLocation();
+        }
+        if (data['keyword'] == '') {
+          this.location_list = [];
+          this.reqObj['keyword'] = '';
+          this.getLocation();
+        }
+      });
+    this.getLocation();
+  }
 
-  getLocation(acc_id: number) {
+  getLocation() {
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      console.log(acc_id," && ",res);
-      if (res['data']) {
-        this.location_list = res['data'];
-        // console.log('this.locationList: ', this.location_list);
-        // this.whichBtn = 'Account';
+    this.api.allPostMethod('locations/locationlist', this.reqObj).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data'] && res['data'].length > 0) {
+          this.location_list.push(...res['data']);
+          this.totalItems = res['totalItems'];
+        } else {
+          this.location_list = [];
+        }
       }
     })
-    this.communicate.isLoaderLoad.next(false);
+  }
+
+  deleteLocation(id: number) {
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('locations/deletelocation', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      this.getLocation();
+      if (res.data && res.data > 0) {
+        this.toastr.success("Location deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+      }
+    });
+
+  }
+
+
+  onScroll() {
+    if (this.location_list && (this.location_list.length < this.totalItems)) {
+      this.reqObj.pageNumber += 1;
+      this.getLocation();
+    }
   }
 
 }

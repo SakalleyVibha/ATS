@@ -60,7 +60,7 @@ export class ManageClientComponent {
   }
 
   getLocationList(acc_id: number) {
-    this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+    this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 20 }).subscribe((res: any) => {
       if (res['data']) {
         this.location_list = res['data'];
         this.client_Form.controls['location_id']?.setValidators([Validators.required]);
@@ -145,15 +145,15 @@ export class ManageClientComponent {
     }
     this.communicate.isLoaderLoad.next(true);
     console.log(this.client_Form.value);
-    this.api.allPostMethod("clients/updateclient",this.client_Form.value).subscribe((res:any)=>{
-      console.log("After client update : ",res);
-      if(res && res?.message){
-        this.toastr.success("Client update successfully !!","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+    this.api.allPostMethod("clients/updateclient", this.client_Form.value).subscribe((res: any) => {
+      console.log("After client update : ", res);
+      if (res && res?.message) {
+        this.toastr.success("Client update successfully !!", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/dashboard-detail/client-detail']);
         });
-      }else{
-        this.toastr.error("Something went wrong. Try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+      } else {
+        this.toastr.error("Something went wrong. Try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }

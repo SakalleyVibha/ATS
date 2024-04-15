@@ -5,15 +5,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
-
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateOrganizationComponent } from './create-organization/create-organization.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
