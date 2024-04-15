@@ -362,7 +362,7 @@
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group-btn-center">
-                            <a (click)="clientEdit ? onEditClient() : onSubmit()" class="btn btn-theme">{{clientEdit ? 'Edit' : 'Save'}}</a>
+                            <a (click)="clientEdit ? onEditClient() : onSubmit()" class="btn btn-theme" [class.disabled]="location_list || location_list.length == 0" >{{clientEdit ? 'Edit' : 'Save'}}</a>
                             <a routerLink="/dashboard-detail/client-detail" class="btn btn-theme-two">Cancel</a>
                         </div>
                     </div>
