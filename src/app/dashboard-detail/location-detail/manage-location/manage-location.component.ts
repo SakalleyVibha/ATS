@@ -47,7 +47,7 @@ export class ManageLocationComponent {
       if (id != null && id != undefined) {
         this.editLocation = true;
         this.api.allPostMethod("locations/getlocation", { id: Number(id), account_id: localData.account_id }).subscribe((res: any) => {
-          let editableData = res['data'][1];
+          let editableData = res['data'];
           console.log("Get Location : ", editableData);
           this.addLocationForm.patchValue({
             name: editableData?.name,

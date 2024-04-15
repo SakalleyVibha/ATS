@@ -140,7 +140,7 @@ export class ManageUserComponent {
         }
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("users/getUser",data).subscribe((editData:any)=>{
-          let editableData = editData['data'][1];
+          let editableData = editData['data'];
           this.userForm.patchValue({
             f_name: editableData?.f_name,
             l_name: editableData?.l_name,

@@ -9,7 +9,10 @@ const routes: Routes = [{
     { path: 'dashboard', component: DashboardComponent },
     { path: 'location-detail', loadChildren: () => import('./location-detail/location-detail.module').then(m => m.LocationDetailModule) },
     { path: 'user-detail', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailModule) },
-    { path: 'client-detail', loadChildren: () => import('./client-detail/client-detail.module').then(m => m.ClientDetailModule) }
+    { path: 'client-detail', loadChildren: () => import('./client-detail/client-detail.module').then(m => m.ClientDetailModule) },
+    { path: 'industry', loadChildren: () => import('./industry/industry.module').then(m => m.IndustryModule) },
+    { path: 'department', loadChildren: () => import('./department/department.module').then(m => m.DepartmentModule) },
+    { path: 'role', loadChildren: () => import('./role/role.module').then(m => m.RoleModule) }
   ]
 }];
 

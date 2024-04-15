@@ -382,7 +382,7 @@
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group-btn-center">
-                            <a (click)="editUser ? onEditUser() :onSubmit()" class="btn btn-theme">{{ editUser ? 'Edit'
+                            <a (click)="editUser ? onEditUser() :onSubmit()" [class.disabled]="user_roles.length == 0 || user_location.length == 0" class="btn btn-theme">{{ editUser ? 'Edit'
                                 : 'Save'}}</a>
                             <a routerLink="/dashboard-detail/user-detail" class="btn btn-theme-two">Cancel</a>
                         </div>

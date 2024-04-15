@@ -1668,3 +1668,11 @@ span.fa.fa-fw.field-icon.toggle-password {
     bottom: 10px;
     left: 13px;
 }
+
+/* Swapnil Sharma - submit button disable */
+
+a.disabled {
+    pointer-events: none;
+    color: gray;
+    cursor: not-allowed;
+}
