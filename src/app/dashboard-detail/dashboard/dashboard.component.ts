@@ -14,7 +14,7 @@ export class DashboardComponent {
   is_owner: any;
   role_permission: any;
 
-  constructor(private api: CommonApiService,private communicate:CommunicateService) {
+  constructor(private api: CommonApiService, private communicate: CommunicateService) {
     this.role_permission = localStorage.getItem("role");
     this.role_permission = JSON.parse(this.role_permission);
   }
@@ -33,9 +33,10 @@ export class DashboardComponent {
         this.accountDetail = res['data'].find((data: any) => data.id == shareData.account_id);
         console.log('res[data]: ', res['data']);
         console.log('this.accountDetail: ', this.accountDetail);
+        this.communicate.isLoaderLoad.next(false);
       } else {
+        this.communicate.isLoaderLoad.next(false);
       }
-      this.communicate.isLoaderLoad.next(false);
     })
   }
 

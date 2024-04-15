@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { ClientDetailRoutingModule } from './client-detail-routing.module';
 import { ClientDetailComponent } from './client-detail.component';
@@ -18,7 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    ClientDetailRoutingModule
+    ClientDetailRoutingModule,
+    InfiniteScrollModule
   ]
 })
 export class ClientDetailModule { }
