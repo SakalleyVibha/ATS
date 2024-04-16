@@ -6,6 +6,7 @@ import { IndustryComponent } from './industry.component';
 import { ManageIndustryComponent } from './manage-industry/manage-industry.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../../core/core.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { CoreModule } from '../../core/core.module';
     CommonModule,
     IndustryRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    InfiniteScrollModule
   ]
 })
 export class IndustryModule { }

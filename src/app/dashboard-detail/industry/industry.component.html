@@ -1,9 +1,9 @@
-<div class="location-sec-bdy">
+<div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
     <div class="row">
       <div class="col-xl-12">
         <div class="loc-heading">
           <h3>Industry </h3>
-        </div>
+        </div> 
       </div>
     </div>
     <div class="search-sec-bdy">

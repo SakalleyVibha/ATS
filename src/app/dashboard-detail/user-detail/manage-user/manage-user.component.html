@@ -3,7 +3,15 @@
         <div class="col-xl-12">
             <div class="loc-heading clb">
                 <h3>{{ editUser ? 'Edit' : 'Create' }} User List </h3>
-
+                <div class="on-off-bdy">
+                    <div class="inactact-pop-bdy">
+                        <label class="form-check-label inactive-txt">inactive</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input " type="checkbox" [(ngModel)]="isActive" role="switch" checked="">
+                            <label class="form-check-label active-txt">Active</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -382,7 +390,7 @@
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group-btn-center">
-                            <a (click)="editUser ? onEditUser() :onSubmit()" [class.disabled]="user_roles.length == 0 || user_location.length == 0" class="btn btn-theme">{{ editUser ? 'Edit'
+                            <a (click)="editUser ? onEditUser() :onSubmit()" [class.disabled]=" (user_roles && user_roles.length == 0) || ( user_location && user_location.length == 0)" class="btn btn-theme">{{ editUser ? 'Edit'
                                 : 'Save'}}</a>
                             <a routerLink="/dashboard-detail/user-detail" class="btn btn-theme-two">Cancel</a>
                         </div>
