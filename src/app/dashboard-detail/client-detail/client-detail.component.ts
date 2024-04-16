@@ -15,7 +15,7 @@ export class ClientDetailComponent {
   clientList: any[] = [];
   current_role: any;
   reqObj: any;
-  totalItems: number = 0;
+  totalPages: number = 0;
 
   searchByKey: FormGroup = new FormGroup({
     keyword: new FormControl()
@@ -61,10 +61,12 @@ export class ClientDetailComponent {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if ((res['data'] && res['data'].length > 0)) {
+          if(this.reqObj.pageNumber == 1){
+            this.clientList = res['data'];
+          } else
           this.clientList.push(...res['data']);
-          this.totalItems = res['totalItems'];
+          this.totalPages = res['totalPages'];
         } else {
-
           this.clientList = [];
         }
       }
@@ -75,6 +77,7 @@ export class ClientDetailComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('clients/deleteclient', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
+      this.reqObj.pageNumber = 1;
       this.getClientList();
       if (res.data && res.data > 0) {
         this.toastr.success("Client deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
@@ -84,7 +87,7 @@ export class ClientDetailComponent {
   }
 
   onScroll() {
-    if (this.clientList && (this.clientList.length < this.totalItems)) {
+    if ( this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
       this.getClientList();
     }

@@ -5,6 +5,7 @@ import { RoleRoutingModule } from './role-routing.module';
 import { RoleComponent } from './role.component';
 import { ManageRoleComponent } from './manage-role/manage-role.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     RoleRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    InfiniteScrollModule
   ]
 })
 export class RoleModule { }

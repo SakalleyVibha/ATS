@@ -20,6 +20,7 @@ export class ManageClientComponent {
   logoName: string = '';
   clientEdit: boolean = false;
   isFieldShow: boolean = false;
+  isActive:Boolean = true;
 
   constructor(private api: CommonApiService, private formbuilder: FormBuilder, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService) {
     let shareData: any = localStorage.getItem("Shared_Data");
@@ -47,7 +48,8 @@ export class ManageClientComponent {
       country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
 
       location_id: [''],
-      account_id: Number(shareData.account_id)
+      account_id: Number(shareData.account_id),
+      status: Number(this.isActive)
     });
     this.getLocationList(shareData.account_id);
     this.editClientData(shareData.account_id);
@@ -60,12 +62,14 @@ export class ManageClientComponent {
   }
 
   getLocationList(acc_id: number) {
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 20 }).subscribe((res: any) => {
       if (res['data']) {
         this.location_list = res['data'];
         this.client_Form.controls['location_id']?.setValidators([Validators.required]);
         this.client_Form.controls['location_id'].updateValueAndValidity();
       }
+      this.communicate.isLoaderLoad.next(false);
     });
   }
 
@@ -80,7 +84,7 @@ export class ManageClientComponent {
         };
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("clients/getclient", data).subscribe((res: any) => {
-          let editableData = res['data'][1];
+          let editableData = res['data'];
           console.log(editableData);
           this.client_Form.patchValue({
             name: editableData?.name,
@@ -100,10 +104,12 @@ export class ManageClientComponent {
             state: editableData?.state,
             zip: editableData?.zip,
           });
+          this.isActive = editableData?.status;
           this.client_Form.removeControl("logo");
           this.client_Form.removeControl("account_id");
           this.client_Form.removeControl('location_id');
           this.client_Form.addControl('id', new FormControl(editableData?.id));
+          this.client_Form.addControl('account_id', new FormControl(acc_id));
           this.communicate.isLoaderLoad.next(false);
         });
       }
@@ -111,19 +117,17 @@ export class ManageClientComponent {
   }
 
   onSubmit() {
-    this.client_Form.value.logo = this.fileTypeBase64;
-
+    
     if (this.client_Form.invalid) {
-      this.isFieldsValid = true;
-      return
+        this.isFieldsValid = true;
+        return
     }
     this.communicate.isLoaderLoad.next(true);
     this.client_Form.patchValue({
       location_id: Number(this.client_Form.value.location_id),
+      status: Number(this.isActive),
     })
-
     this.api.allPostMethod("clients/client", this.client_Form.value).subscribe((afterAdd: any) => {
-      console.log(afterAdd);
       if (afterAdd.message) {
         this.client_Form.reset();
         this.toastr.success("Client created successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
@@ -143,10 +147,13 @@ export class ManageClientComponent {
       this.isFieldsValid = true;
       return;
     }
+    this.client_Form.patchValue({
+      status: Number(this.isActive)
+    });
     this.communicate.isLoaderLoad.next(true);
     console.log(this.client_Form.value);
     this.api.allPostMethod("clients/updateclient", this.client_Form.value).subscribe((res: any) => {
-      if (res && res?.message) {
+      if (res && res.message) {
         this.toastr.success("Client update successfully !!", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/dashboard-detail/client-detail']);
@@ -157,15 +164,15 @@ export class ManageClientComponent {
         });
       }
     })
-
   }
 
   convertImageToBase64(file_event: any) {
     this.logoName = file_event?.target?.files[0]?.name
     const reader = new FileReader();
     reader.readAsDataURL(file_event.srcElement.files[0]);
-    reader.onload = () => {
-      this.fileTypeBase64 = reader.result
+    reader.onload = async () => {
+      this.client_Form.get('logo')?.patchValue(reader.result);
+      this.client_Form.updateValueAndValidity();
     };
   }
 }

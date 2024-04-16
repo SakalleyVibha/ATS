@@ -15,6 +15,7 @@ export class ManageLocationComponent {
   editLocation: boolean = false;
   logoName: string = '';
   fileTypeBase64!: ArrayBuffer | any;
+  isActive:boolean = true;
 
   constructor(private api: CommonApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private communicate: CommunicateService) {
     this.addLocationForm = this.formBuilder.group({
@@ -30,7 +31,8 @@ export class ManageLocationComponent {
       country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       state: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
       zip: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
-      logo: ['', [Validators.required]]
+      logo: ['', [Validators.required]],
+      status: ['']
     });
 
   }
@@ -46,6 +48,7 @@ export class ManageLocationComponent {
       id = paramMap.id;
       if (id != null && id != undefined) {
         this.editLocation = true;
+        this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("locations/getlocation", { id: Number(id), account_id: localData.account_id }).subscribe((res: any) => {
           let editableData = res['data'];
           console.log("Get Location : ", editableData);
@@ -63,9 +66,11 @@ export class ManageLocationComponent {
             state: editableData?.state,
             zip: editableData?.zip,
           });
+          this.isActive = editableData?.status;
           this.addLocationForm.removeControl("logo");
           this.addLocationForm.setControl('id', new FormControl(id));
-        })
+          this.communicate.isLoaderLoad.next(false);
+        });
       }
     });
 
@@ -81,6 +86,7 @@ export class ManageLocationComponent {
       return;
     }
     this.communicate.isLoaderLoad.next(true);
+    this.addLocationForm.get('status')?.patchValue(Number(this.isActive));
     this.api.allPostMethod("locations/location", this.addLocationForm.value).subscribe((resp_location: any) => {
       console.log("After add location : ", resp_location);
       if (resp_location.message) {
@@ -102,7 +108,9 @@ export class ManageLocationComponent {
       this.isFormValid = true;
       return;
     }
+    this.addLocationForm.get('status')?.patchValue(Number(this.isActive));
     this.communicate.isLoaderLoad.next(true);
+    console.log(this.addLocationForm.value);
     this.api.allPostMethod("locations/updatelocation", this.addLocationForm.value).subscribe((updateLocationResponse: any) => {
       console.log("After Location Update : ", updateLocationResponse);
       if (updateLocationResponse?.error != false) {

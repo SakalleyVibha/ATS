@@ -7,7 +7,7 @@
                     <div class="inactact-pop-bdy">
                         <label class="form-check-label inactive-txt">inactive</label>
                         <div class="form-check form-switch">
-                            <input class="form-check-input " type="checkbox" role="switch" checked="">
+                            <input class="form-check-input " type="checkbox" [(ngModel)]="isActive" role="switch" checked="">
                             <label class="form-check-label active-txt">Active</label>
                         </div>
                     </div>
@@ -362,7 +362,7 @@
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group-btn-center">
-                            <a (click)="clientEdit ? onEditClient() : onSubmit()" class="btn btn-theme" [class.disabled]="location_list || location_list.length == 0" >{{clientEdit ? 'Edit' : 'Save'}}</a>
+                            <a (click)="clientEdit ? onEditClient() : onSubmit()" class="btn btn-theme" [class.disabled]="location_list && location_list.length == 0" >{{clientEdit ? 'Edit' : 'Save'}}</a>
                             <a routerLink="/dashboard-detail/client-detail" class="btn btn-theme-two">Cancel</a>
                         </div>
                     </div>

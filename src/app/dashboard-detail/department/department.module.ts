@@ -5,6 +5,7 @@ import { DepartmentRoutingModule } from './department-routing.module';
 import { DepartmentComponent } from './department.component';
 import { ManageDepartmentComponent } from './manage-department/manage-department.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     DepartmentRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    InfiniteScrollModule
   ]
 })
 export class DepartmentModule { }
