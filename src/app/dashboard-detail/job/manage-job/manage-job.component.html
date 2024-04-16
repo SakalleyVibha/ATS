@@ -1,0 +1,608 @@
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading clb">
+                <h3>Create Job</h3>
+
+            </div>
+        </div>
+    </div>
+    <div class="create-md-content">
+        <form [formGroup]="jobForm">
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Select Location</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Location</label>
+                            <div class="form-group">
+                                <select class="form-control" formControlName="location_id"
+                                    (change)="selectLocation($event)">
+                                    <option [disabled]="getAllList['location'] && getAllList['location'].length == 0"
+                                        value="" hidden selected>
+                                        {{(getAllList['location'] && getAllList['location'].length > 0) ? 'Select
+                                        location':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let location of getAllList['location'];let i = index"
+                                        [value]="location?.id">
+                                        {{location?.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Client Information</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Client</label>
+                            <div class="form-group form-group-sec">
+                                <select class="form-control" formControlName="client_id"
+                                    (change)="selectClient($event)">
+                                    @if(jobForm.value.location_id == ''){
+                                    <option [disabled]="getAllList['client'] && getAllList['client'].length == 0"
+                                        value="" hidden selected>
+                                        {{(getAllList['client'] && getAllList['client'].length > 0) ? 'Select
+                                        client':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let client of getAllList['client'];let i = index"
+                                        [value]="client?.id">
+                                        {{client?.name}}</option>
+                                    } @else{
+                                    <option [disabled]="currentClientList && currentClientList.length == 0" value=""
+                                        hidden selected>
+                                        {{(currentClientList && currentClientList.length > 0) ? 'Select
+                                        client':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let client of currentClientList;let i = index" [value]="client?.id">
+                                        {{client?.name}}</option>
+                                    }
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+                                </button>
+                            </div>
+                            <p class="eg-bdy">e.g,TCS,JMC,etc</p>
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Industry</label>
+                            <div class="form-group form-group-sec">
+                                <select class="form-control" formControlName="industry_id"
+                                    (change)="selectIndustry($event)">
+                                    @if(jobForm.value.client_id == ''){
+                                    <option [disabled]="getAllList['industry'] && getAllList['industry'].length == 0"
+                                        value="" hidden selected>
+                                        {{(getAllList['industry'] && getAllList['industry'].length > 0) ? 'Select
+                                        industry':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let industry of getAllList['industry'];let i = index"
+                                        [value]="industry?.id">
+                                        {{industry?.name}}</option>
+                                    } @else{
+                                    <option [disabled]="currentIndustryList && currentIndustryList.length == 0" value=""
+                                        hidden selected>
+                                        {{(currentIndustryList && currentIndustryList.length > 0) ? 'Select
+                                        client':'No item found'}}</option>
+                                    <option *ngFor="let industry of currentIndustryList;let i = index"
+                                        [value]="industry?.id">
+                                        {{industry?.name}}</option>
+                                    }
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Department</label>
+                            <div class="form-group form-group-sec">
+                                <select class="form-control" formControlName="department_id"
+                                    (change)="selectDepartment($event)">
+                                    @if(jobForm.value.industry_id == ''){
+                                    <option
+                                        [disabled]="getAllList['department'] && getAllList['department'].length == 0"
+                                        value="" hidden selected>
+                                        {{(getAllList['department'] && getAllList['department'].length > 0) ? 'Select
+                                        department':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let department of getAllList['department'];let i = index"
+                                        [value]="department?.id">
+                                        {{department?.name}}</option>
+                                    } @else{
+                                    <option [disabled]="currentDepartmentList && currentDepartmentList.length == 0"
+                                        value="" hidden selected>
+                                        {{(currentDepartmentList && currentDepartmentList.length == 0) ? 'No item
+                                        found':'Select
+                                        department'}}</option>
+                                    <option *ngFor="let department of currentDepartmentList;let i = index"
+                                        [value]="department?.id">
+                                        {{department?.name}}</option>
+                                    }
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Role</label>
+                            <div class="form-group form-group-sec">
+                                <select class="form-control">
+                                    @if(jobForm.value.department_id == ''){
+                                    <option [disabled]="getAllList['role'] && getAllList['role'].length == 0" value=""
+                                        hidden selected>
+                                        {{(getAllList['role'] && getAllList['role'].length > 0) ? 'Select
+                                        role':'No item
+                                        found'}}</option>
+                                    <option *ngFor="let role of getAllList['role'];let i = index" [value]="role?.id">
+                                        {{role?.name}}</option>
+                                    } @else{
+                                    <option [disabled]="currentRoleList && currentRoleList.length == 0" value="" hidden
+                                        selected>
+                                        {{(currentRoleList && currentRoleList.length == 0) ? 'No item
+                                        found':'Select
+                                        Role'}}</option>
+                                    <option *ngFor="let role of currentRoleList;let i = index" [value]="role?.id">
+                                        {{role?.name}}</option>
+                                    }
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Work Configuration</label>
+                            <div class="form-group form-group-sec">
+                                <select class="form-control">
+                                    <option>WFO(Work From Home)</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+                                </button>
+                            </div>
+                            <p class="eg-bdy">e.g,WFO.WFH,Remote Work,etc</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Work Authorization</label>
+                            <div class="form-group ">
+                                <select class="form-control">
+                                    <option>OPT</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                            </div>
+                            <p class="eg-bdy">e.g,HTB,OTP,Green Card,etc</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Work Configuration</label>
+                            <div class="form-group ">
+                                <div class="radio-inline-bdy">
+                                    <div>
+                                        <input type="radio" id="html" name="fav_language" value="None">
+                                        <label for="html" class="radio-label">None</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="css" name="fav_language" value="W2">
+                                        <label for="css" class="radio-label">W2</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript9" name="fav_language" value="C2C">
+                                        <label for="javascript9" class="radio-label">C2C</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript10" name="fav_language" value="1099">
+                                        <label for="javascript10" class="radio-label">1099</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript11" name="fav_language" value="1099">
+                                        <label for="javascript11" class="radio-label">Permanent</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="eg-bdy">e.g,W2C,C2C,1099,etc</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Employment Type</label>
+                            <div class="form-group ">
+                                <select class="form-control">
+                                    <option>Full-Time</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Employment Type</label>
+                            <div class="form-group ">
+                                <select class="form-control">
+                                    <option>Full-Time</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Rate Card</h2>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <p class="subheading-txt">In Case of W2 recruit , please make sure that you add overhead
+                            percentage
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Work Configuration</label>
+                            <div class="form-group ">
+                                <div class="radio-inline-bdy">
+                                    <div>
+                                        <input type="radio" id="html1" name="fav_language1" value="None">
+                                        <label for="html1" class="radio-label">None</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="css1" name="fav_language1" value="W2">
+                                        <label for="css1" class="radio-label">W2</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript12" name="fav_language1" value="C2C">
+                                        <label for="javascript12" class="radio-label">C2C</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript1" name="fav_language1" value="1099">
+                                        <label for="javascript1" class="radio-label">1099</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="javascript2" name="fav_language1" value="1099">
+                                        <label for="javascript2" class="radio-label">Permanent</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="eg-bdy">e.g,W2C,C2C,1099,etc</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Client Rate</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="2000.00">
+                            </div>
+                            <p class="eg-bdy">The Amount client is willing to pay</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Gross Margin percentage</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="15.00">
+                            </div>
+                            <p class="eg-bdy">Gross margin percentage to keep</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Overhead percentage</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="9.00">
+                            </div>
+                            <p class="eg-bdy">Overhead percentage W2 employess</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Pay Rate</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="1574.00">
+                            </div>
+                            <p class="eg-bdy">Calculated pay rate for the contractor</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Job Details</h2>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Title</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput"
+                                    placeholder="Java Developer">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Slug</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="java">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Search Vector</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput"
+                                    placeholder="develop 2A java 1A 3E">
+                            </div>
+                            <p class="eg-bdy">Overhead percentage W2 employess</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Expiration Date</label>
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="autoSizingInput" placeholder="2024-02-26">
+                            </div>
+                            <p class="eg-bdy">Note: You are 5.5 hours ahead of server time .The Date when the job
+                                posting expires Optional</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Today</label>
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="autoSizingInput" placeholder="Today">
+                            </div>
+                            <p class="eg-bdy">Note: You are 5.5 hours ahead of server time.Joining data for the position
+                                .Optional</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Contact Period </label>
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="autoSizingInput" placeholder="52">
+                            </div>
+                            <p class="eg-bdy">Enter the length of the contract person</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Education</label>
+                            <div class="form-group ">
+                                <select class="form-control">
+                                    <option>Undergraduate: Btech</option>
+                                    <option>Undergraduate: Btech</option>
+                                    <option>Undergraduate: Btech</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Min Experience</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="1">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Max Experience</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="2">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Opening</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" placeholder="2">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Required Skills</label>
+                            <div class="form-group">
+                                <select id="mySelect" multiple="multiple" class="form-control">
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                    <option value="4">Option 4</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Chosen Required Skills</label>
+                            <div class="form-group">
+                                <select id="requiredskill" multiple="multiple" class="form-control">
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                    <option value="4">Option 4</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-md-6 col-xl-6">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Discription</label>
+                            <div class="form-group">
+                                <textarea id="editorTextarea">This is a textarea element.</textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-md-6 col-xl-6">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Benefits</label>
+                            <div class="form-group">
+                                <textarea id="editorTextarea2">This is a textarea element.</textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Custom Job</h2>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <p class="subheading-txt">Java Developer- Java Technologies Certificate-Required </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+
+                            <div class="form-group form-group-sec">
+                                <select class="form-control">
+                                    <option>Finance-JMC</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+
+                                </button>
+                            </div>
+                            <p class="eg-bdy">e.g,TCS,JMC,etc</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+
+                            <div class="form-group form-group-sec">
+                                <div class="radio-inline-bdy">
+                                    <div>
+                                        <input type="radio" id="html" name="fav_language" value="None">
+                                        <label for="html">Is Required</label>
+                                    </div>
+                                </div>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/trash-2.svg" class="img-fluid">
+
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+
+                            <div class="form-group form-group-sec">
+                                <select class="form-control">
+                                    <option>Finance-JMC</option>
+                                    <option>Evergreenv</option>
+                                    <option>Evergreenv</option>
+                                </select>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/edit-drop.svg">
+
+                                </button>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/crose-red.svg">
+
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+
+                            <div class="form-group form-group-sec">
+                                <div class="radio-inline-bdy">
+                                    <div>
+                                        <input type="radio" id="html" name="fav_language" value="None">
+                                        <label for="html">Is Required</label>
+                                    </div>
+                                </div>
+                                <button class="btn drop-edit-btn">
+                                    <img src="assets/images/trash-2.svg" class="img-fluid">
+
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group-btn-center">
+                            <a href="user-list.html" class="btn btn-theme">Save</a>
+                            <a href="user-list.html" class="btn btn-theme-two">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

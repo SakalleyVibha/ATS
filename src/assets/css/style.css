@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: "Inter", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 p {
@@ -414,7 +414,7 @@ header {
     z-index: 1000;
     /* Ensure header is above other content */
     min-height: 60px;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 2px 25px rgb(0 0 0 / 3%);
     padding-bottom: 0px;
 }
 
@@ -431,7 +431,8 @@ aside {
     /* Enable vertical scrolling if needed */
     z-index: 100;
     /* Ensure aside is above other content except header */
-    box-shadow: 2px 2px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 2px 25px rgb(0 0 0 / 3%);
+    font-family: "Inter", sans-serif;
 }
 
 main {
@@ -607,6 +608,7 @@ span.under-circle {
     height: 45px !important;
     width: 100%;
     border: none !important;
+    padding-right: 0px !important;
 }
 
 .btn.btn-create {
@@ -614,9 +616,9 @@ span.under-circle {
     color: #fff;
     font-size: 15px;
     font-weight: 500;
-    padding: 10px 0px;
+    padding: 12px 0px;
     border-radius: 14px;
-    width: 200px;
+    width: 170px;
     height: 46px;
     line-height: 22px;
 }
@@ -659,6 +661,7 @@ a.btn.btn-create>i {
     line-height: 17px;
     color: #000000;
     border: 0;
+    white-space: nowrap;
 
 }
 
@@ -717,8 +720,7 @@ label.form-check-label.inactive-txt {
     position: absolute;
     content: "";
     right: -5px;
-    background: #559AFF;
-    top: -2px;
+    top: -3.5px;
     line-height: 20px;
     background: #559AFF;
     border-radius: 64px;
@@ -736,7 +738,7 @@ label.form-check-label.inactive-txt {
     content: "";
     left: -5px;
     background: #a3a3a3;
-    top: -2px;
+    top: -3.5px;
     line-height: 20px;
     background: #a3a3a3;
     border-radius: 64px;
@@ -854,7 +856,7 @@ span.image-user-name {
     color: #000;
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
 }
 
@@ -863,7 +865,7 @@ span.txt-tb {
     color: #000;
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
 }
 
@@ -1263,8 +1265,12 @@ Change this width and height to determine the size of the donut. DIV MUST BE SQU
     margin-bottom: 10px;
     border-left: none;
     display: flex;
+    align-items: center;
 }
 
+p.content-colr-bx {
+    margin-bottom: 0;
+}
 
 .legend span {
     display: block;
@@ -1312,15 +1318,18 @@ span.donut-txt {
 
 .right-g-content {
     display: flex;
+    justify-content: end;
+    align-items: center;
 }
 
 .grap-filing-list>ul {
     display: flex;
+    margin-bottom: 0px;
 }
 
 span.grap-filing-txt {
     color: #333333;
-    margin-right: 6px;
+    margin-right: 4px;
     font-size: 12px;
 }
 
@@ -1355,18 +1364,20 @@ span.grap-filing-color {
 
 .controls.graph select {
     border: 1px solid #E4E4E4;
-    border-radius: 16px;
+    border-radius: 9px;
     padding: 8px 14px;
-    width: 132px;
+    min-width: 101px;
     color: #333333;
-    font-size: 16px;
+    font-size: 12px;
     text-transform: uppercase;
 }
 
 .donut-inner-sec {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    height: 100%;
+
 }
 
 p.color-box-list {
@@ -1382,6 +1393,7 @@ p.color-box-list {
     background-color: #ffff;
     border-radius: 10px;
     padding: 20px;
+    height: 100%;
 
 }
 
@@ -1413,11 +1425,13 @@ table.table.table-striped.table-recruter thead tr th {
     font-weight: 400;
     padding: 10px 20px;
     color: #000000;
+    white-space: nowrap;
 }
 
 table.table.table-striped.table-recruter tbody tr td {
     padding: 6px 20px !important;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 table.table.table-striped.table-recruter tbody tr td img.user_img {
@@ -1453,7 +1467,7 @@ table.table.table-striped.table-recruter tbody tr td .progress .progress-bar {
 .rucruter-line-bdy {
     background-color: #ffff;
     border-radius: 10px;
-    padding: 20px 0px;
+    padding-top: 10px;
     padding-bottom: 10px;
 
 }
@@ -1514,7 +1528,7 @@ td.text-nowrap.text-secondary {
 
 .rucruter-heading>h3 {
     color: #333333;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     padding: 0px 20px;
 }
@@ -1637,6 +1651,231 @@ select.form-control {
 table.table.table-tamplate-style.table-user tbody tr td.font15.location-items-bdy {
     white-space: unset;
     min-width: 281px;
+}
+
+/**/
+.form-group.form-group-sec {
+    display: flex;
+    align-items: center;
+}
+
+p.eg-bdy {
+    margin-bottom: 0px;
+    color: #8E8E8E;
+    font-size: 11px;
+}
+
+.radio-inline-bdy {
+    display: flex;
+    column-gap: 9px;
+}
+
+.form-group.form-group-sec {
+    display: flex;
+    align-items: center;
+}
+
+p.eg-bdy {
+    margin-bottom: 0px;
+    color: #8E8E8E;
+    font-size: 11px;
+}
+
+.radio-inline-bdy {
+    display: flex;
+    column-gap: 9px;
+    flex-wrap: wrap;
+}
+
+.radio-inline-bdy label {
+    margin-bottom: 4px;
+}
+
+.required-txt-error {
+    font-size: 11px;
+    color: #e93434;
+    margin-top: 3px;
+    /*text-transform: capitalize;*/
+    font-weight: 500;
+}
+
+.password {
+    position: relative;
+}
+
+span.fa.fa-fw.field-icon.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 52px;
+    opacity: 0.8;
+    color: #aaaaaa;
+}
+
+.select2-selection__choice {
+    display: flex;
+    align-items: center;
+}
+
+.select2-selection__choice__remove {
+    order: 1;
+}
+
+.form-group-wrap select.form-control {
+    color: #212529;
+    border: 1px solid #DEE2E6;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #DEE2E6 !important;
+}
+
+.cke_chrome {
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.cke_bottom {
+    display: none !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #e6e4fa;
+    border-color: #e6e4fa;
+    color: #7367F0;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #7367F0;
+    font-weight: normal;
+    font-size: 19px;
+    line-height: normal;
+}
+
+.radio-label {
+    cursor: pointer;
+    padding-left: 25px;
+    /* Adjust as per your design */
+    position: relative;
+}
+
+.radio-label:before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 1px;
+}
+
+input[type="radio"]:checked+.radio-label:before {
+    background-color: #ffffff;
+    border: 5px solid #7367F0;
+}
+
+/* Optional: Add hover effect */
+
+.radio-inline-bdy input[type="radio" i] {
+    display: none;
+}
+
+.gap-skill-page {
+    min-height: 48vh;
+}
+
+/*.table-wrapper{
+ max-width: 93%;
+}
+.create-md-content {
+    max-width: 90%;
+}*/
+.legendWrapper {
+    margin-left: 100px;
+}
+
+button.toggle-btn {
+    background: transparent;
+    border: 1px solid #f5f5f5;
+    border-radius: 20px;
+}
+
+button.toggle-btn img {
+    width: 22px;
+}
+
+/* changes css */
+
+.cart-under-box-in>span.cart-top {
+    font-size: 14px;
+}
+
+.cart-under-box-in h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+span.cart-grey {
+    font-size: 12px;
+    color: #848484;
+}
+
+.cart-under-box>.cart-under-box-in+div>img {
+    width: 28px;
+}
+
+.circle-process {
+    height: fit-content;
+    width: auto;
+}
+
+.cart-under-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+table.table.table-vcenter.line-table tbody tr td.td-truncate {
+    vertical-align: middle;
+}
+
+td.text-nowrap.text-secondary {
+    vertical-align: bottom;
+}
+
+table.table.table-vcenter.line-table {
+    margin-bottom: 0px;
+}
+
+.table>:not(caption)>*>* {
+    border-bottom: none;
+}
+
+table.table.table-vcenter.line-table tr {
+    border-bottom: 1px solid #8484841c;
+}
+
+table.table.table-vcenter.line-table tr:last-child {
+    border-bottom: none;
+}
+
+.card-table.table-responsive {
+    padding-bottom: 8px;
+}
+
+.rucruter-line-bdy {
+    height: 100%;
+}
+
+.create-md-content {
+    margin-top: 16px;
+}
+
+.table-wrapper>.table-responsive {
+    overflow-x: scroll;
 }
 
 /* Swapnil Sharma - Validation error */

@@ -12,7 +12,8 @@ const routes: Routes = [{
     { path: 'client-detail', loadChildren: () => import('./client-detail/client-detail.module').then(m => m.ClientDetailModule) },
     { path: 'industry', loadChildren: () => import('./industry/industry.module').then(m => m.IndustryModule) },
     { path: 'department', loadChildren: () => import('./department/department.module').then(m => m.DepartmentModule) },
-    { path: 'role', loadChildren: () => import('./role/role.module').then(m => m.RoleModule) }
+    { path: 'role', loadChildren: () => import('./role/role.module').then(m => m.RoleModule) },
+    { path: 'job', loadChildren: () => import('./job/job.module').then(m => m.JobModule) }
   ]
 }];
 
