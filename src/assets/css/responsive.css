@@ -1,95 +1,441 @@
-@media only screen and (max-width: 1440px){
-.row.dash-cart-row .col {
-    max-width: 33%;
-    flex: 1 0 33%;
-}
-}
-@media only screen and (max-width: 1280px){
-.create-form-body::before{
-	left: -48px;
-}
+@media only screen and (max-width: 1560px) {
+    .donutWrapper {
+        width: 200px;
+        height: 200px;
+    }
+
+    span.donut-txt {
+        left: 37%;
+        top: 41%;
+        font-size: 24px;
+    }
+
+    .legendWrapper {
+        margin-left: 50px;
+    }
+
+    span.cart-top {
+        font-size: 13px;
+    }
+
+    .cart-under-box-in>h3 {
+        font-size: 18px;
+        font-weight: 700;
+    }
 }
 
-@media only screen and (max-width: 1200px){
-.create-form-body{
-	    max-width: 88%;
-    margin: auto;
-}
-}
-@media only screen and (max-width: 1024px){
+@media only screen and (max-width: 1440px) {
     .row.dash-cart-row .col {
-    max-width: 50%;
-    flex: 1 0 50%;
-}
-}
-  @media (max-width: 768px) {
-        header {
-            left: 0;
-            width: 100%; /* Make header take full width */
-        }
-        aside {
-            left: -260px; /* Hide the aside menu initially */
-        }
-        main {
-            margin-left: 0; /* Reset margin for main content */
-        }
-        .toggle-btn {
-            display: block; /* Display the toggle button in mobile view */
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100; /* Ensure button is above other content */
-        }
+        max-width: 33%;
+        flex: 1 0 33%;
     }
-@media only screen and (max-width: 767px){
-section.create-wrapper{
-	padding: 69px 20px 30px 20px;
 }
+
+@media only screen and (max-width: 1366px) {
+    span.grap-filing-color {
+        width: 30px;
+    }
+
+    p.color-box-list {
+        height: 15px;
+        width: 15px;
+    }
+
+    .donutWrapper {
+        width: 150px;
+        height: 150px;
+    }
+
+    span.donut-txt {
+        left: 34%;
+        top: 41%;
+        font-size: 18px;
+    }
+
+    p.content-colr-bx {
+        font-size: 12px;
+    }
 }
-@media only screen and (max-width: 580px){
-.row.dash-cart-row .col {
-    max-width: 100%;
-    flex: 1 0 100%;
+
+@media only screen and (max-width: 1280px) {
+    .create-form-body::before {
+        left: -48px;
+    }
+
+    .admin-panel header nav.navbar.navbar-expand-lg a.nav-link {
+        font-size: 12px;
+    }
 }
-.create-form-body::after{
-    right: -38px;
+
+@media only screen and (max-width: 1200px) {
+
+    .dash-sec-bdy .col-xl-5 {
+        margin-top: 15px;
+    }
+
+    span.grap-filing-color {
+        width: 20px;
+        height: 20px;
+    }
+
+    .donut-inner-sec {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .legendWrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    ul.donutTarget.legend {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    p.color-box-list {
+        height: 20px;
+        width: 20px;
+    }
+
+    .create-form-body {
+        max-width: 88%;
+        margin: auto;
+    }
+
+    .chart-bdy {
+        margin-bottom: 4px;
+    }
+
+    .legendWrapper {
+        margin-left: 0px;
+        margin-top: 10px;
+    }
+
+    .donutWrapper {
+        width: 250px;
+        height: 250px;
+    }
+
+    span.donut-txt {
+        left: 36%;
+        top: 41%;
+        font-size: 26px;
+    }
 }
+
+@media only screen and (max-width: 1024px) {
+    .row.dash-cart-row .col {
+        max-width: 50%;
+        flex: 1 0 50%;
+    }
+
+    header {
+        width: calc(100% - 249px);
+    }
 }
-@media only screen and (max-width: 480px){
-.login-form-body{
-	padding: 50px 20px;
-	max-width: 370px;
-	background-size: cover;
+
+@media only screen and (max-width: 820px) {
+    span.grap-filing-txt {
+        width: min-content;
+    }
 }
-.login-heading >h2{
-	font-size: 19px;
+
+@media (max-width: 768px) {
+
+    span.grap-filing-txt {
+        width: fit-content;
+    }
+
+    a.navbar-brand {
+        margin-left: 45px;
+    }
+
+    header {
+        left: 0;
+        width: 100%;
+        /* Make header take full width */
+    }
+
+    aside {
+        left: -260px;
+        /* Hide the aside menu initially */
+    }
+
+    main {
+        margin-left: 0;
+        /* Reset margin for main content */
+    }
+
+    .toggle-btn {
+        display: block;
+        /* Display the toggle button in mobile view */
+        position: fixed;
+        top: 15px;
+        left: 20px;
+        z-index: 1100;
+        /* Ensure button is above other content */
+    }
 }
-p.new-on{
-	flex-wrap: wrap;
+
+@media only screen and (max-width: 767px) {
+    button.navbar-toggler {
+        display: none;
+    }
+
+    .toggle-btn {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 20px;
+        z-index: 1100;
+    }
+
+    section.create-wrapper {
+        padding: 69px 20px 30px 20px;
+    }
+
+    .donutWrapper {
+        width: 180px;
+        height: 180px;
+    }
+
+    span.donut-txt {
+        left: 36%;
+        top: 41%;
+        font-size: 20px;
+    }
 }
-.email-formin-body::before{
-	left: -37px;
-    width: 120px;
-    height: 120px;
+
+@media only screen and (max-width: 580px) {
+    .row.dash-cart-row .col {
+        max-width: 100%;
+        flex: 1 0 100%;
+    }
+
+    .create-form-body::after {
+        right: -38px;
+    }
+
+    a.navbar-brand {
+        margin-left: 40px;
+    }
 }
-.email-formin-body::after{
-	 width: 120px;
-    height: 120px;
-    right: -29px;
-    bottom: -46px;
+
+@media only screen and (max-width: 575px) {
+
+    .loc-heading.clb{
+        justify-content: space-between;
+    }
+
+    .loc-heading.clb>h3 {
+        white-space: nowrap;
+    }
+
+    .on-off-bdy {
+        display: flex;
+    }
+
+    .create-md-content {
+        margin-top: 16px;
+    }
+
+    .create-form-he>h2 {
+        margin-bottom: 0px;
+    }
+
+    .form-input-wrapper>.row .col-sm-12 {
+        width: 100%;
+    }
+
+    span.grap-filing-txt {
+        width: fit-content;
+    }
+
+    .right-g-content {
+        justify-content: space-between;
+    }
+
+    .srch-table-filter {
+        width: 50%;
+    }
+
+    .add-table-button {
+        width: 50%;
+    }
+
+    .form-group-btn-center {
+        display: flex;
+        justify-content: center;
+        column-gap: 12px;
+        padding: 14px 0;
+    }
+    
+    .form-group-btn-center a.btn.btn-theme {
+        margin-right: 0;
+    }
+    
+    a.btn.btn-theme {
+        padding: 6px 50px;
+    }
+    
+    a.btn.btn-theme-two {
+        padding: 6px 50px;
+    }
 }
-.email-formin-body{
-	max-width: 300px;
-    margin: auto;
+
+@media only screen and (max-width: 480px) {
+
+    .heading-pie > h3 {
+        padding-left: 20px;
+    }
+
+    a.btn.btn-theme {
+        padding: 6px 14px;
+        width: 110px;
+    }
+    
+    a.btn.btn-theme-two {
+        padding: 6px 14px;
+        width: 110px;
+    }
+
+    .loc-heading.clb {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .btn.btn-create {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 9px 0px;
+        border-radius: 14px;
+        width: 100%;
+        height: 40px;
+        margin-top: 3px;
+    }
+
+    /* .add-table-button {
+        text-align: center !important;
+    } */
+    .srch-table-filter {
+        width: 100%;
+    }
+
+    .add-table-button {
+        width: 100%;
+    }
+
+    .legendWrapper {
+        width: 100%;
+    }
+
+    .donut-bdy {
+        padding-right: 0px;
+        padding-left: 0;
+    }
+
+    .legendWrapper>ul>li {
+        margin-top: 10px;
+    }
+
+
+    .login-form-body {
+        padding: 50px 20px;
+        max-width: 370px;
+        background-size: cover;
+    }
+
+    .login-heading>h2 {
+        font-size: 19px;
+    }
+
+    p.new-on {
+        flex-wrap: wrap;
+    }
+
+    .email-formin-body::before {
+        left: -37px;
+        width: 120px;
+        height: 120px;
+    }
+
+    .email-formin-body::after {
+        width: 120px;
+        height: 120px;
+        right: -29px;
+        bottom: -46px;
+    }
+
+    .email-formin-body {
+        max-width: 300px;
+        margin: auto;
+    }
+
+    .create-heading-txt h3 {
+        font-size: 14px;
+    }
+
+    .create-logo>h1 {
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    .create-inner {
+        padding: 17px 17px;
+    }
+
+    .donutWrapper {
+        width: 110px;
+        height: 110px;
+    }
+
+    span.donut-txt {
+        left: 33%;
+        top: 41%;
+        font-size: 15px;
+    }
+
+    .legend li {
+        margin-bottom: -9px;
+    }
 }
-.create-heading-txt h3{
-    font-size: 14px;
-}
-.create-logo >h1 {
-    font-size: 9px;
-    font-weight: 700;
-}
-.create-inner{
-    padding: 17px 17px;
-}
+
+@media only screen and (max-width: 400px) {
+
+    a.btn.btn-theme {
+        width: 90px;
+    }
+    
+    a.btn.btn-theme-two {
+        width: 90px;
+    }
+
+    .legendWrapper {
+        width: 54%;
+    }
+
+    .controls.graph {
+        margin-top: 10px;
+    }
+
+    .right-g-content {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        margin-bottom: 10px;
+    }
+
+    .donut-inner-sec {
+        display: flex;
+        flex-direction: row;
+    }
+
+    ul.donutTarget.legend {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        margin-left: 24px;
+    }
 }
