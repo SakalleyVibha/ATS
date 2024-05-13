@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-manage-location',
   templateUrl: './manage-location.component.html',
@@ -11,25 +12,28 @@ import { CommunicateService } from '../../../core/services/communicate.service';
 })
 export class ManageLocationComponent {
   addLocationForm: FormGroup;
-  isFormValid: boolean = false;
+  isFormValid = signal(false);
   editLocation: boolean = false;
   logoName: string = '';
-  fileTypeBase64!: ArrayBuffer | any;
+  imgURLBase64 = signal<ArrayBuffer | any>('');
   isActive:boolean = true;
+  sql_validation = signal(environment.SQL_validation);
+  website_validate = signal(environment.website_validation);
+  number_validation = signal(environment.Phone_Mobile_valid);
 
   constructor(private api: CommonApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private communicate: CommunicateService) {
     this.addLocationForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]],
+      about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(this.sql_validation())]],
       account_id: '',
-      website: ['', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
-      phone: ['', [Validators.required, , Validators.pattern('[6-9][0-9]{12}')]],
-      mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
+      website: ['', [Validators.required, Validators.pattern(this.website_validate())]],
+      phone: ['', [Validators.required, , Validators.pattern(this.number_validation())]],
+      mobile: ['', [Validators.required, Validators.pattern(this.number_validation())]],
       fax: ['', [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
-      street: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      city: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      state: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      street: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
+      city: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
+      country: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
+      state: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
       zip: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
       logo: ['', [Validators.required]],
       status: ['']
@@ -49,9 +53,9 @@ export class ManageLocationComponent {
       if (id != null && id != undefined) {
         this.editLocation = true;
         this.communicate.isLoaderLoad.next(true);
-        this.api.allPostMethod("locations/getlocation", { id: Number(id), account_id: localData.account_id }).subscribe((res: any) => {
+        this.api.allPostMethod("locations/getlocation", { id: Number(id), account_id: localData?.account_id }).subscribe((res: any) => {
           let editableData = res['data'];
-          console.log("Get Location : ", editableData);
+          // console.log("Get Location : ", editableData);
           this.addLocationForm.patchValue({
             name: editableData?.name,
             about: editableData?.about,
@@ -67,7 +71,9 @@ export class ManageLocationComponent {
             zip: editableData?.zip,
           });
           this.isActive = editableData?.status;
-          this.addLocationForm.removeControl("logo");
+          this.imgURLBase64.set(editableData?.logo);          
+          this.addLocationForm.controls['logo'].clearValidators();
+          this.addLocationForm.controls['logo'].updateValueAndValidity();
           this.addLocationForm.setControl('id', new FormControl(id));
           this.communicate.isLoaderLoad.next(false);
         });
@@ -79,16 +85,14 @@ export class ManageLocationComponent {
   get formData() { return this.addLocationForm.controls }
 
   onSubmit() {
-    this.addLocationForm.value.logo = this.fileTypeBase64;
-
     if (this.addLocationForm.invalid) {
-      this.isFormValid = true;
+      this.isFormValid.set(true);
       return;
     }
     this.communicate.isLoaderLoad.next(true);
     this.addLocationForm.get('status')?.patchValue(Number(this.isActive));
-    this.api.allPostMethod("locations/location", this.addLocationForm.value).subscribe((resp_location: any) => {
-      console.log("After add location : ", resp_location);
+    let payload = {...this.addLocationForm.value,logo: this.imgURLBase64()};
+    this.api.allPostMethod("locations/location", payload).subscribe((resp_location: any) => {
       if (resp_location.message) {
         this.addLocationForm.reset();
         this.toastr.success("Location added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
@@ -105,14 +109,15 @@ export class ManageLocationComponent {
 
   onEditForm() {
     if (this.addLocationForm.invalid) {
-      this.isFormValid = true;
+      this.isFormValid.set(true);
       return;
     }
-    this.addLocationForm.get('status')?.patchValue(Number(this.isActive));
     this.communicate.isLoaderLoad.next(true);
-    console.log(this.addLocationForm.value);
-    this.api.allPostMethod("locations/updatelocation", this.addLocationForm.value).subscribe((updateLocationResponse: any) => {
-      console.log("After Location Update : ", updateLocationResponse);
+    this.addLocationForm.get('status')?.patchValue(Number(this.isActive));
+    let isBase64 = this.communicate.isBase64(this.imgURLBase64());
+    let payload = {...this.addLocationForm.value,logo: (isBase64 ? this.imgURLBase64() : false)};
+
+    this.api.allPostMethod("locations/updatelocation", payload).subscribe((updateLocationResponse: any) => {
       if (updateLocationResponse?.error != false) {
         this.toastr.success("Location updated", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
@@ -127,11 +132,31 @@ export class ManageLocationComponent {
   }
 
   convertImageToBase64(file_event: any) {
-    this.logoName = file_event?.target?.files[0]?.name
     const reader = new FileReader();
-    reader.readAsDataURL(file_event.srcElement.files[0]);
+    reader.readAsDataURL(file_event);
     reader.onload = () => {
-      this.fileTypeBase64 = reader.result
+      this.imgURLBase64.set(reader.result)
     };
+  }
+
+  CrossBtn(){
+    this.imgURLBase64.set('');
+    this.addLocationForm.get('logo')?.setValue('');
+    this.addLocationForm.controls['logo'].addValidators(Validators.required);
+    this.addLocationForm.controls['logo'].updateValueAndValidity();
+  }
+
+  onFileChange(event:any){
+    if(event.dataTransfer){
+      let file = event.dataTransfer.files
+      this.addLocationForm.controls['logo'].clearValidators();
+      this.addLocationForm.controls['logo'].updateValueAndValidity();
+      this.convertImageToBase64(file[0]);
+      return
+    }
+    if(event.srcElement && event.srcElement!= undefined){
+      let file = event.srcElement.files
+      this.convertImageToBase64(file[0]);
+    }
   }
 }

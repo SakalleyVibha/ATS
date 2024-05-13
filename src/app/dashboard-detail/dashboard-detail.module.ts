@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { DashboardDetailRoutingModule } from './dashboard-detail-routing.module';
 import { DashboardDetailComponent } from './dashboard-detail.component';
@@ -11,7 +11,7 @@ import { CoreModule } from '../core/core.module';
 @NgModule({
   declarations: [
     DashboardDetailComponent,
-    DashboardComponent
+    DashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -19,6 +19,7 @@ import { CoreModule } from '../core/core.module';
     ReactiveFormsModule,
     FormsModule,
     DashboardDetailRoutingModule,
+    NgOptimizedImage
   ]
 })
 export class DashboardDetailModule { }

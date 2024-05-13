@@ -48,7 +48,7 @@ export class SignupComponent {
   ngOnInit() {
     let date = new Date();
     let today = date.getDate();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}`}`;
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today}` : `${today}`}`;
     this.signUp.get('password')?.valueChanges.subscribe((res) => {
       let cnfrmPass = this.signUp.value?.confirmpassword;
       if (cnfrmPass != '' && cnfrmPass == res) {
@@ -69,8 +69,9 @@ export class SignupComponent {
     this.signUp.patchValue({ dob: date });
     const formCopy = Object.assign({}, this.signUp.getRawValue());
     delete formCopy.confirmpassword;
-
-    this.api.allPostMethod("users/signup", formCopy).subscribe((res: any) => {
+    let payload = {...formCopy,dob: date};
+    console.log("PayLoad : ",payload);
+    this.api.allPostMethod("users/signup", payload).subscribe((res: any) => {
       if (!res.error) {
         this.toastr.success("Sign up done successfully", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);

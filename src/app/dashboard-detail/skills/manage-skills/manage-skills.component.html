@@ -1,0 +1,112 @@
+<div class="location-sec-bdy">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="loc-heading clb">
+          <h3>Create Skills </h3>         
+        </div>
+      </div>
+    </div>
+    <div class="create-md-content">         
+        <div class="create-form-wrap">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="create-form-he">
+                <h2>General Information  </h2>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="skillForm" >
+          <div class="row">              
+            <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label  for="inlineFormInputGroupUsername">Name*</label>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter name" formControlName="name">
+                    <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || formValid()))" class="required-txt-error">
+                        <ng-container *ngIf="formData['name'].errors?.['required']">
+                            Name required
+                        </ng-container>
+                        <ng-container *ngIf="formData['name'].errors?.['pattern']">
+                            Valid name required
+                        </ng-container>
+                        <ng-container *ngIf="formData['name'].errors?.['minlength']">
+                            Name must contain atleast 2 characters
+                        </ng-container>
+                    </div>
+                  </div>
+              </div>
+            </div> 
+            <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label for="inlineFormInputGroupUsername">Description</label>
+                  <div class="form-group">
+                    <textarea rows="3" class="form-control" placeholder="Description skill here" formControlName="description"></textarea>
+                    <div *ngIf="(formData['description'].invalid && (formData['description'].dirty || formData['description'].touched || formValid()))" class="required-txt-error">
+                        <ng-container *ngIf="formData['description'].errors?.['required']">
+                            Description required
+                        </ng-container>
+                        <ng-container *ngIf="formData['description'].errors?.['pattern']">
+                            Valid description required
+                        </ng-container>
+                        <ng-container *ngIf="formData['description'].errors?.['maxlength']">
+                            Description contains 150 characters only
+                        </ng-container>
+                    </div>
+                  </div>
+              </div>
+            </div> 
+            <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label for="inlineFormInputGroupUsername">Location</label>
+                  <div class="form-group">
+                    <select class="form-control" formControlName="location_id">
+                        <option value="" selected hidden>Select location</option>
+                        @for (location of this.location_list(); track $index) {
+                            <option [value]="location?.id" >{{location?.name}}</option>
+                        }
+                    </select>
+                    <div *ngIf="(formData['location_id'].invalid && (formData['location_id'].dirty || formData['location_id'].touched || formValid()))" class="required-txt-error" >
+                        <ng-container *ngIf="formData['location_id'].errors?.['required']">
+                            Location required
+                        </ng-container>
+                    </div>
+                  </div>
+              </div>
+            </div> 
+            <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label for="inlineFormInputGroupUsername">Client</label>
+                  <div class="form-group">
+                    <select class="form-control" formControlName="client_id">
+                        <option value="" selected hidden>Select client</option>
+                        @for (client of this.client_list(); track $index) {
+                            <option [value]="client?.id">{{client?.name}}</option>
+                        }
+                    </select>
+                    <div *ngIf="(formData['client_id'].invalid && ( formData['client_id'].dirty || formData['client_id'].touched || formValid()))" class="required-txt-error" >
+                        <ng-container *ngIf="formData['client_id'].errors?.['required']">
+                            Client required
+                        </ng-container>
+                    </div>
+                  </div>
+              </div>
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="gap-skill-page"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="form-group-btn-center">
+                <a (click)="onSubmit()" class="btn btn-theme">Save</a>
+                <a href="#" class="btn btn-theme-two" routerLink="/dashboard-detail">Cancel</a>
+              </div>
+            </div>
+          </div>
+          </form>
+          
+        </div>
+      </div>
+  </div>

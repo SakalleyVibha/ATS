@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
-                <h3>Jobs </h3>
+                <h3>Skills</h3>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
             </div>
             <div class="col-lg-6 col-sm-12 text-end">
                 <a routerLink="add" class="btn btn-create ">
-                    <i class="fa-solid fa fa-plus"></i> Add Jobs </a>
+                    <i class="fa-solid fa fa-plus"></i> Add Skills</a>
             </div>
         </div>
     </div>
@@ -25,44 +25,41 @@
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>
-                        <th scope="col">List Of Jobs </th>
-                        <th scope="col">Client</th>
-                        <th scope="col">Industry</th>
-                        <th scope="col">Role </th>
+                        <th scope="col">List Of Client</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Address </th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <!-- *ngFor="let job of jobList; let i = index" -->
+
                         <td class="fonts-n3 user-img-desc">
                             <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1"
                                     class="user_img"></span>
                             <span class="image-user-name"> Emily Johnson</span>
                         </td>
                         <td class="fonts-n3">
-                            <span class="txt-tb">Jmc</span>
+                            <span class="txt-tb">Smith Johnson</span>
                         </td>
                         <td class="fonts-n3">
-                            <span class="txt-tb">Finance-JMC</span>
+                            <span class="txt-tb">+1 125 254 20 21</span>
                         </td>
                         <td class="fonts-n3">
-                            <span class="txt-tb">Backend Developer</span>
+                            <span class="txt-tb">Covetus Technologies PVT. LTD.</span>
                         </td>
                         <td class="status-font background-grey-table">
                             <div class="statuslabel completed-bages">Active </div>
-                            <div class="statuslabel deactive-bages">Deactive </div>
                         </td>
                         <td class="action_button">
                             <div class="actiondelete-button">
-                                <a>
-                                    <!-- routerLink="edit" [queryParams]="{id:job.id}" -->
+                                <a href="#">
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
-                                <a>
-                                    <!-- (click)="deleteItem(job.id)" -->
+                                <a href="#">
                                     <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
@@ -72,6 +69,5 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>
