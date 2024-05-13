@@ -15,7 +15,7 @@ export class ManageLocationComponent {
   isFormValid:boolean = false;
   editLocation:boolean = false;
   logoName:string = '';
-  fileTypeBase64!: ArrayBuffer | any;
+  imgURLBase64!: ArrayBuffer | any;
 
   constructor(private api:CommonApiService,private formBuilder:FormBuilder,private router:Router,private communicate:CommunicateService,private activatedRoute: ActivatedRoute,private toastr:ToastrService){
     this.addLocationForm = this.formBuilder.group({
@@ -60,7 +60,8 @@ export class ManageLocationComponent {
       return;
     }
     this.communicate.isLoaderLoad.next(true);
-    this.addLocationForm.value.logo = this.fileTypeBase64;
+    this.addLocationForm.value.logo = this.imgURLBase64;
+    let payload = {...this.addLocationForm.value,logo: this.imgURLBase64}
     this.api.allPostMethod("locations/location",this.addLocationForm.value).subscribe((resp_location:any)=>{
       console.log("After add location : ",resp_location);
       if(resp_location.message){
@@ -82,7 +83,7 @@ export class ManageLocationComponent {
       this.isFormValid = true;
       return;
     }
-    this.addLocationForm.value.logo = this.fileTypeBase64;
+    this.addLocationForm.value.logo = this.imgURLBase64;
     console.log(this.addLocationForm.value);
     // this.api.allPostMethod("locations/updatelocation",this.addLocationForm.value).subscribe((updateLocation:any)=>{
     //   console.log("After Location update : ",updateLocation);
@@ -94,7 +95,7 @@ export class ManageLocationComponent {
     const reader = new FileReader();
     reader.readAsDataURL(file_event.srcElement.files[0]);
     reader.onload = () => {
-      this.fileTypeBase64 = reader.result
+      this.imgURLBase64 = reader.result
     };
   }
 }

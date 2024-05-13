@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading clb">
-                <h3>{{clientEdit ? 'Edit' : 'Create'}} Client</h3>
+                <h3>{{clientEdit() ? 'Edit' : 'Create'}} Client</h3>
                 <div class="on-off-bdy">
                     <div class="inactact-pop-bdy">
                         <label class="form-check-label inactive-txt">inactive</label>
@@ -31,7 +31,7 @@
                             <label for="inlineFormInputGroupUsername">Name*</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter Name" formControlName="name" autocomplete="new-password" >
-                                <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['name'].errors?.['required']">
                                         Name required
                                     </ng-container>
@@ -45,16 +45,68 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" *ngIf="!clientEdit">
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-8">
+                        <div class="row">                          
+                        <div class="col-6 col-lg-4 col-md-4 col-xl-6" [ngClass]="imgURLBase64() ? 'disabledImgSelect':''" >
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Logo</label>
+                                <div class="form-group">
+                                    <div class="form">
+                                        <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)">
+                                            <div class="text-wrapper">
+                                                <div class="centered">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="35" fill="currentColor"
+                                                        class="bi bi-upload" viewBox="0 0 16 16"
+                                                        style="color: #559AFF;margin-bottom: 6px;">
+                                                        <path
+                                                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                        <path
+                                                            d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="centered">
+                                                    <input type="file" name="file" id="file" (change)="onFileChange($event)" formControlName="logo">
+                                                    <label for="file" class="dropFile"><span class="textLink">Browser</span></label>
+                                                </div>
+                                                <div class="centered">
+                                                    <span class="dropFile">drop a file here</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))" class="required-txt-error">
+                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                logo required
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                            @if (imgURLBase64()) {
+                                <div class="col-12 col-lg-4 col-md-12 col-xl-5">
+                                    <div class="form-group-wrap">
+                                        <label for="inlineFormInputGroupUsername">Selected Logo</label>
+                                        <div class="logo_edit">
+                                            <button class="btn btn-danger btn-design" (click)="CrossBtn()">X</button>
+                                            <img src="{{imgURLBase64()}}" class="file-preview" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                        </div>  
+                    </div>
+                    </div>
+                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" *ngIf="!clientEdit()">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">Location Name*</label>
                             <div class="form-group">
                                 <select class="form-control" formControlName="location_id">
                                     <!-- <option disabled value="" hidden selected *ngIf=" <= 0">Select location</option> -->
-                                    <option [disabled]="location_list.length" value="" hidden >{{location_list.length ? 'Select location':'No item found'}}</option>
-                                    <option *ngFor="let location of location_list;let i = index" [value]="location?.id" >{{location?.name}}</option>
+                                    <option [disabled]="location_list().length" value="" hidden >{{location_list().length ? 'Select location':'No item found'}}</option>
+                                    <option *ngFor="let location of location_list();let i = index" [value]="location?.id" >{{location?.name}}</option>
                                 </select>
-                                <div *ngIf="(formData['location_id'].invalid && (formData['location_id'].touched || formData['location_id'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['location_id'].invalid && (formData['location_id'].touched || formData['location_id'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['location_id'].errors?.['required']">
                                         Location required
                                     </ng-container>
@@ -67,7 +119,7 @@
                             <label for="inlineFormInputGroupUsername">Website</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter website" formControlName="website">
-                                <div *ngIf="(formData['website'].invalid && (formData['website'].touched || formData['website'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['website'].invalid && (formData['website'].touched || formData['website'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['website'].errors?.['required']">
                                         Website required
                                     </ng-container>
@@ -78,30 +130,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 col-md-4 col-xl-4" *ngIf="!clientEdit">
-                        <div class="form-group-wrap">
-                            <label for="inlineFormInputGroupUsername">logo*</label>
-                            <div class="form-group">
-                                <div class="form">
-                                    <div class="file-upload-wrapper" [attr.data-text]="logoName != '' ? logoName : 'Select your file!'">
-                                        <input name="file-upload-field" type="file" class="file-upload-field" (change)="convertImageToBase64($event)" value="" formControlName="logo">
-                                        <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid))" class="required-txt-error">
-                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                logo required
-                                            </ng-container>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                     <div class="col-6 col-lg-4 col-md-4 col-xl-4">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">Mobile</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter mobile number" formControlName="mobile">
-                                <div *ngIf="(formData['mobile'].invalid && (formData['mobile'].touched || formData['mobile'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['mobile'].invalid && (formData['mobile'].touched || formData['mobile'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['mobile'].errors?.['required']">
                                         Mobile required
                                     </ng-container>
@@ -117,7 +151,7 @@
                             <label for="inlineFormInputGroupUsername">Phone number </label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter phone number" formControlName="phone">
-                                <div *ngIf="(formData['phone'].invalid && (formData['phone'].touched || formData['phone'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['phone'].invalid && (formData['phone'].touched || formData['phone'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['phone'].errors?.['required']">
                                         Phone required
                                     </ng-container>
@@ -133,7 +167,7 @@
                             <label for="inlineFormInputGroupUsername">Fax</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter fax number" formControlName="fax">
-                                <div *ngIf="(formData['fax'].invalid && (formData['fax'].touched || formData['fax'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['fax'].invalid && (formData['fax'].touched || formData['fax'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['fax'].errors?.['pattern']">
                                         Valid fax required
                                     </ng-container>
@@ -144,13 +178,12 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-6 col-lg-4 col-md-4 col-xl-4">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">About</label>
                             <div class="form-group">
                                 <textarea rows="3" class="form-control" placeholder="Enter description here" formControlName="about"></textarea>
-                                <div *ngIf="(formData['about'].invalid && (formData['about'].touched || formData['about'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['about'].invalid && (formData['about'].touched || formData['about'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['about'].errors?.['required']">
                                         About required
                                     </ng-container>
@@ -164,28 +197,26 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
             <!-- </form>
         </div>
         <div class="create-form-wrap"> -->
-
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-xl-12">
                     <div class="create-form-he">
                         <h2>POC Information </h2>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- <form> -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-6 col-lg-4 col-md-4 col-xl-4">
                         <div class="form-group-wrap">
                             <label for="inlineFormInputGroupUsername">POC Name</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter POC name" formControlName="poc_name">
-                                <div *ngIf="(formData['poc_name'].invalid && (formData['poc_name'].touched || formData['poc_name'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['poc_name'].invalid && (formData['poc_name'].touched || formData['poc_name'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_name'].errors?.['required']">
                                         Proof name required
                                     </ng-container>
@@ -201,7 +232,7 @@
                             <label for="inlineFormInputGroupUsername">POC Email</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter proof email" formControlName="poc_email" autocomplete="new-password" >
-                                <div *ngIf="(formData['poc_email'].invalid && (formData['poc_email'].touched || formData['poc_email'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['poc_email'].invalid && (formData['poc_email'].touched || formData['poc_email'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_email'].errors?.['required']">
                                         Proof email required
                                     </ng-container>
@@ -217,7 +248,7 @@
                             <label for="inlineFormInputGroupUsername">POC Mobile</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter proof mobile" formControlName="poc_mobile">
-                                <div *ngIf="(formData['poc_mobile'].invalid && (formData['poc_mobile'].touched || formData['poc_mobile'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['poc_mobile'].invalid && (formData['poc_mobile'].touched || formData['poc_mobile'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_mobile'].errors?.['required']">
                                         Proof mobile required
                                     </ng-container>
@@ -233,7 +264,7 @@
                             <label for="inlineFormInputGroupUsername">POC Phone</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter proof phone" formControlName="poc_phone">
-                                <div *ngIf="(formData['poc_phone'].invalid && (formData['poc_phone'].touched || formData['poc_phone'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['poc_phone'].invalid && (formData['poc_phone'].touched || formData['poc_phone'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_phone'].errors?.['required']">
                                         Proof phone required
                                     </ng-container>
@@ -249,7 +280,7 @@
                             <label for="inlineFormInputGroupUsername">POC Fax</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter proof fax" formControlName="poc_fax">
-                                <div *ngIf="(formData['poc_fax'].invalid && (formData['poc_fax'].touched || formData['poc_fax'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['poc_fax'].invalid && (formData['poc_fax'].touched || formData['poc_fax'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['poc_fax'].errors?.['pattern']">
                                         Valid proof fax required
                                     </ng-container>
@@ -260,13 +291,10 @@
                             </div>
                         </div>
                     </div>
-
-                </div>
-
+                </div> -->
             <!-- </form>
         </div>
         <div class="create-form-wrap"> -->
-
             <div class="row">
                 <div class="col-xl-12">
                     <div class="create-form-he">
@@ -282,7 +310,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput"
                                     placeholder="Enter street" formControlName="street">
-                                    <div *ngIf="(formData['street'].invalid && (formData['street'].touched || formData['street'].dirty || isFieldsValid))" class="required-txt-error">
+                                    <div *ngIf="(formData['street'].invalid && (formData['street'].touched || formData['street'].dirty || isFieldsValid()))" class="required-txt-error">
                                         <ng-container *ngIf="formData['street'].errors?.['required']">
                                             Street required
                                         </ng-container>
@@ -298,7 +326,7 @@
                             <label for="inlineFormInputGroupUsername">State</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter state" formControlName="state">
-                                <div *ngIf="(formData['state'].invalid && (formData['state'].touched || formData['state'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['state'].invalid && (formData['state'].touched || formData['state'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['state'].errors?.['required']">
                                         State required
                                     </ng-container>
@@ -314,7 +342,7 @@
                             <label for="inlineFormInputGroupUsername">City</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter city" formControlName="city">
-                                <div *ngIf="(formData['city'].invalid && (formData['city'].touched || formData['city'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['city'].invalid && (formData['city'].touched || formData['city'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['city'].errors?.['required']">
                                         City required
                                     </ng-container>
@@ -330,7 +358,7 @@
                             <label for="inlineFormInputGroupUsername">Zip</label>
                             <div class="form-group">
                                 <input type="tel" class="form-control" id="autoSizingInput" placeholder="Enter zip" formControlName="zip">
-                                <div *ngIf="(formData['zip'].invalid && (formData['zip'].touched || formData['zip'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['zip'].invalid && (formData['zip'].touched || formData['zip'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['zip'].errors?.['required']">
                                         Zip required
                                     </ng-container>
@@ -349,7 +377,7 @@
                             <label for="inlineFormInputGroupUsername">Country</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="autoSizingInput" placeholder="Enter Country" formControlName="country">
-                                <div *ngIf="(formData['country'].invalid && (formData['country'].touched || formData['country'].dirty || isFieldsValid))" class="required-txt-error">
+                                <div *ngIf="(formData['country'].invalid && (formData['country'].touched || formData['country'].dirty || isFieldsValid()))" class="required-txt-error">
                                     <ng-container *ngIf="formData['country'].errors?.['required']">
                                         Country required
                                     </ng-container>
@@ -362,7 +390,7 @@
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group-btn-center">
-                            <a (click)="clientEdit ? onEditClient() : onSubmit()" class="btn btn-theme" [class.disabled]="location_list && location_list.length == 0" >{{clientEdit ? 'Edit' : 'Save'}}</a>
+                            <a (click)="clientEdit() ? onEditClient() : onSubmit()" class="btn btn-theme" [class.disabled]="location_list() && location_list().length == 0" >{{clientEdit() ? 'Edit' : 'Save'}}</a>
                             <a routerLink="/dashboard-detail/client-detail" class="btn btn-theme-two">Cancel</a>
                         </div>
                     </div>

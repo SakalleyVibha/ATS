@@ -14,6 +14,7 @@ import { SignupComponent } from './signup/signup.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateOrganizationComponent } from './create-organization/create-organization.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PasswordChangeComponent } from './password-change/password-change.compo
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    SharedModule
   ],
   providers: [
 

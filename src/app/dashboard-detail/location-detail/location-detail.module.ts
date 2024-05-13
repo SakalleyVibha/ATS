@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { LocationDetailRoutingModule } from './location-detail-routing.module';
 import { LocationDetailComponent } from './location-detail.component';
@@ -7,11 +7,12 @@ import { ManageLocationComponent } from './manage-location/manage-location.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../../core/core.module';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
     LocationDetailComponent,
-    ManageLocationComponent
+    ManageLocationComponent,
   ],
   imports: [
     CoreModule,
@@ -19,7 +20,9 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
     LocationDetailRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    SharedModule,
+    NgOptimizedImage
   ]
 })
 export class LocationDetailModule { }

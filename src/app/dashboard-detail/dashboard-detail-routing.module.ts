@@ -13,7 +13,9 @@ const routes: Routes = [{
     { path: 'industry', loadChildren: () => import('./industry/industry.module').then(m => m.IndustryModule) },
     { path: 'department', loadChildren: () => import('./department/department.module').then(m => m.DepartmentModule) },
     { path: 'role', loadChildren: () => import('./role/role.module').then(m => m.RoleModule) },
-    { path: 'job', loadChildren: () => import('./job/job.module').then(m => m.JobModule) }
+    { path: 'job', loadChildren: () => import('./job/job.module').then(m => m.JobModule) },
+    { path: 'team', loadChildren: () => import('./teams/teams.module').then(m => m.TeamsModule) },
+    { path: 'skills', loadChildren: () => import('./skills/skills.module').then(m => m.SkillsModule) }
   ]
 }];
 

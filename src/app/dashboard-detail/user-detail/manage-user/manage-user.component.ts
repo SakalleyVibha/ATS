@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicateService } from '../../../core/services/communicate.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-manage-user',
@@ -20,7 +21,10 @@ export class ManageUserComponent {
   maxDOB: any;
   editUser: boolean = false;
   selected_details: any;
-  isActive:boolean = true;
+  isActive:boolean = true;  
+  sql_validation = signal(environment.SQL_validation);
+  website_validate = signal(environment.website_validation);
+  number_validation = signal(environment.Phone_Mobile_valid);
 
   constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute,private communicate:CommunicateService) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -31,20 +35,20 @@ export class ManageUserComponent {
       location: 0
     }
     this.userForm = this.formBuild.group({
-      f_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      l_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      alias: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
+      f_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
+      l_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
+      alias: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
       dob: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      website: new FormControl('', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]),
-      phone: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
-      mobile: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
+      website: new FormControl('', [Validators.required, Validators.pattern(this.website_validate())]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
+      mobile: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       fax: new FormControl('', [ Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
 
-      street: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      country: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      state: new FormControl('', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
+      street: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      city: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      country: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      state: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
       zip: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]),
       role_id: new FormControl('', [Validators.required]),
       account_id: new FormControl(user_data.account_id),
@@ -60,7 +64,6 @@ export class ManageUserComponent {
   get formData() { return this.userForm.controls }
 
   ngOnInit() {
-    // this.getUserRole();
     let date = new Date();
     let today = date.getDate();
     this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}` }`;
@@ -88,7 +91,7 @@ export class ManageUserComponent {
 
   getUserRole(acc_id: number) {
     this.api.allgetMethod("role/roles",{}).subscribe((roles: any) => {
-      if (roles.data.length > 0) {
+      if (roles.data?.length > 0) {
         this.user_roles = roles.data;
       }
     });
@@ -113,14 +116,14 @@ export class ManageUserComponent {
     this.communicate.isLoaderLoad.next(true);
     date = this.convertDate(this.userForm.value.dob);
     this.userForm.patchValue({
-      dob: date,
       role_id: Number(this.userForm.value.role_id),
       account_id: Number(this.userForm.value.account_id),
       location_id: Number(this.userForm.value.location_id),
       client_id: Number(this.userForm.value.client_id),
       status: Number(this.isActive)
     });
-    this.api.allPostMethod("users/addUser", this.userForm.value).subscribe((response: any) => {
+    let payload = {...this.userForm.value,dob:date}
+    this.api.allPostMethod("users/addUser", payload).subscribe((response: any) => {
       if (response.error == false) {
         this.userForm.reset();
         this.toastr.success("User added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
