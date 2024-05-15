@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { single } from 'rxjs';
+import { delay, of, single } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,13 +22,15 @@ export class ManageTeamComponent {
   Teamedit = signal(false);
   sql_validation = signal(environment.SQL_validation);
   isActive = signal(true);
-  user_list = signal<any>([]);
+  user_list : any = signal<any>([]);//changermade
   role_list = signal<any>([]);
   team_id = signal<number>(-1);
   dropdownSettings = {};
   filteredUser = signal<any>([]);
   editedRoleList = signal<any>([]);
   list: { name: string; checked: boolean; }[] | undefined;
+  dropdownList!: { item_id: number; item_text: string; }[];//changermade
+  selectedItems!: { item_id: number; item_text: string; }[];//changermade
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private formbuild: FormBuilder, private toastr: ToastrService, private router: Router, private activeRout: ActivatedRoute) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -43,7 +45,12 @@ export class ManageTeamComponent {
 
     this.teamForm.statusChanges.subscribe((status) => {
       if (status === 'VALID') {
-        this.onFormSubmit();
+        of(null).pipe(
+          delay(1000) // Delay execution by 1 second (1000 milliseconds)
+        ).subscribe(() => {
+          this.onFormSubmit();
+        });//changermade
+        // this.onFormSubmit();
         this.list = this.user_list();
         // this.submitButton.disabled = false;
       }
@@ -55,6 +62,28 @@ export class ManageTeamComponent {
   }
 
   ngOnInit() {
+    ////changermade
+    this.dropdownList = [
+      { item_id: 1, item_text: 'Mumbai' },
+      { item_id: 2, item_text: 'Bangaluru' },
+      { item_id: 3, item_text: 'Pune' },
+      { item_id: 4, item_text: 'Navsari' },
+      { item_id: 5, item_text: 'New Delhi' }
+    ];
+    this.selectedItems = [
+      { item_id: 3, item_text: 'Pune' },
+      { item_id: 4, item_text: 'Navsari' }
+    ];
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+    //changermade
     this.activeRout.queryParams.subscribe((res: any) => {
       if (res.id != null || res.id != undefined) {
         this.communicate.isLoaderLoad.next(true);
@@ -98,7 +127,14 @@ export class ManageTeamComponent {
       allowSearchFilter: true
     };
   }
-
+  //changermade
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+  onSelectAll(items: any) {
+    console.log(items);
+  }
+//changermade
   get formData() { return this.teamForm.controls };
 
   onFormSubmit() {
@@ -146,11 +182,21 @@ export class ManageTeamComponent {
   }
 
   convertImageToBase64(file_event: any) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file_event);
-    reader.onload = async () => {
-      this.imgURLBase64.set(reader.result);
-    };
+    new Promise((resolve, reject) => {//changermade
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file_event);
+      reader.onload = async () => {
+        this.imgURLBase64.set(reader.result);
+        //changermade
+        if(this.imgURLBase64()){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+        //changermade
+      };
+    })
   }
 
   CrossBtn() {
@@ -160,17 +206,17 @@ export class ManageTeamComponent {
     this.teamForm.controls['logo'].updateValueAndValidity();
   }
 
-  onFileChange(event: any) {
+  async onFileChange(event: any) {//changermade
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.teamForm.controls['logo'].removeValidators(Validators.required);
       this.teamForm.controls['logo'].updateValueAndValidity();
-      this.convertImageToBase64(file[0]);
+      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
       return
     }
     if (event.srcElement && event.srcElement != undefined) {
       let file = event.srcElement.files
-      this.convertImageToBase64(file[0]);
+      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
     }
   }
 

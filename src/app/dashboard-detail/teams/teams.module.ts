@@ -6,6 +6,7 @@ import { TeamsComponent } from './teams.component';
 import { ManageTeamComponent } from './manage-team/manage-team.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SharedModule } from '../../shared/shared.module';
     CommonModule,
     TeamsRoutingModule,
     FormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     ReactiveFormsModule,
     SharedModule,
     NgOptimizedImage

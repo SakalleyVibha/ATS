@@ -195,7 +195,7 @@
                                                                                 editedRoleList().length
                                                                                 >
                                                                                 0) ?
-                                                                                filteredUser:'No
+                                                                                assignUserForm.value.userList[i].role:'No
                                                                                 role
                                                                                 found'}}</option>
                                                                             @for (role of editedRoleList(); track
@@ -209,7 +209,7 @@
                                                                                 {{(role_list() && role_list().length
                                                                                 >
                                                                                 0) ?
-                                                                                filteredUser:'No
+                                                                                assignUserForm.value.userList[i].role:'No
                                                                                 role
                                                                                 found'}}</option>
                                                                             @for (role of role_list(); track
@@ -259,10 +259,13 @@
                                                                             }
                                                                             }
                                                                         </select>
-                                                                        <!-- <ng-multiselect-dropdown [list]="list"
-                                                                            (shareCheckedList)="shareCheckedList($event)"
-                                                                            (shareIndividualCheckedList)="shareIndividualCheckedList($event)">
-                                                                        </ng-multiselect-dropdown> -->
+                                                                        <ng-multiselect-dropdown [placeholder]="'custom placeholder'"
+                                                                        [settings]="dropdownSettings"
+                                                                        [data]="dropdownList"
+                                                                        [(ngModel)]="selectedItems"
+                                                                        (onSelect)="onItemSelect($event)"
+                                                                        (onSelectAll)="onSelectAll($event)">
+                                                                        </ng-multiselect-dropdown>
                                                                     </div>
                                                                 </div>
                                                             </td>
