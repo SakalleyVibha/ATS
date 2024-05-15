@@ -6,6 +6,7 @@ import { DashboardDetailComponent } from './dashboard-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { CoreModule } from '../core/core.module';
     CommonModule,
     CoreModule,
     ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
     DashboardDetailRoutingModule,
     NgOptimizedImage

@@ -4,16 +4,20 @@
             <div class="create-inner">
                 <div class="create-heading-bdy">
                     <div class="create-heading-txt">
+                        @if(team_id() == -1){
                         <h3>{{ Teamedit() ? 'Edit':'Create' }} Team List</h3>
-                        <div class="on-off-bdy">
+
+                        } @else{<h3>Assign Team Members</h3>}
+                        <!-- <div class="on-off-bdy">
                             <div class="inactact-pop-bdy">
                                 <label class="form-check-label inactive-txt">inactive</label>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input " type="checkbox" id="status" [(ngModel)]="isActive" role="switch" checked="">
+                                    <input class="form-check-input " type="checkbox" id="status" [(ngModel)]="isActive"
+                                        role="switch" checked="">
                                     <label class="form-check-label active-txt">Active</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="create-logo">
                         <h1>ATS Covetus</h1>
@@ -126,17 +130,181 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-12">
+                                <!-- <div class="col-xl-12">
                                     <div class="form-group-btn-center">
                                         <a class="btn btn-theme"
                                             (click)="Teamedit() ? onEditTeam() : onFormSubmit()">{{Teamedit() ?
                                             'Edit':'Save'}}</a>
-                                        <a routerLink="/dashboard-detail/client-detail"
-                                            class="btn btn-theme-two">Cancel</a>
+                                        <a routerLink="/dashboard-detail/team" class="btn btn-theme-two">Cancel</a>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </form>
+                    </div>
+                    <div class="create-form-wrap">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="create-form-he">
+                                    <h2>Assign Team Users</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <form [formGroup]="assignUserForm"> -->
+                        <div class="row ">
+                            <div class="col-12">
+                                <form [formGroup]="assignUserForm">
+                                    <div class="row ">
+                                        <div class="table-wrapper">
+                                            <div class="table-responsive">
+                                                <table class="table table-tamplate-style table-user">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>
+                                                            <th scope="col">Role</th>
+                                                            <th scope="col">User</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody formArrayName="userList">
+                                                        @for (user of userList.controls; track i; let
+                                                        i=$index)
+                                                        {
+                                                        <tr [formGroupName]="i">
+                                                            <td class="fonts-n3 user-img-desc">
+                                                                <div class="form-check">
+                                                                    <!-- <input class="form-check-input" type="checkbox"
+                                                                        [value]='user?.id' id="flexCheckDefault"
+                                                                        [disabled]="user?.is_owner == true"
+                                                                        (change)="onCheckChange($event)"> -->
+                                                                    {{i + 1}}
+                                                                </div>
+                                                            </td>
+                                                            <td class="fonts-n3">
+                                                                <div class="form-group-wrap">
+                                                                    <div class="form-group ">
+                                                                        <select class="form-control"
+                                                                            formControlName="role"
+                                                                            (change)=selectedRole($event)>
+                                                                            @if(editedRoleList() &&
+                                                                            editedRoleList().length > 0){
+
+                                                                            <option value="" hidden selected>
+                                                                                {{(editedRoleList() &&
+                                                                                editedRoleList().length
+                                                                                >
+                                                                                0) ?
+                                                                                filteredUser:'No
+                                                                                role
+                                                                                found'}}</option>
+                                                                            @for (role of editedRoleList(); track
+                                                                            $index){
+                                                                            <option *ngIf="role?.role_name != 'Admin'"
+                                                                                [value]="role?.id">
+                                                                                {{role?.role_name}}</option>
+                                                                            }
+                                                                            } @else {
+                                                                            <option value="" hidden selected>
+                                                                                {{(role_list() && role_list().length
+                                                                                >
+                                                                                0) ?
+                                                                                filteredUser:'No
+                                                                                role
+                                                                                found'}}</option>
+                                                                            @for (role of role_list(); track
+                                                                            $index){
+                                                                            <option *ngIf="role?.role_name != 'Admin'"
+                                                                                [value]="role?.id">
+                                                                                {{role?.role_name}}</option>
+                                                                            }
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="status-font background-grey-table">
+                                                                <div class="form-group-wrap">
+                                                                    <div class="form-group ">
+                                                                        <select class="form-control"
+                                                                            formControlName="user_id">
+                                                                            @if(assignUserForm.value.userList[i].role){
+                                                                            <option value="" hidden selected>
+                                                                                {{(filteredUser() &&
+                                                                                filteredUser().length
+                                                                                >
+                                                                                0) ? 'Select
+                                                                                Role':'No role
+                                                                                found'}}</option>
+                                                                            @for (item of filteredUser(); track
+                                                                            $index){
+                                                                            <option *ngIf="item?.role_name != 'Admin'"
+                                                                                [value]="item?.id">
+                                                                                {{item?.f_name +" "+item?.l_name}}
+                                                                            </option>}
+                                                                            } @else {
+
+                                                                            <option value="" hidden selected>
+                                                                                {{(user_list() && user_list().length
+                                                                                >
+                                                                                0) ? 'Select
+                                                                                Role':'No role
+                                                                                found'}}</option>
+                                                                            @for (item of user_list(); track
+                                                                            $index){
+                                                                            <option *ngIf="item?.role_name != 'Admin'"
+                                                                                [value]="item?.id">
+                                                                                {{item?.f_name +" "+item?.l_name}}
+                                                                            </option>
+                                                                            }
+                                                                            }
+                                                                        </select>
+                                                                        <!-- <ng-multiselect-dropdown [list]="list"
+                                                                            (shareCheckedList)="shareCheckedList($event)"
+                                                                            (shareIndividualCheckedList)="shareIndividualCheckedList($event)">
+                                                                        </ng-multiselect-dropdown> -->
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="fonts-n3">
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        role="switch" id="flexSwitchCheckChecked"
+                                                                        checked (change)="onCheckStatus($event, i)">
+
+                                                                </div>
+                                                            </td>
+                                                            <td class="action_button">
+                                                                <div class="actiondelete-button">
+                                                                    <a (click)="deleteFromForm(i)">
+                                                                        <img src="assets/images/trash-2.svg"
+                                                                            class="img-fluid unselected-icon">
+                                                                        <img src="assets/images/trash-2white.svg"
+                                                                            class="img-fluid selected-white-icon">
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="text-end col-lg-12 col-sm-12" (click)="addUser()">
+                                                    <a routerLink="add" class="btn btn-create ">
+                                                        <i class="fa-solid fa fa-plus"></i> Add User </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="form-group-btn-center">
+                                    <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
+                                    <a routerLink="/dashboard-detail/team" class="btn btn-theme-two">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
