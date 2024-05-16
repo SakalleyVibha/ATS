@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: 'password-change', component: PasswordChangeComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'create-organization', component: CreateOrganizationComponent, canActivate: [authenticateGuard] },
-  { path: 'create-user-location', loadChildren: () => import('./create-user-location/create-user-location.module').then(m => m.CreateUserLocationModule), canActivate: [authenticateGuard] },
   { path: 'dashboard-detail', loadChildren: () => import('./dashboard-detail/dashboard-detail.module').then(m => m.DashboardDetailModule), canActivate: [authenticateGuard] }
 ];
 

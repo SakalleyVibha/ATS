@@ -10,7 +10,7 @@ import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
   styleUrl: './user-detail.component.css'
 })
 export class UserDetailComponent {
-  user_list: any;
+  user_list: any = [];
   Date = new Date();
   current_role: any;
   user_data: any;
@@ -33,8 +33,10 @@ export class UserDetailComponent {
   }
 
   ngOnInit(){
-    this.searchData.pipe(filter((x:any)=> x.length >=0 || x == ''),debounceTime(1000),distinctUntilChanged()).
+    this.searchData.pipe(filter((x:any)=> x.length >=3 || x == ''),debounceTime(1000),distinctUntilChanged()).
     subscribe((data:any)=>{
+      this.user_list = [];
+      this.reqObj.pageNumber = 1;
       this.reqObj.keyword = data;
       this.getUserList();
     });
@@ -44,10 +46,8 @@ export class UserDetailComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("users/getUserList", this.reqObj).subscribe((getUser: any) => {
       if (getUser.data.length > 0) {
-        this.user_list = getUser.data;
-      } else {
-        this.user_list = [];
-      }
+        this.user_list = [...this.user_list,...getUser.data];
+      } 
       this.communicate.isLoaderLoad.next(false);
     })
   }
@@ -56,10 +56,17 @@ export class UserDetailComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('users/deleteUserProfile', { id: id, account_id: this.reqObj?.account_id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
+      this.reqObj.pageNumber = 1;
+      this.user_list = [];
       this.getUserList();
       if (res.data && res.data > 0) {
         this.toastr.success("User deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
       }
     });
+  }
+
+  onScroll(){
+    this.reqObj.pageNumber += 1;
+    this.getUserList();
   }
 }

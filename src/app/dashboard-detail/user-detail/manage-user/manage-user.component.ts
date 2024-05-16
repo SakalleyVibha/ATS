@@ -15,7 +15,7 @@ export class ManageUserComponent {
 
   userForm!: FormGroup;
   isFormValid: boolean = false;
-  user_roles: any;
+  user_roles: any = [];
   user_location: any;
   client_list: any;
   maxDOB: any;
@@ -128,6 +128,7 @@ export class ManageUserComponent {
         this.userForm.reset();
         this.toastr.success("User added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
+          this.communicate.isDetailSideShow.next(true);
           this.router.navigate(['/dashboard-detail/user-detail']);
         });
       } else {

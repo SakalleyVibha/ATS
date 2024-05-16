@@ -3,7 +3,7 @@ import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
 
 @Component({
   selector: 'app-location-detail',
@@ -17,9 +17,8 @@ export class LocationDetailComponent {
   reqObj: any;
   totalPages: number = 0;
 
-  searchByKey: FormGroup = new FormGroup({
-    keyword: new FormControl()
-  });
+  searchByKey:FormControl = new FormControl('');
+
 
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
@@ -38,20 +37,17 @@ export class LocationDetailComponent {
   }
 
   ngOnInit() {
-    let obs = this.searchByKey.valueChanges
-      .pipe(debounceTime(1000))
-      .subscribe(data => {
-        if (data['keyword'] && data['keyword'].length > 2) {
-          this.location_list = [];
-          this.reqObj['keyword'] = data['keyword'];
+    this.searchByKey.valueChanges.pipe(
+     debounceTime(1000),
+     distinctUntilChanged()
+    ).subscribe(v =>{
+       if(v.length >= 3 || v == ''){
+        this.location_list = [];
+         this.reqObj.pageNumber = 1;
+          this.reqObj['keyword'] = v;
           this.getLocation();
-        }
-        if (data['keyword'] == '') {
-          this.location_list = [];
-          this.reqObj['keyword'] = '';
-          this.getLocation();
-        }
-      });
+       }
+    })
     this.getLocation();
   }
 
@@ -61,14 +57,8 @@ export class LocationDetailComponent {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if (res['data'] && res['data'].length > 0) {
-          if(this.reqObj.pageNumber == 1){
-            this.location_list = res['data'];
-          } else 
-          this.location_list.push(...res['data']);
-          
+          this.location_list = [...this.location_list,...res.data]
           this.totalPages = res['totalPages'];
-        } else {
-          this.location_list = [];
         }
       }
     })
@@ -79,6 +69,7 @@ export class LocationDetailComponent {
     this.api.allPostMethod('locations/deletelocation', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       this.reqObj.pageNumber = 1;
+      this.location_list = [];
       this.getLocation();
       if (res.data && res.data > 0) {
         this.toastr.success("Location deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })

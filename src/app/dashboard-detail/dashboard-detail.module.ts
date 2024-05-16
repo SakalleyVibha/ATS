@@ -6,19 +6,21 @@ import { DashboardDetailComponent } from './dashboard-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 @NgModule({
   declarations: [
     DashboardDetailComponent,
     DashboardComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
+    DashboardDetailRoutingModule,
     CoreModule,
     ReactiveFormsModule,
     FormsModule,
-    DashboardDetailRoutingModule,
     NgOptimizedImage
   ]
 })
