@@ -163,7 +163,6 @@
                                                             <th scope="col">Id</th>
                                                             <th scope="col">Role</th>
                                                             <th scope="col">User</th>
-                                                            <th scope="col">Status</th>
                                                             <th scope="col">Action</th>
                                                         </tr>
                                                     </thead>
@@ -194,8 +193,9 @@
                                                                                 {{(editedRoleList() &&
                                                                                 editedRoleList().length
                                                                                 >
-                                                                                0) ?
-                                                                                assignUserForm.value.userList[i].role:'No
+                                                                                0) ?(getRoleValue(i) != 'false' ?
+                                                                                getRoleValue(i) : 'Role Selected')
+                                                                                :'No
                                                                                 role
                                                                                 found'}}</option>
                                                                             @for (role of editedRoleList(); track
@@ -206,12 +206,7 @@
                                                                             }
                                                                             } @else {
                                                                             <option value="" hidden selected>
-                                                                                {{(role_list() && role_list().length
-                                                                                >
-                                                                                0) ?
-                                                                                assignUserForm.value.userList[i].role:'No
-                                                                                role
-                                                                                found'}}</option>
+                                                                                Select Role</option>
                                                                             @for (role of role_list(); track
                                                                             $index){
                                                                             <option *ngIf="role?.role_name != 'Admin'"
@@ -220,14 +215,26 @@
                                                                             }
                                                                             }
                                                                         </select>
+                                                                        <!-- <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
+                                                                    class="required-txt-error">
+                                                                    <ng-container *ngIf="formData['name'].errors?.['required']">
+                                                                        Name required
+                                                                    </ng-container>
+                                                                </div> -->
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                             <td class="status-font background-grey-table">
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
-                                                                        <select class="form-control"
-                                                                            formControlName="user_id">
+                                                                        <ng-multiselect-dropdown
+                                                                            [placeholder]="'Select User'"
+                                                                            [settings]="dropdownSettings"
+                                                                            [data]="getDataValues()"
+                                                                            formControlName="user_id"
+                                                                            (onSelect)="onItemSelect($event)">
+                                                                        </ng-multiselect-dropdown>
+                                                                        <!-- <select class="form-control">
                                                                             @if(assignUserForm.value.userList[i].role){
                                                                             <option value="" hidden selected>
                                                                                 {{(filteredUser() &&
@@ -258,25 +265,18 @@
                                                                             </option>
                                                                             }
                                                                             }
-                                                                        </select>
-                                                                        <ng-multiselect-dropdown [placeholder]="'custom placeholder'"
-                                                                        [settings]="dropdownSettings"
-                                                                        [data]="dropdownList"
-                                                                        [(ngModel)]="selectedItems"
-                                                                        (onSelect)="onItemSelect($event)"
-                                                                        (onSelectAll)="onSelectAll($event)">
-                                                                        </ng-multiselect-dropdown>
+                                                                        </select> -->
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="fonts-n3">
+                                                            <!-- <td class="fonts-n3">
                                                                 <div class="form-check form-switch">
                                                                     <input class="form-check-input" type="checkbox"
                                                                         role="switch" id="flexSwitchCheckChecked"
                                                                         checked (change)="onCheckStatus($event, i)">
 
                                                                 </div>
-                                                            </td>
+                                                            </td> -->
                                                             <td class="action_button">
                                                                 <div class="actiondelete-button">
                                                                     <a (click)="deleteFromForm(i)">
@@ -292,7 +292,7 @@
                                                     </tbody>
                                                 </table>
                                                 <div class="text-end col-lg-12 col-sm-12" (click)="addUser()">
-                                                    <a routerLink="add" class="btn btn-create ">
+                                                    <a class="btn btn-create ">
                                                         <i class="fa-solid fa fa-plus"></i> Add User </a>
                                                 </div>
                                             </div>
