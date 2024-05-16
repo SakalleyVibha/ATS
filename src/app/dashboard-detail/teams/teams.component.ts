@@ -15,9 +15,9 @@ export class TeamsComponent {
   current_role = signal<any>({});
   reqObj: any;
   totalPages: number = 0;
-  searchByKey:FormControl = new FormControl('');
+  searchByKey: FormControl = new FormControl('');
   searchValue = new Subject<Event>();
-  searchString:string = ''
+  searchString: string = ''
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
     this.current_role.set(localStorage.getItem('role'));
@@ -27,18 +27,18 @@ export class TeamsComponent {
     this.reqObj = {
       account_id: user_data?.account_id,
       pageNumber: 1,
-      pageSize: 5,
-      keyword:''
+      pageSize: 10,
+      keyword: ''
     };
   }
 
   ngOnInit() {
-    this.searchValue.pipe(filter((value:any)=> value.length >= 3 || value == ''),debounceTime(1000),distinctUntilChanged()).subscribe(
-      (value:any)=>{
-      this.reqObj.keyword = value;
-      this.reqObj.pageNumber = 1;
-      this.getTeamList();
-    });    
+    this.searchValue.pipe(filter((value: any) => value.length >= 3 || value == ''), debounceTime(1000), distinctUntilChanged()).subscribe(
+      (value: any) => {
+        this.reqObj.keyword = value;
+        this.reqObj.pageNumber = 1;
+        this.getTeamList();
+      });
     this.getTeamList();
   }
 
@@ -48,12 +48,12 @@ export class TeamsComponent {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if ((res['data'] && res['data'].length > 0)) {
-          if(this.reqObj.pageNumber == 1){
+          if (this.reqObj.pageNumber == 1) {
             this.teamList.set(res['data']);
           } else
-          this.teamList.update(x=>{
-            return [...x,res['data']]
-          })
+            this.teamList.update(x => {
+              return [...x, ...res['data']]
+            })
           console.log(this.teamList());
           this.totalPages = res['totalPages'];
         } else {
@@ -76,7 +76,7 @@ export class TeamsComponent {
   }
 
   onScroll() {
-    if ( this.reqObj.pageNumber < this.totalPages) {
+    if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
       this.getTeamList();
     }

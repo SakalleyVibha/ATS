@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     DashboardDetailRoutingModule,
     CoreModule,
     ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
     NgOptimizedImage
   ]

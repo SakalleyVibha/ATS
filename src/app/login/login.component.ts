@@ -15,8 +15,8 @@ export class LoginComponent {
   public login: FormGroup;
   ispasswordshow: boolean = false;
   allRoles: any[] = [];
-  isFieldValid:boolean = false;
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router,private communicate:CommunicateService) {
+  isFieldValid: boolean = false;
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router, private communicate: CommunicateService) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -30,7 +30,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if(this.login.invalid){
+    if (this.login.invalid) {
       this.isFieldValid = true;
       return
     }
@@ -71,7 +71,7 @@ export class LoginComponent {
         });
 
       } else {
-        this.toast.error(res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(()=>{
+        this.toast.error(res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }
@@ -82,6 +82,7 @@ export class LoginComponent {
     this.api.allgetMethod('role/roles', {}).subscribe((res: any) => {
       if (!res['error']) {
         this.allRoles = res['data'];
+        localStorage.setItem("role_list", JSON.stringify(this.allRoles));
       }
     });
   }
