@@ -97,7 +97,7 @@
                                 <select class="form-control" formControlName="role_id" (change)="selectRole($event)">
                                     <option hidden disabled value="">Select role</option>
                                     <!-- For loop for roles -->
-                                    <option *ngFor="let role of user_roles" [value]="role?.id">{{role?.name}}</option>
+                                    <option *ngFor="let role of user_roles" [value]="role?.id">{{role?.role_name}}</option>
                                 </select>
                                 <div *ngIf="formData['role_id'].invalid && (formData['role_id'].touched || formData['role_id'].dirty || isFormValid)"
                                     class="required-txt-error">

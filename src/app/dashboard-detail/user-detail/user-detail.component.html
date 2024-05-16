@@ -21,8 +21,12 @@
         </div>
     </div>
     <div class="table-wrapper">
-        <div class="table-responsive">
-            <table class="table table-tamplate-style table-user">
+        <div class="table-responsive" style="height: 631px" 
+        [scrollWindow]="false" infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()">
+            <table class="table table-tamplate-style table-user" >
                 <thead>
                     <tr>
                         <th scope="col">List Of Users</th>
@@ -65,7 +69,7 @@
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
-                                <a (click)="deleteUser(user.id)">
+                                <a (click)="deleteUser(user.id)" class="cursor-pointer" [class.disabled]="user.is_owner">
                                     <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
                                 </a>

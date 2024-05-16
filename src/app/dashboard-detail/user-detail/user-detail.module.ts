@@ -6,6 +6,7 @@ import { CoreModule } from '../../core/core.module';
 import { UserDetailRoutingModule } from './user-detail-routing.module';
 import { UserDetailComponent } from './user-detail.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -20,7 +21,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    InfiniteScrollModule
   ]
 })
 export class UserDetailModule { }

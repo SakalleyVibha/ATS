@@ -1,0 +1,150 @@
+@if(isDetailSide){
+    <aside>
+        <div class="row">
+            <div class="col">
+                <div class="logo-aside">
+                    <h3>logo</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="aside-menu">
+                    <ul>
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="dashboard"><img src="assets/images/side-icon/job.svg"
+                                        class="img-side-icon">Dashboard </a>
+                            </div>
+                        </li> -->
+                        <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="location-detail"><img src="assets/images/side-icon/setting.svg"
+                                        class="img-side-icon">Location </a>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="client-detail"><img src="assets/images/side-icon/client.svg"
+                                        class="img-side-icon">Client
+                                </a>
+                            </div>
+                        </li> -->
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="industry"><img src="assets/images/side-icon/client.svg"
+                                        class="img-side-icon">Industry
+                                </a>
+                            </div>
+                        </li> -->
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="department"><img src="assets/images/side-icon/client.svg"
+                                        class="img-side-icon">Department
+                                </a>
+                            </div>
+                        </li> -->
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="role"><img src="assets/images/side-icon/client.svg" class="img-side-icon">Role
+                                </a>
+                            </div>
+                        </li> -->
+                        <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="user-detail"><img src="assets/images/side-icon/client.svg"
+                                        class="img-side-icon">User </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="candidate-detail"><img src="assets/images/side-icon/client.svg"
+                                        class="img-side-icon">Candidate </a>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="job"><img src="assets/images/side-icon/job.svg" class="img-side-icon">Job </a>
+                            </div>
+                        </li> -->
+                        <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="team"><img src="assets/images/side-icon/job.svg" class="img-side-icon">Teams</a>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <div class="dropdown btn-group">
+                                <a routerLink="skills"><img src="assets/images/side-icon/client.svg" class="img-side-icon">Skills</a>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col">
+                <div class="logout" (click)="onLogout()">
+                    <a class="btn btn-theme">
+                        <button id="skip-btn" style="border: 0px; background-color: transparent; color : #fff">Log Out</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    
+    </aside>
+}@else{
+    <aside>
+        <div class="logo-aside">
+            <h3>logo</h3>
+        </div>
+        <div class="aside timeline">
+            <div class="step" [ngClass]="{'step-active' : location_list && location_list.length > 0}">
+                <div>
+                    <div class="status" [ngClass]="{'in-progress' : location_list && location_list.length > 0}">
+                        <span>{{location_list && location_list.length > 0 ? 'Completed' : 'Pending'}}</span>
+                    </div>
+                </div>
+                    <div routerLink="location-detail">
+                        <div class="circle">
+                            <span class="under-circle">1</span>
+    
+                        </div>
+                    </div>
+                <div>
+                    <div class="title">Add Location</div>
+                    <div class="caption">Step description</div>
+                </div>
+            </div>
+            <div class="step " [ngClass]="{'step-active' : user_list && user_list.length > 0}">
+                <div>
+                    <div class="status" [ngClass]="{'in-progress' : user_list && user_list.length > 0}"> <span>{{user_list
+                            && user_list.length > 0 ? 'Completed' : 'Pending'}}</span></div>
+                </div>
+                <div routerLink="user-detail">
+                    <div class="circle">
+                        <span class="under-circle">2</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="title">Add User</div>
+                    <div class="caption">Step description</div>
+                </div>
+            </div>
+    
+        </div>
+        <div class="skip-btn" (click)="skip()">
+            <a class="btn btn-theme">
+                <button id="skip-btn" style="border: 0px; background-color: transparent; color : #fff">Skip</button>
+            </a>
+        </div>
+    
+        <div class="skip-btn logout" (click)="onLogout()">
+            <a class="btn btn-theme">
+                <button id="skip-btn" style="border: 0px; background-color: transparent; color : #fff">Log Out</button>
+            </a>
+        </div>
+    
+    </aside>
+}
+
+

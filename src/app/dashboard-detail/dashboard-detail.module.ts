@@ -6,6 +6,7 @@ import { DashboardDetailComponent } from './dashboard-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -13,14 +14,15 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
   declarations: [
     DashboardDetailComponent,
     DashboardComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
+    DashboardDetailRoutingModule,
     CoreModule,
     ReactiveFormsModule,
     NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
-    DashboardDetailRoutingModule,
     NgOptimizedImage
   ]
 })

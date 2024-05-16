@@ -55,7 +55,6 @@ export class ManageLocationComponent {
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("locations/getlocation", { id: Number(id), account_id: localData?.account_id }).subscribe((res: any) => {
           let editableData = res['data'];
-          // console.log("Get Location : ", editableData);
           this.addLocationForm.patchValue({
             name: editableData?.name,
             about: editableData?.about,
@@ -84,7 +83,7 @@ export class ManageLocationComponent {
 
   get formData() { return this.addLocationForm.controls }
 
-  onSubmit() {
+  onSubmit() {   
     if (this.addLocationForm.invalid) {
       this.isFormValid.set(true);
       return;
@@ -97,7 +96,26 @@ export class ManageLocationComponent {
         this.addLocationForm.reset();
         this.toastr.success("Location added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/dashboard-detail/location-detail']);
+         
+          let isSkip:any = localStorage.getItem('isDashboardDetail');
+          if(!JSON.parse(isSkip)){
+            let payLoad = { account_id: this.addLocationForm.value.account_id, pageNumber: 1, pageSize: 10 };
+            this.api.allPostMethod("users/getUserList", payLoad).subscribe({
+              next: (res:any)=>{
+                 let userList = res.data || [];
+                 userList = userList.filter((v:any) => !v.is_owner);
+                 if(!userList.length){
+                  this.router.navigate(['dashboard-detail','user-detail']);
+                 }else{
+                    this.communicate.isDetailSideShow.next(true);
+                    this.router.navigate(['/dashboard-detail/location-detail']);
+                 }
+              }
+            })
+          }else{
+            this.communicate.isDetailSideShow.next(true);
+            this.router.navigate(['/dashboard-detail/location-detail']);
+          }
         });
       } else {
         this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {

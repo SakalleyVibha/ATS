@@ -7,14 +7,11 @@ import { Router } from '@angular/router';
   styleUrl: './dashboard-detail.component.css'
 })
 export class DashboardDetailComponent {
-
+ 
   constructor(private router: Router) { }
 
   ngOnInit() { }
 
-  onLogout() {
-    localStorage.clear()
-    this.router.navigate(['/login']);
-  }
+
 
 }

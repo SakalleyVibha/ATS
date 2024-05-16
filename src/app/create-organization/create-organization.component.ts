@@ -14,20 +14,20 @@ export class CreateOrganizationComponent {
   organizationForm: FormGroup;
   isFieldsValid = signal<boolean>(false)
   forEdit = signal(false)
-  imgURLBase64 = signal<ArrayBuffer | any>(new ArrayBuffer(10));
+  imgURLBase64 = signal<ArrayBuffer | any>('');
 
   constructor(private formBuild: FormBuilder, private router: Router, private toastr: ToastrService, private serviceApi: CommonApiService, private communicate: CommunicateService, private activerouter: ActivatedRoute) {
     this.organizationForm = this.formBuild.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(communicate.queryValidator)]],
+      about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(communicate.queryValidator)]],
       website: ['', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
       phone: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       fax: ['', [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
-      street: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      city: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      state: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      street: ['', [Validators.required, Validators.pattern(communicate.queryValidator)]],
+      city: ['', [Validators.required, Validators.pattern(communicate.queryValidator)]],
+      country: ['', [Validators.required, Validators.pattern(communicate.queryValidator)]],
+      state: ['', [Validators.required, Validators.pattern(communicate.queryValidator)]],
       zip: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
       logo: ['', [Validators.required]]
     });
@@ -81,7 +81,8 @@ export class CreateOrganizationComponent {
         this.organizationForm.reset();
         this.toastr.success("Form Submitted", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/create-user-location']);
+          localStorage.setItem('isLocatioCreated',JSON.stringify(false));
+          this.router.navigate(['dashboard-detail','location-detail']);
         });
       } else {
         this.toastr.error("Something went wrong", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
