@@ -15,6 +15,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateOrganizationComponent } from './create-organization/create-organization.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { SharedModule } from './shared/shared.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { SharedModule } from './shared/shared.module';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     NgxUiLoaderModule,
     SharedModule
   ],
