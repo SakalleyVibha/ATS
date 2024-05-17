@@ -1,0 +1,87 @@
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading clb">
+                <h3>{{this.determineSubmission().path | titlecase}} LOB </h3>
+                <div class="on-off-bdy">
+                    <div class="inactact-pop-bdy">
+                        <label class="form-check-label inactive-txt">inactive</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input " type="checkbox" id="status" role="switch"
+                                [checked]="this.addLobForm.value.status == 1" (change)="onCheckChange($event)">
+                            <label class="form-check-label active-txt">Active</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="create-md-content">
+        <div class="create-form-wrap">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="create-form-he">
+                        <h2>General Information </h2>
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="addLobForm">
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Name*</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="name"
+                                    placeholder="Enter name" [readonly]="this.determineSubmission().path == 'edit'">
+                                <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || formValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['name'].errors?.['required']">
+                                        Name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['name'].errors?.['pattern']">
+                                        Valid name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['name'].errors?.['minlength']">
+                                        Name must contain atleast 3 characters
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">About*</label>
+                            <div class="form-group">
+                                <textarea rows="3" class="form-control" placeholder="Description "
+                                    formControlName="about"></textarea>
+                                <div *ngIf="(formData['about'].invalid && (formData['about'].touched || formData['about'].dirty || formValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['about'].errors?.['required']">
+                                        About required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['about'].errors?.['pattern']">
+                                        Valid about required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="gap-skill-page"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group-btn-center">
+                            <a class="btn btn-theme" (click)="determineSaveFunc()">Save</a>
+                            <a href="#" class="btn btn-theme-two" routerLink="/dashboard-detail/lob-detail">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

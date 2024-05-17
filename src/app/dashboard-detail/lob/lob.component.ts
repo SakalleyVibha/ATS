@@ -1,17 +1,18 @@
 import { Component, signal } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
-import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-teams',
-  templateUrl: './teams.component.html',
-  styleUrl: './teams.component.css'
+  selector: 'app-lob',
+  templateUrl: './lob.component.html',
+  styleUrl: './lob.component.css'
 })
-export class TeamsComponent {
-  teamList = signal<Array<any>>([])
+export class LobComponent {
+
+  lobList = signal<Array<any>>([])
   current_role = signal<any>({});
   reqObj: any;
   totalPages: number = 0;
@@ -37,27 +38,26 @@ export class TeamsComponent {
       (value: any) => {
         this.reqObj.keyword = value;
         this.reqObj.pageNumber = 1;
-        this.getTeamList();
+        this.getlobList();
       });
-    this.getTeamList();
+    this.getlobList();
   }
 
-  getTeamList() {
+  getlobList() {
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('team/getTeamList', this.reqObj).subscribe((res: any) => {
+    this.api.allPostMethod('lob/getLobList', this.reqObj).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if ((res['data'] && res['data'].length > 0)) {
           if (this.reqObj.pageNumber == 1) {
-            this.teamList.set(res['data']);
+            this.lobList.set(res['data']);
           } else
-            this.teamList.update(x => {
+            this.lobList.update(x => {
               return [...x, ...res['data']]
             })
-          console.log(this.teamList());
           this.totalPages = res['totalPages'];
         } else {
-          this.teamList.set([]);
+          this.lobList.set([]);
         }
       }
     });
@@ -65,9 +65,9 @@ export class TeamsComponent {
 
   deleteTeam(id: number) {
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('team/deleteTeam', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
+    this.api.allPostMethod('lob/deleteLob', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
       this.reqObj.pageNumber = 1;
-      this.getTeamList();
+      this.getlobList();
       this.communicate.isLoaderLoad.next(false);
       if (res.data && res.data > 0) {
         this.toastr.success("Teams deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
@@ -78,11 +78,12 @@ export class TeamsComponent {
   onScroll() {
     if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
-      this.getTeamList();
+      this.getlobList();
     }
   }
 
   handleImageError(event: any) {
     event.target.src = 'images/default-avatar.jpg'; // Path to your fallback image
   }
+
 }

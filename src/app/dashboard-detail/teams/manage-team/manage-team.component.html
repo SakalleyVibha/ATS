@@ -228,7 +228,7 @@
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
                                                                         <ng-multiselect-dropdown
-                                                                            [placeholder]="'Select User'"
+                                                                            [placeholder]="this.Teamedit() ? this.user_list()[i].f_name+' '+this.user_list()[i].l_name  : 'Select User'"
                                                                             [settings]="dropdownSettings"
                                                                             [data]="getDataValues()"
                                                                             formControlName="user_id"
@@ -303,7 +303,7 @@
                             <div class="col-xl-12">
                                 <div class="form-group-btn-center">
                                     <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
-                                    <a routerLink="/dashboard-detail/team" class="btn btn-theme-two">Cancel</a>
+                                    <a routerLink="/dashboard-detail/lob-detail" class="btn btn-theme-two">Cancel</a>
                                 </div>
                             </div>
                         </div>

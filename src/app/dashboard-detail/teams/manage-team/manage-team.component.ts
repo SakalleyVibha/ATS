@@ -74,6 +74,7 @@ export class ManageTeamComponent {
 
           updateData.user_team_relations.map((data: any) => {
             this.userList.push(this.formbuild.group({
+              role: data['account_user']?.role_id,
               user_id: data['account_user']?.id,
               status: data?.status
             }));
@@ -93,7 +94,7 @@ export class ManageTeamComponent {
   //changermade
   onItemSelect(item: any) {
     console.log(item);
-    this.finalUserList().push({ id: item.id, name: item.name, status: 1 })
+    this.finalUserList().push({ user_id: item.id, status: 1 })
     console.log('this.finalUserList(): ', this.finalUserList());
     console.log(this.userList);
   }

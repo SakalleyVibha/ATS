@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
-                <h3>Team List </h3>
+                <h3>LOB List </h3>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="col-lg-6 col-sm-12 text-end">
                 <a routerLink="add" class="btn btn-create ">
-                    <i class="fa-solid fa fa-plus"></i> Add Team </a>
+                    <i class="fa-solid fa fa-plus"></i> Add LOB </a>
             </div>
         </div>
     </div>
@@ -34,39 +34,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (team of teamList(); track $index) {
+                    @for (lob of lobList(); track $index) {
                     <tr>
                         <td class="fonts-n3 user-img-desc">
-                            <span class="image-user"><img [ngSrc]='team?.logo' alt="No image" class="user_img"
-                                    height="50" width="50"></span>
-                            <span class="image-user-name"> {{team?.name}}</span>
+                            <span class="image-user-name"> {{lob?.name}}</span>
                         </td>
                         <td class="fonts-n3">
-                            <span class="txt-tb">{{team?.created_at | date: 'MM/dd/yyyy'}}</span>
+                            <span class="txt-tb">{{lob?.created_at | date: 'MM/dd/yyyy'}}</span>
                         </td>
                         <td class="status-font background-grey-table">
-                            <div class="statuslabel completed-bages" *ngIf="team?.status == 1">Active </div>
-                            <div class="statuslabel deactive-bages" *ngIf="team?.status == 0">Deactive </div>
+                            <div class="statuslabel completed-bages" *ngIf="lob?.status == 1">Active </div>
+                            <div class="statuslabel deactive-bages" *ngIf="lob?.status == 0">Deactive </div>
                         </td>
                         <td class="action_button">
                             <div class="actiondelete-button">
-                                <a routerLink="edit" [queryParams]="{id:team?.id}">
+                                <a routerLink="edit" [queryParams]="{id:lob?.id}">
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
-                                <a (click)="deleteTeam(team?.id)">
+                                <a (click)="deleteTeam(lob?.id)">
                                     <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
                             </div>
                         </td>
                     </tr>
-                    }
-                    <tr class="text-center" *ngIf="teamList()?.length == 0">
+                    } @empty {
+
+                    <tr class="text-center">
                         <td colspan="7">
                             <button class="btn btn-add-doc">No Record Found</button>
                         </td>
                     </tr>
+                    }
                 </tbody>
             </table>
         </div>

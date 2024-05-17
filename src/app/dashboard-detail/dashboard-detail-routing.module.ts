@@ -16,10 +16,11 @@ const routes: Routes = [{
     { path: 'job', loadChildren: () => import('./job/job.module').then(m => m.JobModule) },
     { path: 'team', loadChildren: () => import('./teams/teams.module').then(m => m.TeamsModule) },
     { path: 'skills', loadChildren: () => import('./skills/skills.module').then(m => m.SkillsModule) },
-    { path: 'candidate-detail', loadChildren: () => import('./candidate-detail/candidate-detail.module').then(m => m.CandidateDetailModule) }
+    { path: 'candidate-detail', loadChildren: () => import('./candidate-detail/candidate-detail.module').then(m => m.CandidateDetailModule) },
+    { path: 'lob-detail', loadChildren: () => import('./lob/lob.module').then(m => m.LobModule) }
   ]
 },
-  ];
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

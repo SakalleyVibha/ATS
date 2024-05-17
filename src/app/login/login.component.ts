@@ -64,7 +64,7 @@ export class LoginComponent {
           this.login.reset();
           this.communicate.isLoaderLoad.next(false);
           if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
-            this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/create-user-location' : '/create-organization')]);
+            this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
           } else {
             this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail']);
           }
