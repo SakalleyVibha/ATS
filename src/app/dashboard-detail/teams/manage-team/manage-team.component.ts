@@ -222,12 +222,13 @@ export class ManageTeamComponent {
 
   async assignUserTeam() {
     console.log('this.userList: ', this.userList);
-    this.communicate.isLoaderLoad.next(true);
     if (this.Teamedit()) {
       let editTeam = await this.onEditTeam();
     } else {
       let editTeam = await this.onFormSubmit();
     }
+    this.communicate.isLoaderLoad.next(true);
+    debugger
     this.assignUserForm.patchValue({
       team_id: this.team_id(),
     });
@@ -238,7 +239,7 @@ export class ManageTeamComponent {
     }
     this.api.allPostMethod('team/assingUser', req).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (response['error']) {
+      if (response['error'] == true) {
         this.toastr.error("Something went wrong", "");
       } else {
         this.toastr.success(response['message'], "");
@@ -288,7 +289,7 @@ export class ManageTeamComponent {
 
   addUser() {
     this.userList.push(this.formbuild.group({
-      role: new FormControl(), user_id: new FormControl(), status: new FormControl(1)
+      role: new FormControl('', [Validators.required]), user_id: new FormControl('', [Validators.required]), status: new FormControl(1)
     }));
   }
 

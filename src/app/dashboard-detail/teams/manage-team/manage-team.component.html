@@ -234,38 +234,21 @@
                                                                             formControlName="user_id"
                                                                             (onSelect)="onItemSelect($event)">
                                                                         </ng-multiselect-dropdown>
-                                                                        <!-- <select class="form-control">
-                                                                            @if(assignUserForm.value.userList[i].role){
-                                                                            <option value="" hidden selected>
-                                                                                {{(filteredUser() &&
-                                                                                filteredUser().length
-                                                                                >
-                                                                                0) ? 'Select
-                                                                                Role':'No role
-                                                                                found'}}</option>
-                                                                            @for (item of filteredUser(); track
-                                                                            $index){
-                                                                            <option *ngIf="item?.role_name != 'Admin'"
-                                                                                [value]="item?.id">
-                                                                                {{item?.f_name +" "+item?.l_name}}
-                                                                            </option>}
-                                                                            } @else {
-
-                                                                            <option value="" hidden selected>
-                                                                                {{(user_list() && user_list().length
-                                                                                >
-                                                                                0) ? 'Select
-                                                                                Role':'No role
-                                                                                found'}}</option>
-                                                                            @for (item of user_list(); track
-                                                                            $index){
-                                                                            <option *ngIf="item?.role_name != 'Admin'"
-                                                                                [value]="item?.id">
-                                                                                {{item?.f_name +" "+item?.l_name}}
-                                                                            </option>
-                                                                            }
-                                                                            }
-                                                                        </select> -->
+                                                                        <div>{{userList.get('user_id')?.invalid | json}}
+                                                                        </div>
+                                                                        <!-- <div
+                                                                            *ngIf="userList.get('user_id')?.invalid && (userList.get('user_id')?.dirty || userList.get('user_id')?.touched)">
+                                                                            <small class="text-danger"
+                                                                                *ngIf="userList.get('user_id')?.errors?.['required']">
+                                                                                User is required.
+                                                                            </small>
+                                                                        </div> -->
+                                                                        <div
+                                                                            *ngFor="let user of userList.controls; let i = index">
+                                                                            <pre>{{ user.get('user_id')?.errors | json }}</pre>
+                                                                            <pre>{{ user.get('user_id')?.touched }}</pre>
+                                                                            <pre>{{ user.get('user_id')?.dirty }}</pre>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
