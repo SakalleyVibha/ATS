@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CreateUserLocationRoutingModule } from './create-user-location-routing.module';
 import { CreateUserLocationComponent } from './create-user-location.component';
-import { SidebarComponent } from '../dashboard-detail/sidebar/sidebar.component';
+// import { SidebarComponent } from '../dashboard-detail/sidebar/sidebar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 import { LocationDetailModule } from './location-detail/location-detail.module';
@@ -12,7 +12,7 @@ import { UserDetailModule } from './user-detail/user-detail.module';
 @NgModule({
   declarations: [
     CreateUserLocationComponent,
-    SidebarComponent
+    // SidebarComponent
   ],
   imports: [
     CommonModule,

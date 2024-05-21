@@ -1,0 +1,103 @@
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading clb">
+                <h3>{{this.determineSubmission().path | titlecase}} Recruits Type</h3>
+                <div class="on-off-bdy">
+                    <div class="inactact-pop-bdy">
+                        <label class="form-check-label inactive-txt">inactive</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input " type="checkbox" id="status" role="switch"
+                                [checked]="this.addRecruitsTypeForm.value.status == 1" (change)="onCheckChange($event)">
+                            <label class="form-check-label active-txt">Active</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="create-md-content">
+        <div class="create-form-wrap">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="create-form-he">
+                        <h2>General Information </h2>
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="addRecruitsTypeForm">
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Name*</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="autoSizingInput" formControlName="name"
+                                    placeholder="Enter name" [readonly]="this.determineSubmission().path == 'edit'">
+                                <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || formValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['name'].errors?.['required']">
+                                        Name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['name'].errors?.['pattern']">
+                                        Valid name required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['name'].errors?.['minlength']">
+                                        Name must contain atleast 3 characters
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-xl-4">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Description*</label>
+                            <div class="form-group">
+                                <textarea rows="3" class="form-control" placeholder="Description "
+                                    formControlName="description"></textarea>
+                                <div *ngIf="(formData['description'].invalid && (formData['description'].touched || formData['description'].dirty || formValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['description'].errors?.['required']">
+                                        Description required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['description'].errors?.['pattern']">
+                                        Valid description required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-2">
+                        <div class="form-group-wrap">
+                            <label for="inlineFormInputGroupUsername">Is Featured*</label>
+                            <div class="form-group">
+                              <select class="form-control" formControlName="is_featured" (change)="selectIsFeatured($event)">
+                                <option></option>
+                                <option value="1">True</option>
+                                <option value="0">False</option>
+                              </select>
+                              <div
+                                *ngIf="formData['is_featured'].invalid && (formData['is_featured'].touched || formData['is_featured'].dirty || formValid())"
+                                class="required-txt-error">
+                                <ng-container *ngIf="formData['is_featured'].errors?.['required']">
+                                  Select is featured
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group-btn-center">
+                            <a class="btn btn-theme" (click)="determineSaveFunc()">Save</a>
+                            <a href="#" class="btn btn-theme-two" routerLink="/dashboard-detail/recruits-type">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

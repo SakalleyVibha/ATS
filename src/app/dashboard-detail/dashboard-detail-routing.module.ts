@@ -17,7 +17,12 @@ const routes: Routes = [{
     { path: 'team', loadChildren: () => import('./teams/teams.module').then(m => m.TeamsModule) },
     { path: 'skills', loadChildren: () => import('./skills/skills.module').then(m => m.SkillsModule) },
     { path: 'candidate-detail', loadChildren: () => import('./candidate-detail/candidate-detail.module').then(m => m.CandidateDetailModule) },
-    { path: 'lob-detail', loadChildren: () => import('./lob/lob.module').then(m => m.LobModule) }
+    { path: 'lob-detail', loadChildren: () => import('./lob/lob.module').then(m => m.LobModule) },
+    { path: 'work-configuration', loadChildren: () => import('./work-configuration/work-configuration.module').then(m => m.WorkConfigurationModule) },
+    { path: 'work-authorization', loadChildren: () => import('./work-authorization/work-authorization.module').then(m => m.WorkAuthorizationModule) },
+    { path: 'recruits-type', loadChildren: () => import('./recruits-type/recruits-type.module').then(m => m.RecruitsTypeModule) },
+    { path: 'employment-type', loadChildren: () => import('./employment-type-form/employment-type-form.module').then(m => m.EmploymentTypeFormModule) },
+    { path: 'custom-field', loadChildren: () => import('./custom-field-form/custom-field-form.module').then(m => m.CustomFieldFormModule) }
   ]
 },
 ];
