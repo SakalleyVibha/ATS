@@ -1,0 +1,74 @@
+<div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading">
+                <h3>Work Configuration </h3>
+            </div>
+        </div>
+    </div>
+    <div class="search-sec-bdy">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-sm-12">
+                <div class="d-flex  search-filter-main" role="search">
+                    <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
+                    <input class="form-control" type="search" placeholder="Search here . . ." [(ngModel)]="searchString"
+                        type="text" (ngModelChange)="this.searchValue.next($event)" aria-label="Search">
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12 text-end">
+                <a routerLink="add" class="btn btn-create ">
+                    <i class="fa-solid fa fa-plus"></i> Add Work Configuration </a>
+            </div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table class="table table-tamplate-style table-user">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Created Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (workConfig of workConfigurationList(); track $index) {
+                    <tr>
+                        <td class="fonts-n3 user-img-desc">
+                            <span class="image-user-name"> {{workConfig?.name}}</span>
+                        </td>
+                        <td class="fonts-n3">
+                            <span class="txt-tb">{{workConfig?.created_at | date: 'MM/dd/yyyy'}}</span>
+                        </td>
+                        <td class="status-font background-grey-table">
+                            <div class="statuslabel completed-bages" *ngIf="workConfig?.is_active == true">Active </div>
+                            <div class="statuslabel deactive-bages" *ngIf="workConfig?.is_active == false">Deactive </div>
+                        </td>
+                        <td class="action_button">
+                            <div class="actiondelete-button">
+                                <a routerLink="edit" [queryParams]="{id:workConfig?.id}">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
+                                    <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
+                                </a>
+                                <a >
+                                    <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
+                                    <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    } @empty {
+
+                    <tr class="text-center">
+                        <td colspan="7">
+                            <button class="btn btn-add-doc">No Record Found</button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
