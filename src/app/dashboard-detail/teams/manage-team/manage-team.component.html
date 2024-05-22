@@ -215,12 +215,6 @@
                                                                             }
                                                                             }
                                                                         </select>
-                                                                        <!-- <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
-                                                                    class="required-txt-error">
-                                                                    <ng-container *ngIf="formData['name'].errors?.['required']">
-                                                                        Name required
-                                                                    </ng-container>
-                                                                </div> -->
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -231,41 +225,8 @@
                                                                             [placeholder]="this.Teamedit() ? this.user_list()[i].f_name+' '+this.user_list()[i].l_name  : 'Select User'"
                                                                             [settings]="dropdownSettings"
                                                                             [data]="getDataValues()"
-                                                                            formControlName="user_id"
-                                                                            (onSelect)="onItemSelect($event)">
+                                                                            formControlName="user_id">
                                                                         </ng-multiselect-dropdown>
-                                                                        <!-- <select class="form-control">
-                                                                            @if(assignUserForm.value.userList[i].role){
-                                                                            <option value="" hidden selected>
-                                                                                {{(filteredUser() &&
-                                                                                filteredUser().length
-                                                                                >
-                                                                                0) ? 'Select
-                                                                                Role':'No role
-                                                                                found'}}</option>
-                                                                            @for (item of filteredUser(); track
-                                                                            $index){
-                                                                            <option *ngIf="item?.role_name != 'Admin'"
-                                                                                [value]="item?.id">
-                                                                                {{item?.f_name +" "+item?.l_name}}
-                                                                            </option>}
-                                                                            } @else {
-
-                                                                            <option value="" hidden selected>
-                                                                                {{(user_list() && user_list().length
-                                                                                >
-                                                                                0) ? 'Select
-                                                                                Role':'No role
-                                                                                found'}}</option>
-                                                                            @for (item of user_list(); track
-                                                                            $index){
-                                                                            <option *ngIf="item?.role_name != 'Admin'"
-                                                                                [value]="item?.id">
-                                                                                {{item?.f_name +" "+item?.l_name}}
-                                                                            </option>
-                                                                            }
-                                                                            }
-                                                                        </select> -->
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -304,6 +265,11 @@
                                 <div class="form-group-btn-center">
                                     <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
                                     <a routerLink="/dashboard-detail/lob-detail" class="btn btn-theme-two">Cancel</a>
+                                </div>
+                            </div>
+                            <div class="col-xl-12" *ngIf="showValidation() == true">
+                                <div class="form-group-btn-center error-valid">
+                                    <span class="text-danger">User must be selected.</span>
                                 </div>
                             </div>
                         </div>

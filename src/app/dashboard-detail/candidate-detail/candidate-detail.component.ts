@@ -17,6 +17,7 @@ export class CandidateDetailComponent {
   totalPages: number = 0;
   searchByKey: FormControl = new FormControl('');
   searchValue = new Subject<Event>();
+  searchString: string = ''
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
     this.current_role.set(localStorage.getItem('role'));
@@ -53,7 +54,6 @@ export class CandidateDetailComponent {
             this.candidateList.update(x => {
               return [...x, ...res['data']]
             })
-          console.log(this.candidateList());
           this.totalPages = res['totalPages'];
         } else {
           this.candidateList.set([]);
