@@ -215,12 +215,6 @@
                                                                             }
                                                                             }
                                                                         </select>
-                                                                        <!-- <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
-                                                                    class="required-txt-error">
-                                                                    <ng-container *ngIf="formData['name'].errors?.['required']">
-                                                                        Name required
-                                                                    </ng-container>
-                                                                </div> -->
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -231,24 +225,8 @@
                                                                             [placeholder]="this.Teamedit() ? this.user_list()[i].f_name+' '+this.user_list()[i].l_name  : 'Select User'"
                                                                             [settings]="dropdownSettings"
                                                                             [data]="getDataValues()"
-                                                                            formControlName="user_id"
-                                                                            (onSelect)="onItemSelect($event)">
+                                                                            formControlName="user_id">
                                                                         </ng-multiselect-dropdown>
-                                                                        <div>{{userList.get('user_id')?.invalid | json}}
-                                                                        </div>
-                                                                        <!-- <div
-                                                                            *ngIf="userList.get('user_id')?.invalid && (userList.get('user_id')?.dirty || userList.get('user_id')?.touched)">
-                                                                            <small class="text-danger"
-                                                                                *ngIf="userList.get('user_id')?.errors?.['required']">
-                                                                                User is required.
-                                                                            </small>
-                                                                        </div> -->
-                                                                        <div
-                                                                            *ngFor="let user of userList.controls; let i = index">
-                                                                            <pre>{{ user.get('user_id')?.errors | json }}</pre>
-                                                                            <pre>{{ user.get('user_id')?.touched }}</pre>
-                                                                            <pre>{{ user.get('user_id')?.dirty }}</pre>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -287,6 +265,11 @@
                                 <div class="form-group-btn-center">
                                     <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
                                     <a routerLink="/dashboard-detail/lob-detail" class="btn btn-theme-two">Cancel</a>
+                                </div>
+                            </div>
+                            <div class="col-xl-12" *ngIf="showValidation() == true">
+                                <div class="form-group-btn-center error-valid">
+                                    <span class="text-danger">User must be selected.</span>
                                 </div>
                             </div>
                         </div>

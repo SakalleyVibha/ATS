@@ -1,0 +1,564 @@
+<div class="location-sec-bdy">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="loc-heading clb">
+                <h3>Add Candidate </h3>
+                <div class="on-off-bdy">
+                    <div class="inactact-pop-bdy">
+                        <label class="form-check-label inactive-txt">inactive</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input " type="checkbox" role="switch" checked="">
+                            <label class="form-check-label active-txt">Active</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="create-md-content">
+        <form [formGroup]="addCandidateForm">
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Contact Information</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-input-wrapper">
+                    <div class="row">
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Name*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter name" formControlName="name">
+                                    <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['name'].errors?.['required']">
+                                            Name required
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['name'].errors?.['minlength']">
+                                            Name must contain atleast 2 characters
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Email*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter email" formControlName="email">
+                                    <div *ngIf="(formData['email'].invalid && (formData['email'].touched || formData['email'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['email'].errors?.['required']">
+                                            Email required
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['email'].errors?.['email']">
+                                            Valid email required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Linkedin*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter link" formControlName="linkedin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Contact*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter contact" formControlName="contact">
+                                    <div *ngIf="(formData['contact'].invalid && (formData['contact'].touched || formData['contact'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['contact'].errors?.['required']">
+                                            Contact required
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['contact'].errors?.['minlength']">
+                                            Contact must contain atleast 10 characters
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Alternate Contact</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter alternate contact" formControlName="alternate_contact">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>Address Infomation</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-input-wrapper">
+                    <div class="row">
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">City*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter city" formControlName="city">
+                                    <div *ngIf="(formData['city'].invalid && (formData['city'].touched || formData['city'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['city'].errors?.['required']">
+                                            City required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">State*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="state">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(state of state(); track state.id){
+                                        <option [value]="state?.value">{{state?.name}}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div *ngIf="(formData['state'].invalid && (formData['state'].touched || formData['state'].dirty || isFieldsValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['state'].errors?.['required']">
+                                        State required
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="create-form-wrap">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="create-form-he">
+                            <h2>General Information</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-input-wrapper">
+                    <div class="row">
+
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Title*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter title" formControlName="title">
+                                    <div *ngIf="(formData['title'].invalid && (formData['title'].touched || formData['title'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['title'].errors?.['required']">
+                                            Title required
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['title'].errors?.['minlength']">
+                                            Title must contain atleast 3 characters
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Position*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter position" formControlName="position">
+                                </div>
+                                <div *ngIf="(formData['position'].invalid && (formData['position'].touched || formData['position'].dirty || isFieldsValid()))"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['position'].errors?.['required']">
+                                        Position required
+                                    </ng-container>
+                                    <ng-container *ngIf="formData['position'].errors?.['minlength']">
+                                        Position must contain atleast 3 characters
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Total Experience*</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter total year of experience" formControlName="total_experience">
+                                    <div *ngIf="(formData['total_experience'].invalid && (formData['total_experience'].touched || formData['total_experience'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['total_experience'].errors?.['required']">
+                                            Experience required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Relevant Experience*</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter total year of relevant experience"
+                                        formControlName="relevant_experience">
+                                    <div *ngIf="(formData['relevant_experience'].invalid && (formData['relevant_experience'].touched || formData['relevant_experience'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['relevant_experience'].errors?.['required']">
+                                            Relevant experience required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Mode of Hire*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="mode_of_hire"
+                                        (change)="selectMode($event)">
+                                        <option value="" hidden selected>Select Value</option>
+                                        @for(mode of modeHire(); track mode.id){
+                                        <option [value]="mode?.value">{{mode?.title}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="(formData['mode_of_hire'].invalid && (formData['mode_of_hire'].touched || formData['mode_of_hire'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['mode_of_hire'].errors?.['required']">
+                                            Mode of hire required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Visa Status*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="visa_status">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(visa of visaStatus(); track visa.id){
+                                        <option [value]="visa?.value">{{visa?.title}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="(formData['visa_status'].invalid && (formData['visa_status'].touched || formData['visa_status'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['visa_status'].errors?.['required']">
+                                            Visa status required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Salary*</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="autoSizingInput"
+                                        formControlName="salary" placeholder="Enter current salary">
+                                    <div *ngIf="(formData['salary'].invalid && (formData['salary'].touched || formData['salary'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['salary'].errors?.['required']">
+                                            Salary required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Salary Type*</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter salary type" formControlName="salary_type">
+                                    <div *ngIf="(formData['salary_type'].invalid && (formData['salary_type'].touched || formData['salary_type'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['salary_type'].errors?.['required']">
+                                            Salary type required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Employer Name*</label>
+                                <div class="form-group">
+                                    @if(this.showEmployerDD()==false){
+
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter employer name" formControlName="employer_name">
+                                    } @else {
+                                    <select class="form-control" formControlName="employer_name">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(employer of employerName(); track employer.id){
+                                        <option [value]="employer?.value">{{employer?.title}}</option>
+                                        }
+                                    </select>
+                                    }
+                                    <div *ngIf="(formData['employer_name'].invalid && (formData['employer_name'].touched || formData['employer_name'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['employer_name'].errors?.['required']">
+                                            Employer name required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Visa Validity*</label>
+                                <div class="form-group">
+                                    <input type="date" class="form-control" id="autoSizingInput"
+                                        formControlName="visa_validity">
+                                    <div *ngIf="(formData['visa_validity'].invalid && (formData['visa_validity'].touched || formData['visa_validity'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['visa_validity'].errors?.['required']">
+                                            Visa validity required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Relocation*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="relocation">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(relocation of relocationList(); track relocation.id){
+                                        <option [value]="relocation?.value">{{relocation?.name}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="(formData['relocation'].invalid && (formData['relocation'].touched || formData['relocation'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['relocation'].errors?.['required']">
+                                            Field required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Current Project Status*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="current_project_status">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(project of projectStatus(); track project.id){
+                                        <option [value]="project?.value">{{project?.name}}</option>
+                                        }
+                                    </select>
+
+                                    <div *ngIf="(formData['current_project_status'].invalid && (formData['current_project_status'].touched || formData['current_project_status'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['current_project_status'].errors?.['required']">
+                                            Current project status required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Joining Availability*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Eg. 60 days" formControlName="joining_availability">
+                                    <div *ngIf="(formData['joining_availability'].invalid && (formData['joining_availability'].touched || formData['joining_availability'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['joining_availability'].errors?.['required']">
+                                            Mention joining availability
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Education Detail*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter highest level of graduation"
+                                        formControlName="education_detail">
+                                    <div *ngIf="(formData['education_detail'].invalid && (formData['education_detail'].touched || formData['education_detail'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['education_detail'].errors?.['required']">
+                                            Education detail required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Graduation Completion Year*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter completion of graduation year"
+                                        formControlName="graduation_completion_year">
+                                    <div *ngIf="(formData['graduation_completion_year'].invalid && (formData['graduation_completion_year'].touched || formData['graduation_completion_year'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container
+                                            *ngIf="formData['graduation_completion_year'].errors?.['required']">
+                                            Graduation completion year required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Resume Resource*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="resume_source">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(resume of resumeSource(); track resume.id){
+                                        <option [value]="resume?.value">{{resume?.title}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="(formData['resume_source'].invalid && (formData['resume_source'].touched || formData['resume_source'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['resume_source'].errors?.['required']">
+                                            Resume source required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Notes*</label>
+                                <div class="form-group">
+                                    <textarea rows="3" class="form-control" formControlName="notes"
+                                        placeholder="..."></textarea>
+                                    <div *ngIf="(formData['notes'].invalid && (formData['notes'].touched || formData['notes'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['notes'].errors?.['required']">
+                                            Notes required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6"
+                                    [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
+                                    <div class="form-group-wrap">
+                                        <label for="inlineFormInputGroupUsername">Profile Image</label>
+                                        <div class="form-group">
+                                            <div class="form">
+                                                <div class="dropzone" fileDragDrop
+                                                    (filesChangeEmiter)="onFileChange($event)">
+                                                    <div class="text-wrapper">
+                                                        <div class="centered">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="50"
+                                                                height="35" fill="currentColor" class="bi bi-upload"
+                                                                viewBox="0 0 16 16"
+                                                                style="color: #559AFF;margin-bottom: 6px;">
+                                                                <path
+                                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                                <path
+                                                                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="centered">
+                                                            <input type="file" name="file" id="file"
+                                                                (change)="onFileChange($event)" formControlName="logo">
+                                                            <label for="file" class="dropFile"><span
+                                                                    class="textLink">Browser</span></label>
+                                                        </div>
+                                                        <div class="centered">
+                                                            <span class="dropFile">drop a file here</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
+                                                    class="required-txt-error">
+                                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                        Logo required
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                    @if (imgURLBase64()) {
+                                    <div class="col-12 col-lg-4 col-md-12 col-xl-5">
+                                        <div class="form-group-wrap">
+                                            <label for="inlineFormInputGroupUsername">Selected Logo</label>
+                                            <div class="logo_edit">
+                                                <button class="btn btn-danger btn-design"
+                                                    (click)="CrossBtn()">X</button>
+                                                <img src="{{imgURLBase64()}}" class="file-preview" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                    <div class="form-group-wrap">
+                                        <label for="inlineFormInputGroupUsername">Add Resume</label>
+                                        <div class="form-group">
+                                            <div class="form">
+                                                <div class="dropzone">
+                                                    <input type="file" name="pdf" id="pdf" multiple
+                                                        (change)="onFileChangePDF($event)">
+                                                    <label for="pdf" class="dropFile"><span
+                                                            class="textLink">Browser</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="form-group-btn-center">
+                        <a class="btn btn-theme" (click)="saveCandidateForm()">Save</a>
+                        <a class="btn btn-theme-two">Cancel</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
