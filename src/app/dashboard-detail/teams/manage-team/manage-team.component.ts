@@ -57,7 +57,8 @@ export class ManageTeamComponent {
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 3,
-      allowSearchFilter: true
+      allowSearchFilter: true,
+      closeDropDownOnSelection: false
     };
     //changermade
     this.activeRout.queryParams.subscribe((res: any) => {
@@ -267,34 +268,52 @@ export class ManageTeamComponent {
 
   deleteFromForm(i: number) {
     this.userList.removeAt(i);
+    console.log('this.userList: ', this.userList.value);
+    // let array: any[] = .slice();
+    // array.map((data: any) => {
+    let valueObj = this.role_list().find((item: any) => item.id == this.userList.value[i].role);
+    // console.log('valueObj: ', valueObj);
+    this.editedRoleList().push(valueObj)
+    // })
+    console.log('this.editedRoleList(): ', this.editedRoleList());
   }
 
   getAllRoles() {
     let get_roles = localStorage.getItem('role_list');
     if (get_roles) {
       this.role_list.set(JSON.parse(get_roles));
+      console.log('this.role_list: ', this.role_list());
+      this.editedRoleList.set(this.role_list());
+      console.log('this.editedRoleList: ', this.editedRoleList());
     }
   }
 
   selectedRole(event: any) {
+    let role: any[] = this.role_list().slice();
+    this.editedRoleList.set(role)
     this.filteredUser.set(this.user_list().filter((user: any) => user.role_master?.id == event.target.value));
 
-    let index = this.assignUserForm.value.userList.findIndex((user: any) => user.role == event.target.value);
-    if (index != -1) {
-      let idx = this.role_list().filter((user: any) => user.id != event.target.value)
-      this.editedRoleList.set(idx);
-    }
+    this.assignUserForm.value.userList.map((item: any) => {
+      let idx = this.editedRoleList().findIndex((data: any) => data.id == item.role);
+      if (idx != -1) {
+        this.editedRoleList().splice(idx, 1)
+      }
+    })
   }
 
   addUser() {
+    if ((this.userList.value.length > 0) && this.userList.value[this.userList.value.length - 1]?.role == '') {
+      console.log('this.userList.value[this.userList.value.length - 1].role: ', this.userList.value[this.userList.value.length - 1]);
+    }
     this.userList.push(this.formbuild.group({
       role: new FormControl(''), user_id: new FormControl(0, [Validators.required]), status: new FormControl(1)
     }));
+    console.log('this.userList.value[this.userList.value.length - 1].role: ', this.userList.value);
   }
 
   getRoleValue(i: number) {
     let obj = this.role_list().find((data: any) => data.id == this.assignUserForm.value.userList[i].role);
-    return obj?.role_name ?? 'false';
+    return obj?.role_name ?? 'Select Value';
   }
 
   getDataValues() {

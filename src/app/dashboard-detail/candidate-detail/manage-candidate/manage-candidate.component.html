@@ -83,8 +83,8 @@
                                         <ng-container *ngIf="formData['contact'].errors?.['required']">
                                             Contact required
                                         </ng-container>
-                                        <ng-container *ngIf="formData['contact'].errors?.['minlength']">
-                                            Contact must contain atleast 10 characters
+                                        <ng-container *ngIf="formData['contact'].errors?.['pattern']">
+                                            Valid contact number required
                                         </ng-container>
                                     </div>
                                 </div>
@@ -275,7 +275,7 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Salary*</label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" id="autoSizingInput"
+                                    <input type="text" class="form-control" id="autoSizingInput"
                                         formControlName="salary" placeholder="Enter current salary">
                                     <div *ngIf="(formData['salary'].invalid && (formData['salary'].touched || formData['salary'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
@@ -290,7 +290,7 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Salary Type*</label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" id="autoSizingInput"
+                                    <input type="text" class="form-control" id="autoSizingInput"
                                         placeholder="Enter salary type" formControlName="salary_type">
                                     <div *ngIf="(formData['salary_type'].invalid && (formData['salary_type'].touched || formData['salary_type'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
@@ -493,6 +493,7 @@
                                                         </div>
                                                         <div class="centered">
                                                             <input type="file" name="file" id="file"
+                                                                accept=".png, .jpg, .jpeg"
                                                                 (change)="onFileChange($event)" formControlName="logo">
                                                             <label for="file" class="dropFile"><span
                                                                     class="textLink">Browser</span></label>
@@ -535,11 +536,17 @@
                                         <label for="inlineFormInputGroupUsername">Add Resume</label>
                                         <div class="form-group">
                                             <div class="form">
-                                                <div class="dropzone">
+                                                <div class="">
                                                     <input type="file" name="pdf" id="pdf" multiple
-                                                        (change)="onFileChangePDF($event)">
-                                                    <label for="pdf" class="dropFile"><span
-                                                            class="textLink">Browser</span></label>
+                                                        accept=".doc, .docx, .pdf" (change)="onFileChangePDF($event)">
+                                                    <label for="pdf" class="dropFile"><span class="resume-add">Add
+                                                            Resume + </span></label>
+                                                    @for(pdf of resumeFileNames();track $index){
+                                                    <div class="resume-name">
+                                                        <span class="resume-added">{{pdf}} <span class="cross-icon"
+                                                                (click)="deleteFromArray($index)">x</span></span>
+                                                    </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>

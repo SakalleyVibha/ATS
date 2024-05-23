@@ -60,7 +60,6 @@ export class CandidateDetailComponent {
         }
       }
     });
-    this.communicate.isLoaderLoad.next(false);
   }
 
   deleteCandidate(id: number) {

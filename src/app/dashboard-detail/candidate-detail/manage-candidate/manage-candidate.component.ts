@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
+import { CommunicateService } from '../../../core/services/communicate.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -24,8 +26,10 @@ export class ManageCandidateComponent {
   imgURLBase64 = signal<any>('');
   selectedFiles: FileList | null = null;
   documentList = signal<any>([]);
+  resumeFileNames = signal<any>([]);
+  sql_validation = signal(environment.SQL_validation);
 
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,) {
     this.createCandidateForm();
   }
 
@@ -43,7 +47,7 @@ export class ManageCandidateComponent {
       relevant_experience: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
-      contact: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      contact: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
       alternate_contact: new FormControl(''),
       city: new FormControl('', [Validators.required]),
       state: new FormControl('', [Validators.required]),
@@ -122,12 +126,17 @@ export class ManageCandidateComponent {
     const base64Files: { [key: string]: string } = {};
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i];
+      console.log('file: ', file);
+      this.resumeFileNames().push(file.name);
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
         base64Files[file.name] = event.target.result.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        this.documentList().push({ docType: 'resume', doc: base64Files[file.name] })
+        console.log('event.target.result: ', event.target.result);
+        console.log('base64Files: ', base64Files[file.type]);
+        this.documentList().push({ docType: 'resume', doc: base64Files[file.name], fileName: file.name })
       };
+      console.log("this.resumeFileNames() : ", this.resumeFileNames());
 
       reader.readAsDataURL(file);
     }
@@ -137,13 +146,25 @@ export class ManageCandidateComponent {
 
   }
 
+  deleteFromArray(index: number) {
+    this.resumeFileNames().slice(index, 1);
+    console.log('this.resumeFileNames(): ', this.resumeFileNames());
+    let idx = this.documentList().findIndex((data: any) => data.fileName == this.resumeFileNames()[index]);
+    if (idx != -1) {
+      this.documentList().slice(idx, 1);
+    }
+  }
+
   saveCandidateForm() {
     if (this.addCandidateForm.invalid) {
+      console.log('this.addCandidateForm: ', this.addCandidateForm.value);
       this.isFieldsValid.set(true);
-
+      return;
     }
-    let req = { ...this.addCandidateForm.value, documents: this.documentList() }
+    let req = { ...this.addCandidateForm.value, documents: this.documentList(), logo: this.imgURLBase64() }
+    this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if (res['data']) {
           this.toastr.success("Candidate created successfully", "")

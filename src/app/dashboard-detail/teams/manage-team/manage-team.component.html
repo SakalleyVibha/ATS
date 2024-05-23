@@ -160,10 +160,10 @@
                                                 <table class="table table-tamplate-style table-user">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Id</th>
-                                                            <th scope="col">Role</th>
-                                                            <th scope="col">User</th>
-                                                            <th scope="col">Action</th>
+                                                            <th scope="col-lg-2">Id</th>
+                                                            <th scope="col-lg-3">Role</th>
+                                                            <th scope="col-lg-6">User</th>
+                                                            <th scope="col-lg-1">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody formArrayName="userList">
@@ -171,7 +171,7 @@
                                                         i=$index)
                                                         {
                                                         <tr [formGroupName]="i">
-                                                            <td class="fonts-n3 user-img-desc">
+                                                            <td class="fonts-n3 user-img-desc col-lg-2">
                                                                 <div class="form-check">
                                                                     <!-- <input class="form-check-input" type="checkbox"
                                                                         [value]='user?.id' id="flexCheckDefault"
@@ -180,7 +180,7 @@
                                                                     {{i + 1}}
                                                                 </div>
                                                             </td>
-                                                            <td class="fonts-n3">
+                                                            <td class="fonts-n3 col-lg-3">
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
                                                                         <select class="form-control"
@@ -190,23 +190,18 @@
                                                                             editedRoleList().length > 0){
 
                                                                             <option value="" hidden selected>
-                                                                                {{(editedRoleList() &&
-                                                                                editedRoleList().length
-                                                                                >
-                                                                                0) ?(getRoleValue(i) != 'false' ?
-                                                                                getRoleValue(i) : 'Role Selected')
-                                                                                :'No
-                                                                                role
-                                                                                found'}}</option>
+                                                                                {{getRoleValue(i)}}
+                                                                            </option>
                                                                             @for (role of editedRoleList(); track
                                                                             $index){
                                                                             <option *ngIf="role?.role_name != 'Admin'"
                                                                                 [value]="role?.id">
-                                                                                {{role?.role_name}}</option>
+                                                                                {{role?.role_name}}
+                                                                            </option>
                                                                             }
                                                                             } @else {
-                                                                            <option value="" hidden selected>
-                                                                                Select Role</option>
+                                                                            <option value="" hidden selected>Select Role
+                                                                            </option>
                                                                             @for (role of role_list(); track
                                                                             $index){
                                                                             <option *ngIf="role?.role_name != 'Admin'"
@@ -218,7 +213,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="status-font background-grey-table">
+                                                            <td class="status-font background-grey-table col-lg-6">
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
                                                                         <ng-multiselect-dropdown
@@ -238,7 +233,7 @@
 
                                                                 </div>
                                                             </td> -->
-                                                            <td class="action_button">
+                                                            <td class="action_button col-lg-1">
                                                                 <div class="actiondelete-button">
                                                                     <a (click)="deleteFromForm(i)">
                                                                         <img src="assets/images/trash-2.svg"
