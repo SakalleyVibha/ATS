@@ -20,6 +20,8 @@ const routes: Routes = [{
     { path: 'skills', loadChildren: () => import('./skills/skills.module').then(m => m.SkillsModule) },
     { path: 'candidate-detail', loadChildren: () => import('./candidate-detail/candidate-detail.module').then(m => m.CandidateDetailModule) },
     { path: 'lob-detail', loadChildren: () => import('./lob/lob.module').then(m => m.LobModule) },
+    { path: 'job-role', loadChildren: () => import('./job-role/job-role.module').then(m => m.JobRoleModule) },
+    { path: 'section', loadChildren: () => import('./section/section.module').then(m => m.SectionModule) },
     { path: 'work-configuration', loadChildren: () => import('./work-configuration/work-configuration.module').then(m => m.WorkConfigurationModule) },
     { path: 'work-authorization', loadChildren: () => import('./work-authorization/work-authorization.module').then(m => m.WorkAuthorizationModule) },
     { path: 'recruits-type', loadChildren: () => import('./recruits-type/recruits-type.module').then(m => m.RecruitsTypeModule) },

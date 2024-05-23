@@ -5,11 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
-  styleUrl: './role.component.css'
+  selector: 'app-job-role',
+  templateUrl: './job-role.component.html',
+  styleUrl: './job-role.component.css'
 })
-export class RoleComponent {
+export class JobRoleComponent {
   roleList:any;
   searchValue = new Subject<Event>();
   searchString:string = ''
@@ -38,24 +38,22 @@ export class RoleComponent {
 
   onDeleteRole(id:number){
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod("role/deleterole",{ id }).subscribe({
-      next: (res:any)=>{
-        if(!res.error){
-          this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-            this.communicate.isLoaderLoad.next(false);
-          });
-        }else{
-          this.toastr.error(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-            this.communicate.isLoaderLoad.next(false);
-          });
-        }
+    this.api.allPostMethod("job-role/deleteJobRoleById",{ id: id , account_id: this.paginationData?.account_ID}).subscribe((res:any)=>{
+      if(res?.message){
+        this.communicate.isLoaderLoad.next(false);
+        this.paginationData.pageNumber = 1;
+        this.getRoleList();
+      }else{
+        this.toastr.error("Something went wrong.Please try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+          this.communicate.isLoaderLoad.next(false);
+      });
       }
     });
   }
 
   getRoleList(){
     this.communicate.isLoaderLoad.next(true);
-    this.api.allgetMethod("role/roles",{}).subscribe((res:any)=>{
+    this.api.allPostMethod("job-role/jobRolelist",this.paginationData).subscribe((res:any)=>{
       if(res?.data.length > 0){
         if(this.paginationData.pageNumber == 1){
           this.roleList = res?.data;
