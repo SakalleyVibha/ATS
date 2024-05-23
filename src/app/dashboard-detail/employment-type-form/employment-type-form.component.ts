@@ -1,17 +1,18 @@
 import { Component, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
+import { FormControl } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
-  selector: 'app-candidate-detail',
-  templateUrl: './candidate-detail.component.html',
-  styleUrl: './candidate-detail.component.css'
+  selector: 'app-employment-type-form',
+  templateUrl: './employment-type-form.component.html',
+  styleUrl: './employment-type-form.component.css'
 })
-export class CandidateDetailComponent {
-  candidateList = signal<Array<any>>([]);
+export class EmploymentTypeFormComponent {
+
+  employmentTypeList = signal<Array<any>>([])
   current_role = signal<any>({});
   reqObj: any;
   totalPages: number = 0;
@@ -19,7 +20,8 @@ export class CandidateDetailComponent {
   searchValue = new Subject<Event>();
   searchString: string = ''
 
-  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
+
+  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService){
     this.current_role.set(localStorage.getItem('role'));
     this.current_role.set(JSON.parse(this.current_role()));
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -30,6 +32,7 @@ export class CandidateDetailComponent {
       pageSize: 10,
       keyword: ''
     };
+
   }
 
   ngOnInit() {
@@ -37,40 +40,27 @@ export class CandidateDetailComponent {
       (value: any) => {
         this.reqObj.keyword = value;
         this.reqObj.pageNumber = 1;
-        this.getCandidateList();
+        this.getEmploymentTypeList();
       });
-    this.getCandidateList();
+    this.getEmploymentTypeList();
   }
 
-  getCandidateList() {
+  getEmploymentTypeList() {
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('candidates/candidateList', this.reqObj).subscribe((res: any) => {
+    this.api.allPostMethod('employement-type/employment-type-list', this.reqObj).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (!res['error']) {
+      if (res['error'] != true) {
         if ((res['data'] && res['data'].length > 0)) {
           if (this.reqObj.pageNumber == 1) {
-            this.candidateList.set(res['data']);
+            this.employmentTypeList.set(res['data']);
           } else
-            this.candidateList.update(x => {
+            this.employmentTypeList.update(x => {
               return [...x, ...res['data']]
             })
           this.totalPages = res['totalPages'];
         } else {
-          this.candidateList.set([]);
+          this.employmentTypeList.set([]);
         }
-      }
-    });
-    this.communicate.isLoaderLoad.next(false);
-  }
-
-  deleteCandidate(id: number) {
-    this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('team/deleteclient', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
-      this.reqObj.pageNumber = 1;
-      this.getCandidateList();
-      this.communicate.isLoaderLoad.next(false);
-      if (res.data && res.data > 0) {
-        this.toastr.success("Candidate deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
       }
     });
   }
@@ -78,7 +68,8 @@ export class CandidateDetailComponent {
   onScroll() {
     if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
-      this.getCandidateList();
+      this.getEmploymentTypeList();
     }
   }
+
 }

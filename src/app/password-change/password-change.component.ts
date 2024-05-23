@@ -16,9 +16,9 @@ export class PasswordChangeComponent {
   isconfirmpasswordshow: boolean = false;
   ispasswordshow: boolean = false;
   isPasswordReset: boolean = false;
-  isFieldsValid:boolean = false;
-  
-  constructor(private fb: FormBuilder, private toast: ToastrService, private commonApi: CommonApiService, private router: Router,private communicate:CommunicateService) {
+  isFieldsValid: boolean = false;
+
+  constructor(private fb: FormBuilder, private toast: ToastrService, private commonApi: CommonApiService, private router: Router, private communicate: CommunicateService) {
     let shareData: any = localStorage.getItem('Shared_Data');
     shareData = JSON.parse(shareData);
     this.changeTempPasswordForm = this.fb.group({
@@ -33,7 +33,7 @@ export class PasswordChangeComponent {
   get formData() { return this.changeTempPasswordForm.controls }
 
   ngOnInit() {
-    this.changeTempPasswordForm.get('password')?.valueChanges.subscribe((res:any) => {
+    this.changeTempPasswordForm.get('password')?.valueChanges.subscribe((res: any) => {
       let cnfrmPass = this.changeTempPasswordForm.value?.confirmpassword;
       if (cnfrmPass != '' && cnfrmPass == res) {
         this.changeTempPasswordForm.controls['confirmpassword']?.updateValueAndValidity();
@@ -42,7 +42,7 @@ export class PasswordChangeComponent {
   }
 
   resetPassword() {
-    if(this.changeTempPasswordForm.invalid){
+    if (this.changeTempPasswordForm.invalid) {
       this.isFieldsValid = true;
       return;
     }
@@ -50,7 +50,6 @@ export class PasswordChangeComponent {
     let formData = Object.assign({}, this.changeTempPasswordForm.value);
     delete formData.confirmpassword
     this.commonApi.allPostMethod('users/changeUsersPassword', formData).subscribe((res: any) => {
-      console.log("After Change Password : ", res);
       this.changeTempPasswordForm.reset();
       if (res.message) {
         this.isPasswordReset = true;

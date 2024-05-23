@@ -8,13 +8,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 
 @NgModule({
   declarations: [
     DashboardDetailComponent,
     DashboardComponent,
-    SidebarComponent
+    SidebarComponent,
+    UserProfileComponent
   ],
   imports: [
     CommonModule,
