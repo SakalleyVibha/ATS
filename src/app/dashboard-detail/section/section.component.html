@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
-                <h3>Role </h3>
+                <h3>Section </h3>
             </div>
         </div>
     </div>
@@ -11,12 +11,12 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="d-flex  search-filter-main" role="search">
                     <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
-                    <input class="form-control" [(ngModel)]="searchString" type="text" (ngModelChange)="this.searchValue.next($event)" placeholder="Search here . . ." aria-label="Search">
+                    <input class="form-control" placeholder="Search here . . ." aria-label="Search" [formControl]="searchKeyword">
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12 text-end">
                 <a routerLink="add" class="btn btn-create ">
-                    <i class="fa-solid fa fa-plus"></i> Add role </a>
+                    <i class="fa-solid fa fa-plus"></i> Add section </a>
             </div>
         </div>
     </div>
@@ -28,34 +28,34 @@
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>
-                        <th scope="col">List Of Role</th>
+                        <th scope="col">List Of Section</th>
                         <th scope="col">Description</th>
-                        <!-- <th scope="col">Status</th> -->
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                     @if(roleList?.length){
-                        <tr *ngFor="let role of roleList">
+                     @if(sectionList && sectionList.length){
+                        <tr *ngFor="let section of sectionList">
                             <td class="fonts-n3 user-img-desc">
                                 <!-- <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1"
                                         class="user_img"></span> -->
-                                <span class="image-user-name">{{role?.role_name}}</span>
+                                <span class="image-user-name">{{section?.section_name}}</span>
                             </td>
                             <td class="fonts-n3">
-                                <span class="txt-tb">{{role?.role_description}}</span>
+                                <span class="txt-tb">{{section?.section_description}}</span>
                             </td>
-                            <!-- <td class="status-font background-grey-table">
-                                <div class="statuslabel completed-bages" *ngIf="role?.status == true">Active </div>
-                                <div class="statuslabel deactive-bages" *ngIf="role?.status == false">Deactive </div>
-                            </td> -->
+                            <td class="status-font background-grey-table">
+                                <div class="statuslabel completed-bages" *ngIf="section?.status == true">Active </div>
+                                <div class="statuslabel deactive-bages" *ngIf="section?.status == false">Deactive </div>
+                            </td>
                             <td class="action_button">
                                 <div class="actiondelete-button">
-                                    <a routerLink="edit" [queryParams]="{id:role?.id}">
+                                    <a routerLink="edit" [queryParams]="{id:section?.id}">
                                         <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                         <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                                     </a>
-                                    <a (click)="onDeleteRole(role?.id)">
+                                    <a (click)="deleteSection(section?.id)">
                                         <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                         <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
                                     </a>

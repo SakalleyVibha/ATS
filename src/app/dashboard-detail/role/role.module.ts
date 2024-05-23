@@ -6,6 +6,7 @@ import { RoleComponent } from './role.component';
 import { ManageRoleComponent } from './manage-role/manage-role.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     RoleRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    NgMultiSelectDropDownModule
   ]
 })
 export class RoleModule { }

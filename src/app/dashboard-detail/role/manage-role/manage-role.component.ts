@@ -4,6 +4,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-manage-role',
@@ -14,127 +15,108 @@ export class ManageRoleComponent {
   roleForm:FormGroup;
   isFormValid:boolean = false;
   isEditForm:boolean = false;
-  clientList:Array<any>= [];
-  industryList: any;
-  departmentList: any;
   isActive:boolean = true;
+  roleId:any;
+  sectionList = [];
+  dropdownSettings:IDropdownSettings = {
+    singleSelection: false,
+    idField: 'id',
+    textField: 'section_name',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    itemsShowLimit: 3,
+    maxHeight:100,
+    allowSearchFilter: true
+  };
   
   constructor(private api:CommonApiService,private router:Router,private communicate:CommunicateService,private formBuild:FormBuilder,private toastr:ToastrService,private activeRouter:ActivatedRoute){
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
 
     this.roleForm = this.formBuild.group({
-      name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      account_id: new FormControl(user_data?.account_id),
-      client_id: new FormControl('',[Validators.required]),
-      industry_id:new FormControl('',[Validators.required]),
-      department_id:new FormControl('',[Validators.required]),
-      status: new FormControl(''),
-      // poc_name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]),
-      // poc_email: new FormControl('',[Validators.required,Validators.email]),
-      // poc_phone: new FormControl('',[Validators.required,Validators.pattern('[6-9][0-9]{12}')]),
-      // poc_mobile: new FormControl('',[Validators.required,Validators.pattern('[6-9][0-9]{12}')]),
-      // poc_fax: new FormControl('',[Validators.pattern('^[0-9]*$'),Validators.minLength(10),Validators.maxLength(13)]),
-      description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)])
+      name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
+      description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),
+      section: new FormControl([]),
+      status: new FormControl(true)
     });
     this.communicate.isLoaderLoad.next(true);
-    this.getClientList(user_data?.account_id); 
+    this.getSectionList()
    
-    this.getEditData(user_data?.account_id);
   }
+  get formData() { return this.roleForm.controls };
 
-  get formData() { return this.roleForm.controls }
+  ngOnInit():void{
+     this.activeRouter.queryParamMap.subscribe(params => {
+        this.roleId = params.get('id');
+        if( this.roleId){
+           this.isEditForm = true;
+           this.communicate.isLoaderLoad.next(true);
+           this.getRoleDetails(Number( this.roleId));
+        }
+     })
+  }
   
-
-  getClientList(acc_id:any){
-    this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if(res?.data.length > 0){
-        this.clientList = res['data'];
-      }else{
-        this.clientList = [];
-        // this.roleForm.controls['client_id']?.clearValidators();
-        // this.roleForm.controls['client_id']?.updateValueAndValidity();
+  getSectionList(){
+    let payload = {
+       pageNumber: 1,
+       pageSize: 100,
+       keyword: ''
+    }
+    this.api.allPostMethod('section/sections',payload).subscribe({
+      next: (res:any)=>{
+        this.communicate.isLoaderLoad.next(false);
+         if(!res.error){
+           this.sectionList = res.data;
+         }
       }
-      this.getIndustrialList(acc_id);
-      this.communicate.isLoaderLoad.next(false);
-    });
-  }
-
-  getIndustrialList(acc_id:any){
-    this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod("industry/industrieslist",{account_id:acc_id,pageNumber:1,pageSize:10}).subscribe((res:any)=>{
-      if(res?.data.length > 0){
-        this.industryList = res.data;
-      }else{
-        // this.roleForm.controls['industry_id']?.clearValidators();
-        // this.roleForm.controls['industry_id']?.updateValueAndValidity();
-        this.industryList = [];
-      }
-      this.getDepartmentList(acc_id);
-      this.communicate.isLoaderLoad.next(false);
-    });
-  }
-
-  getDepartmentList(acc_id:any){
-    this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod("departments/departmentlist",{account_id:acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res:any)=>{
-      if(res && res?.data.length > 0){
-        this.departmentList = res['data']
-      }else{
-        this.departmentList = []
-        // this.roleForm.controls['department_id']?.clearValidators();
-        // this.roleForm.controls['department_id']?.updateValueAndValidity(); 
-      }
-      this.communicate.isLoaderLoad.next(false);
     })
   }
 
-  getEditData(acc_id:number){
-    this.activeRouter.queryParams.subscribe((res:any)=>{
-      if(res && res?.id && res != null){
-        this.isEditForm = true;
-        this.communicate.isLoaderLoad.next(true);
-        this.api.allPostMethod("job-role/jobRolelist",{account_id : acc_id ,id: Number(res?.id),pageNumber:1,pageSize:10}).subscribe((res:any)=>{
-          console.log(res);
-          let editData = res.data[0];
-          this.roleForm.patchValue({
-            name: editData.name,
-            description: editData.description,
-          });
-          this.isActive = editData.status;
-          this.roleForm.addControl("id",new FormControl(editData?.id));
-          this.roleForm.removeControl("industry_id")
-          this.roleForm.removeControl("client_id")
-          this.roleForm.removeControl("department_id")
-          this.communicate.isLoaderLoad.next(false);
-        });
-      }
-    });
+  getRoleDetails(id:number){
+      this.api.allPostMethod('role/getrole',{ id }).subscribe({
+        next: (res:any)=>{
+            if(!res.error){
+              this.communicate.isLoaderLoad.next(false); 
+              let sections = res.data.role_section_relations.map((v:any) => v.section_master);
+              this.roleForm.patchValue({
+                name: res.data?.role_name,
+                description: res.data?.role_description,
+                section: sections,
+               // status: res.data?.status
+              })
+            }else{
+              this.toastr.error(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+                this.communicate.isLoaderLoad.next(false);
+              });
+            }
+        }
+      })
   }
 
   onSubmitForm(){
     if(this.roleForm.invalid){
       this.isFormValid = true;
       return;
+    };
+    let formVal = this.roleForm.value;
+    let payload = {
+      role_name: formVal.name,
+      role_description: formVal.description,
+      section_ids: formVal.section.map((v:any)=> v.id)
     }
-    this.roleForm.patchValue({
-      client_id: Number(this.roleForm.value.client_id),
-      industry_id: Number(this.roleForm.value.industry_id),
-      department_id: Number(this.roleForm.value.department_id),
-      status: Number(this.isActive)
-    });
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod('job-role/addjobRole',this.roleForm.value).subscribe((response:any)=>{
-      if(response?.message && !response.error){
-        this.toastr.success("Role data added successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/dashboard-detail/role']);
-        });
-      }else{
-        this.toastr.error("Something went wrong, Please try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-          this.communicate.isLoaderLoad.next(false);
-        });
+    this.api.allPostMethod('role/addrole',payload).subscribe({
+      next: (res:any)=>{
+          if(!res.error){
+            this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+              this.communicate.isLoaderLoad.next(false);
+              this.router.navigate(['dashboard-detail','role'])
+            });
+          }else{
+            this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+              this.communicate.isLoaderLoad.next(false);
+            });
+          }
       }
     })
   }
@@ -144,20 +126,26 @@ export class ManageRoleComponent {
       this.isFormValid = true
       return
     }
-    this.roleForm.patchValue({
-      status: Number(this.isActive)
-    })
+    let formVal = this.roleForm.value
+    let payload = {
+      id: this.roleId,
+      role_name: formVal.name,
+      role_description: formVal.description,
+      section_ids: formVal.section.map((v:any) => v.id),
+    }
     this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod("job-role/updatejobRole",this.roleForm.value).subscribe((res:any)=>{
-      if(res.data[0] == true){
-        this.toastr.success("Role update successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['dashboard-detail/role']);
-        });
-      }else{
-        this.toastr.error("Something went wrong,Please try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
-          this.communicate.isLoaderLoad.next(false);
-        });
+    this.api.allPostMethod('role/editrole',payload).subscribe({
+      next: (res:any)=>{
+          if(!res.error){
+            this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+              this.communicate.isLoaderLoad.next(false);
+              this.router.navigate(['dashboard-detail','role'])
+            });
+          }else{
+            this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+              this.communicate.isLoaderLoad.next(false);
+            });
+          }
       }
     })
   }
