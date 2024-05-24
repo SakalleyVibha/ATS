@@ -64,7 +64,23 @@ export class WorkAuthorizationComponent {
       }
     });
   }
-
+  deleteWorkAuthorization(id:number){
+    this.communicate.isLoaderLoad.next(true);
+      this.api.allPostMethod('work-authorization/delete-work-authorization',{ id }).subscribe({
+        next: (res:any)=>{
+           if(!res.error){
+              this.getWorkAuthorizationList();
+              this.reqObj.keyword = '';
+              this.searchByKey.reset()
+              this.toastr.success(res.message,'');
+              this.communicate.isLoaderLoad.next(false);
+           }else{
+            this.toastr.error(res.message || res.error, '');
+            this.communicate.isLoaderLoad.next(false);
+           }
+        }
+      })
+  }
   onScroll() {
     if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
