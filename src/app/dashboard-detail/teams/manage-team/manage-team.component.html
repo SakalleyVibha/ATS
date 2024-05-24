@@ -95,6 +95,7 @@
                                                                 <div class="centered">
                                                                     <input type="file" name="file" id="file"
                                                                         (change)="onFileChange($event)"
+                                                                        accept=".png, .jpg, .jpeg"
                                                                         formControlName="logo">
                                                                     <label for="file" class="dropFile"><span
                                                                             class="textLink">Browser</span></label>
@@ -150,8 +151,71 @@
                             </div>
                         </div>
 
+                        <div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1"
+                            [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+                            <div class="search-sec-bdy">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="d-flex  search-filter-main" role="search">
+                                            <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
+                                            <input class="form-control" type="search" placeholder="Search here . . ."
+                                                [(ngModel)]="searchString" type="text"
+                                                (ngModelChange)="this.searchValue.next($event)" aria-label="Search">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrapper">
+                                <div class="table-responsive">
+                                    <table class="table table-tamplate-style table-user">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Id</th>
+                                                <th scope="col">User</th>
+                                                <th scope="col">Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (user of user_list(); track $index) {
+                                            <tr>
+                                                <td class="fonts-n3 user-img-desc">
+                                                    <input type="checkbox" [value]="user.id" name="scales"
+                                                        [id]="'id_'+user.id" (change)="selectedEvent($event)" />
+                                                    <span class="image-user"> {{$index+ 1}}</span>
+                                                </td>
+                                                <td class="fonts-n3">
+                                                    <span class="txt-tb">{{user?.f_name+"
+                                                        "+user?.l_name}}</span>
+                                                </td>
+                                                <td class="status-font background-grey-table">
+                                                    <span class="txt-tb">{{user['role_master']?.role_name}}</span>
+                                                </td>
+                                            </tr>
+                                            } @empty {
+                                            <tr class="text-center" *ngIf="user_list()?.length == 0">
+                                                <td colspan="7">
+                                                    <button class="btn btn-add-doc">No User Found</button>
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="form-group-btn-center">
+                                        <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
+                                        <a routerLink="/dashboard-detail/team" class="btn btn-theme-two">Cancel</a>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12" *ngIf="showValidation() == true">
+                                    <div class="form-group-btn-center error-valid">
+                                        <span class="text-danger">User must be selected.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- <form [formGroup]="assignUserForm"> -->
-                        <div class="row ">
+                        <!-- <div class="row ">
                             <div class="col-12">
                                 <form [formGroup]="assignUserForm">
                                     <div class="row ">
@@ -173,10 +237,6 @@
                                                         <tr [formGroupName]="i">
                                                             <td class="fonts-n3 user-img-desc col-lg-2">
                                                                 <div class="form-check">
-                                                                    <!-- <input class="form-check-input" type="checkbox"
-                                                                        [value]='user?.id' id="flexCheckDefault"
-                                                                        [disabled]="user?.is_owner == true"
-                                                                        (change)="onCheckChange($event)"> -->
                                                                     {{i + 1}}
                                                                 </div>
                                                             </td>
@@ -225,14 +285,6 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <!-- <td class="fonts-n3">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        role="switch" id="flexSwitchCheckChecked"
-                                                                        checked (change)="onCheckStatus($event, i)">
-
-                                                                </div>
-                                                            </td> -->
                                                             <td class="action_button col-lg-1">
                                                                 <div class="actiondelete-button">
                                                                     <a (click)="deleteFromForm(i)">
@@ -267,8 +319,7 @@
                                     <span class="text-danger">User must be selected.</span>
                                 </div>
                             </div>
-                        </div>
-                        <!-- </form> -->
+                        </div> -->
                     </div>
                 </div>
             </div>
