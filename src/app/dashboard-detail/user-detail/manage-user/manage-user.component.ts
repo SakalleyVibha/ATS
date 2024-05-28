@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
 export class ManageUserComponent {
 
   userForm!: FormGroup;
-  isFormValid: boolean = false;
+  isFormValid = signal(false);
   user_roles: any = [];
   user_location: any;
   client_list: any;
@@ -25,6 +25,7 @@ export class ManageUserComponent {
   sql_validation = signal(environment.SQL_validation);
   website_validate = signal(environment.website_validation);
   number_validation = signal(environment.Phone_Mobile_valid);
+  imgURLBase64 = signal<ArrayBuffer | any>('');
 
   constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute,private communicate:CommunicateService) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -44,7 +45,7 @@ export class ManageUserComponent {
       phone: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       mobile: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       fax: new FormControl('', [ Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
-
+      profile_img: ['', [Validators.required]],
       street: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
       city: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
       country: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
@@ -109,7 +110,7 @@ export class ManageUserComponent {
 
   onSubmit() {
     if (this.userForm.invalid) {
-      this.isFormValid = true;
+      this.isFormValid.set(true);
       return
     }
     let date = '';
@@ -122,7 +123,7 @@ export class ManageUserComponent {
       client_id: Number(this.userForm.value.client_id),
       status: Number(this.isActive)
     });
-    let payload = {...this.userForm.value,dob:date}
+    let payload = {...this.userForm.value,dob:date,profile_img: this.imgURLBase64()}
     this.api.allPostMethod("users/addUser", payload).subscribe((response: any) => {
       if (response.error == false) {
         this.userForm.reset();
@@ -166,6 +167,9 @@ export class ManageUserComponent {
             country: editableData?.country,
           });
           this.isActive = editableData?.status;
+          this.imgURLBase64.set(editableData?.profile_img); 
+          this.userForm.controls['profile_img'].clearValidators();
+          this.userForm.controls['profile_img'].updateValueAndValidity();
           this.userForm.addControl("id",new FormControl(editableData?.id));
           this.userForm.removeControl('role_id');
           this.userForm.removeControl('client_id');
@@ -179,13 +183,15 @@ export class ManageUserComponent {
 
   onEditUser() {
     if (this.userForm.invalid) {
-      this.isFormValid = true;
+      this.isFormValid.set(true);
       return
     }
     this.communicate.isLoaderLoad.next(true);
     this.userForm.get('status')?.patchValue(Number(this.isActive));
+    let isBase64 = this.communicate.isBase64(this.imgURLBase64());
     // this.userForm.value = {...this.userForm.value, id : }
-    this.api.allPostMethod("users/updateUserProfile",this.userForm.value).subscribe((res:any)=>{
+    let payload = {...this.userForm.value,profile_img: (isBase64 ? this.imgURLBase64() : false)};
+    this.api.allPostMethod("users/updateUserProfile",payload).subscribe((res:any)=>{
       console.log("After User update : ",res);
       if(res && res?.error == false){
         this.toastr.success("User profile update successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
@@ -205,6 +211,35 @@ export class ManageUserComponent {
     var newParts = [parts[2], parts[1], parts[0]];
     var newDateString = newParts.join("-");
     return newDateString;
+  }
+
+  convertImageToBase64(file_event: any) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file_event);
+    reader.onload = () => {
+      this.imgURLBase64.set(reader.result)
+    };
+  }
+
+  crossBtn(){
+    this.imgURLBase64.set('');
+    this.userForm.get('profile_img')?.setValue('');
+    this.userForm.controls['profile_img'].addValidators(Validators.required);
+    this.userForm.controls['profile_img'].updateValueAndValidity();
+  }
+
+  onFileChange(event:any){
+    if(event.dataTransfer){
+      let file = event.dataTransfer.files
+      this.userForm.controls['profile_img'].clearValidators();
+      this.userForm.controls['profile_img'].updateValueAndValidity();
+      this.convertImageToBase64(file[0]);
+      return
+    }
+    if(event.srcElement && event.srcElement!= undefined){
+      let file = event.srcElement.files
+      this.convertImageToBase64(file[0]);
+    }
   }
 
 }
