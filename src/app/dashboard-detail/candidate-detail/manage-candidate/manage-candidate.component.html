@@ -290,8 +290,12 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Salary Type*</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="autoSizingInput"
-                                        placeholder="Enter salary type" formControlName="salary_type">
+                                    <select class="form-control" formControlName="salary_type">
+                                        <option value="" hidden selected>Select Value</option>
+                                        @for(type of salaryType(); track type.id){
+                                        <option [value]="type?.value">{{type?.title}}</option>
+                                        }
+                                    </select>
                                     <div *ngIf="(formData['salary_type'].invalid && (formData['salary_type'].touched || formData['salary_type'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
                                         <ng-container *ngIf="formData['salary_type'].errors?.['required']">
@@ -422,6 +426,7 @@
                                     <input type="text" class="form-control" id="autoSizingInput"
                                         placeholder="Enter completion of graduation year"
                                         formControlName="graduation_completion_year">
+
                                     <div *ngIf="(formData['graduation_completion_year'].invalid && (formData['graduation_completion_year'].touched || formData['graduation_completion_year'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
                                         <ng-container

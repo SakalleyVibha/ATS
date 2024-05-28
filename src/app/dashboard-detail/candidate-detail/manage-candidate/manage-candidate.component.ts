@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
+import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, SALARY_TYPE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
@@ -23,6 +23,7 @@ export class ManageCandidateComponent {
   projectStatus = signal<any>(PROJECT_STATUS);
   resumeSource = signal<any>(RESUME_SOURCE);
   employerName = signal<any>(EMPLOYER_NAME);
+  salaryType = signal<any>(SALARY_TYPE);
   imgURLBase64 = signal<any>('');
   selectedFiles: FileList | null = null;
   documentList = signal<any>([]);

@@ -11,6 +11,11 @@ export const RELOCATION = [
     { id: 2, name: 'Travel', value: 'travel' },
     { id: 3, name: 'N/A', value: 'n/a' }
 ];
+export const SALARY_TYPE = [
+    { id: 1, title: 'Hourly', value: 'hourly' },
+    { id: 2, title: 'Weekly', value: 'weekly' },
+    { id: 3, title: 'Monthly', value: 'monthly' }
+];
 export const VISA_STATUS = [
     { id: 1, title: 'USC', value: 'usc' },
     { id: 2, title: 'GC', value: 'gc' },
