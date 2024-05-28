@@ -39,10 +39,11 @@
                         <td class="fonts-n3 user-img-desc">
                             <span class="image-user"><img [ngSrc]='team?.logo' alt="No image" class="user_img"
                                     height="50" width="50"></span>
-                            <span class="image-user-name"> {{team?.name}}</span>
+                            <span class="image-user-name"> {{team?.name ?? 'N/A'}}</span>
                         </td>
                         <td class="fonts-n3">
-                            <span class="txt-tb">{{team?.created_at | date: 'MM/dd/yyyy'}}</span>
+                            <span class="txt-tb">{{team?.created_at ? (team?.created_at | date: 'MM/dd/yyyy') :
+                                'N/A'}}</span>
                         </td>
                         <td class="status-font background-grey-table">
                             <div class="statuslabel completed-bages" *ngIf="team?.status == 1">Active </div>

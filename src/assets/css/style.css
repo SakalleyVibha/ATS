@@ -1916,26 +1916,31 @@ a.disabled {
     color: gray;
     cursor: not-allowed;
 }
+
 .logo_edit {
     position: absolute;
 }
+
 .file-preview {
     width: 150px;
     height: 150px;
 }
+
 .disabledImgSelect {
     pointer-events: none;
     opacity: 0.4;
 }
+
 @media (max-width: 575.98px) {
     .logo_edit {
         position: relative;
     }
+
     .file-preview {
         width: 100%;
         height: 200px;
     }
-    
+
 }
 
 /* Swapnil S. image section */
@@ -2008,4 +2013,8 @@ aside .row {
     border: 0.5px solid #EBF9F1;
     padding: 5px 12px;
     text-align: center;
+}
+
+span.selected-item-container>span.selected-item {
+    max-width: none !important;
 }

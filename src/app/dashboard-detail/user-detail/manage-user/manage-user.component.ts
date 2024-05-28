@@ -21,13 +21,13 @@ export class ManageUserComponent {
   maxDOB: any;
   editUser: boolean = false;
   selected_details: any;
-  isActive:boolean = true;  
+  isActive: boolean = true;
   sql_validation = signal(environment.SQL_validation);
   website_validate = signal(environment.website_validation);
   number_validation = signal(environment.Phone_Mobile_valid);
   imgURLBase64 = signal<ArrayBuffer | any>('');
 
-  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute,private communicate:CommunicateService) {
+  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
 
@@ -44,7 +44,7 @@ export class ManageUserComponent {
       website: new FormControl('', [Validators.required, Validators.pattern(this.website_validate())]),
       phone: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       mobile: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
-      fax: new FormControl('', [ Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
+      fax: new FormControl('', [Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
       profile_img: ['', [Validators.required]],
       street: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
       city: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
@@ -67,7 +67,7 @@ export class ManageUserComponent {
   ngOnInit() {
     let date = new Date();
     let today = date.getDate();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}` }`;
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today - 1}` : `${today - 1}`}`;
   }
 
   selectRole(event: any) {
@@ -79,7 +79,7 @@ export class ManageUserComponent {
     } else if (event.target.value == 3 && (this.client_list && this.client_list.length > 0)) {
       this.userForm.controls['client_id'].setValidators([Validators.required])
       this.userForm.controls['client_id'].updateValueAndValidity()
-    } else if(this.client_list && this.client_list.length == 0){
+    } else if (this.client_list && this.client_list.length == 0) {
       this.userForm.controls['client_id'].removeValidators([Validators.required]);
       this.userForm.controls['client_id'].updateValueAndValidity()
     }
@@ -91,7 +91,7 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allgetMethod("role/roles",{}).subscribe((roles: any) => {
+    this.api.allgetMethod("role/roles", {}).subscribe((roles: any) => {
       if (roles.data?.length > 0) {
         this.user_roles = roles.data;
       }
@@ -123,7 +123,7 @@ export class ManageUserComponent {
       client_id: Number(this.userForm.value.client_id),
       status: Number(this.isActive)
     });
-    let payload = {...this.userForm.value,dob:date,profile_img: this.imgURLBase64()}
+    let payload = { ...this.userForm.value, dob: date, profile_img: this.imgURLBase64() }
     this.api.allPostMethod("users/addUser", payload).subscribe((response: any) => {
       if (response.error == false) {
         this.userForm.reset();
@@ -133,44 +133,44 @@ export class ManageUserComponent {
           this.router.navigate(['/dashboard-detail/user-detail']);
         });
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(()=>{
+        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }
     })
   }
 
-  forEditData(acc_id:any){
+  forEditData(acc_id: any) {
     this.activeRouter.queryParams.subscribe((params: any) => {
       if (params.id != null || params.id != undefined) {
         let data = {
           id: Number(params.id),
-          account_id:acc_id,
+          account_id: acc_id,
         }
         this.communicate.isLoaderLoad.next(true);
-        this.api.allPostMethod("users/getUser",data).subscribe((editData:any)=>{
+        this.api.allPostMethod("users/getUser", data).subscribe((editData: any) => {
           let editableData = editData['data'];
           this.userForm.patchValue({
             f_name: editableData?.f_name,
             l_name: editableData?.l_name,
             alias: editableData?.alias,
-            dob:  editableData?.dob,
+            dob: editableData?.dob,
             email: editableData?.email,
-            website:  editableData?.website,
+            website: editableData?.website,
             phone: editableData?.phone,
             mobile: editableData?.mobile,
-            fax:  editableData?.fax,      
-            street: editableData?.street, 
+            fax: editableData?.fax,
+            street: editableData?.street,
             state: editableData?.state,
             zip: editableData?.zip,
             city: editableData?.city,
             country: editableData?.country,
           });
           this.isActive = editableData?.status;
-          this.imgURLBase64.set(editableData?.profile_img); 
+          this.imgURLBase64.set(editableData?.profile_img);
           this.userForm.controls['profile_img'].clearValidators();
           this.userForm.controls['profile_img'].updateValueAndValidity();
-          this.userForm.addControl("id",new FormControl(editableData?.id));
+          this.userForm.addControl("id", new FormControl(editableData?.id));
           this.userForm.removeControl('role_id');
           this.userForm.removeControl('client_id');
           this.userForm.removeControl('location_id');
@@ -190,16 +190,16 @@ export class ManageUserComponent {
     this.userForm.get('status')?.patchValue(Number(this.isActive));
     let isBase64 = this.communicate.isBase64(this.imgURLBase64());
     // this.userForm.value = {...this.userForm.value, id : }
-    let payload = {...this.userForm.value,profile_img: (isBase64 ? this.imgURLBase64() : false)};
-    this.api.allPostMethod("users/updateUserProfile",payload).subscribe((res:any)=>{
-      console.log("After User update : ",res);
-      if(res && res?.error == false){
-        this.toastr.success("User profile update successfully","",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+    let payload = { ...this.userForm.value, profile_img: (isBase64 ? this.imgURLBase64() : false) };
+    this.api.allPostMethod("users/updateUserProfile", payload).subscribe((res: any) => {
+      console.log("After User update : ", res);
+      if (res && res?.error == false) {
+        this.toastr.success("User profile update successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
           this.router.navigate(['/dashboard-detail/user-detail']);
         });
-      }else{
-        this.toastr.error("Something went wrong. Try again later","",{closeButton:true,timeOut:5000}).onHidden.subscribe((res:any)=>{
+      } else {
+        this.toastr.error("Something went wrong. Try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe((res: any) => {
           this.communicate.isLoaderLoad.next(false);
         });
       }
@@ -208,9 +208,11 @@ export class ManageUserComponent {
 
   convertDate(dateString: string) {
     var parts = dateString.split("-");
+    console.log('parts: ', parts);
     var newParts = [parts[2], parts[1], parts[0]];
-    var newDateString = newParts.join("-");
-    return newDateString;
+    console.log('newParts: ', newParts);
+    var newDateString = parts.join("-");
+    return dateString;
   }
 
   convertImageToBase64(file_event: any) {
@@ -221,22 +223,22 @@ export class ManageUserComponent {
     };
   }
 
-  crossBtn(){
+  crossBtn() {
     this.imgURLBase64.set('');
     this.userForm.get('profile_img')?.setValue('');
     this.userForm.controls['profile_img'].addValidators(Validators.required);
     this.userForm.controls['profile_img'].updateValueAndValidity();
   }
 
-  onFileChange(event:any){
-    if(event.dataTransfer){
+  onFileChange(event: any) {
+    if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.userForm.controls['profile_img'].clearValidators();
       this.userForm.controls['profile_img'].updateValueAndValidity();
       this.convertImageToBase64(file[0]);
       return
     }
-    if(event.srcElement && event.srcElement!= undefined){
+    if (event.srcElement && event.srcElement != undefined) {
       let file = event.srcElement.files
       this.convertImageToBase64(file[0]);
     }

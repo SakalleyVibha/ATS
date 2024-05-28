@@ -1,0 +1,24 @@
+span.resume-add {
+    /* background-color: #559AFF; */
+    color: #559AFF;
+    padding: 10px;
+    height: 3px !important;
+    width: 10px;
+    border-radius: 5px;
+    border: 2px solid #559AFF;
+}
+
+span.resume-added {
+    /* background-color: #559AFF; */
+    color: #559AFF;
+    padding: 10px;
+    height: 3px !important;
+    width: 10px;
+    border-radius: 5px;
+}
+
+.resume-name {
+    margin-top: 6px;
+    font-size: 11px;
+    /* border: 1px solid; */
+}
