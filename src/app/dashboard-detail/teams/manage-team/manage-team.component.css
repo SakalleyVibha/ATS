@@ -55,3 +55,8 @@ table.table.table-tamplate-style.table-user tbody tr td {
     column-gap: 20px;
     margin: auto;
 }
+
+.table-responsive.table-matching {
+    overflow-y: auto;
+    height: 413px;
+}

@@ -164,13 +164,14 @@ export class ManageTeamComponent {
     this.api.allPostMethod("users/getUserList", this.userReqObj()).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (response['error'] == false) {
-        let data = response['data'].filter((data: any) => data.is_owner != true)
-        this.user_list.set(data);
+        response['data'] = response['data'].filter((data: any) => data.is_owner != true)
         if ((response['data'] && response['data'].length > 0)) {
           if (this.userReqObj().pageNumber == 1) {
-            this.user_list.set(data);
-          } else
-            this.user_list.update(x => { return [...x, ...data] })
+            this.user_list.set(response['data']);
+          } else {
+            this.user_list.set([...this.user_list(), ...response['data']])
+
+          }
           this.totalPages.set(response['totalPages']);
         } else {
           this.user_list.set([]);
