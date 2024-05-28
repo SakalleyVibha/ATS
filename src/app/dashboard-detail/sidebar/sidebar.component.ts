@@ -23,7 +23,7 @@ export class SidebarComponent {
     user_data = JSON.parse(user_data);
     let isSkip:any = localStorage.getItem('isDashboardDetail');
     if(!JSON.parse(isSkip)){
-      this.getUserandLocation(user_data.account_id);
+      this.getUserandLocation(user_data?.account_id);
     }
   }
 
