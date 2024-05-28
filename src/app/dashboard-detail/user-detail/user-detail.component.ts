@@ -10,7 +10,7 @@ import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
   styleUrl: './user-detail.component.css'
 })
 export class UserDetailComponent {
-  user_list: any = [];
+  user_list: any[] = [];
   Date = new Date();
   current_role: any;
   user_data: any;
