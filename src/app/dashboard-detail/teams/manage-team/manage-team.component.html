@@ -166,11 +166,11 @@
                             </div>
                             <div class="table-wrapper">
                                 <div class="col-xl-11 d-flex table-wrapper-user">
-                                    <div class="table-responsive col-xl-6 p-2 table-matching">
+                                    <div class="table-responsive col-xl-6 p-2 table-matching" infiniteScroll
+                                        [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+                                        (scrolled)="onScroll()">
                                         <label for="inlineFormInputGroupUsername">User List</label>
-                                        <table class="table table-tamplate-style table-user" infiniteScroll
-                                            [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-                                            (scrolled)="onScroll()">
+                                        <table class="table table-tamplate-style table-user">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Id</th>
