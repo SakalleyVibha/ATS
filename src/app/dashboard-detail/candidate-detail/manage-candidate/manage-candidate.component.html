@@ -99,6 +99,73 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="row">
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6"
+                                    [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
+                                    <div class="form-group-wrap">
+                                        <label for="inlineFormInputGroupUsername">Profile Image</label>
+                                        <div class="form-group upload">
+                                            <div class="form">
+                                                <!-- <div class="dropzone" fileDragDrop
+                                                    (filesChangeEmiter)="onFileChange($event)">
+                                                    <div class="text-wrapper">
+                                                        <div class="centered">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="50"
+                                                                height="35" fill="currentColor" class="bi bi-upload"
+                                                                viewBox="0 0 16 16"
+                                                                style="color: #559AFF;margin-bottom: 6px;">
+                                                                <path
+                                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                                <path
+                                                                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="centered">
+                                                            <input type="file" name="file" id="file"
+                                                                accept=".png, .jpg, .jpeg"
+                                                                (change)="onFileChange($event)" formControlName="logo">
+                                                            <label for="file" class="dropFile"><span
+                                                                    class="textLink">Browser</span></label>
+                                                        </div>
+                                                        <div class="centered">
+                                                            <span class="dropFile">drop a file here</span>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="file-upload-wrapper upload-candid-profile"
+                                                    data-text="Select your file!">
+                                                    <input name="file-upload-field" type="file"
+                                                        class="file-upload-field" value="">
+                                                </div>
+
+                                                <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
+                                                    class="required-txt-error">
+                                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                        Logo required
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                    @if (imgURLBase64()) {
+                                    <div class="col-12 col-lg-4 col-md-12 col-xl-5">
+                                        <div class="form-group-wrap">
+                                            <label for="inlineFormInputGroupUsername">Selected Logo</label>
+                                            <div class="logo_edit">
+                                                <button class="btn btn-danger btn-design"
+                                                    (click)="CrossBtn()">X</button>
+                                                <img src="{{imgURLBase64()}}" class="file-preview" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -235,8 +302,7 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Mode of Hire*</label>
                                 <div class="form-group">
-                                    <select class="form-control" formControlName="mode_of_hire"
-                                        (change)="selectMode($event)">
+                                    <select class="form-control" formControlName="mode_of_hire">
                                         <option value="" hidden selected>Select Value</option>
                                         @for(mode of modeHire(); track mode.id){
                                         <option [value]="mode?.value">{{mode?.title}}</option>
@@ -305,15 +371,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12"
+                            *ngIf="addCandidateForm.value.mode_of_hire == 'c2c'">
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Employer Name*</label>
                                 <div class="form-group">
-                                    @if(this.showEmployerDD()==false){
-
-                                    <input type="text" class="form-control" id="autoSizingInput"
-                                        placeholder="Enter employer name" formControlName="employer_name">
-                                    } @else {
                                     <select class="form-control" formControlName="employer_name">
                                         <option value="" hidden selected>
                                             Select Value</option>
@@ -321,7 +383,7 @@
                                         <option [value]="employer?.value">{{employer?.title}}</option>
                                         }
                                     </select>
-                                    }
+
                                     <div *ngIf="(formData['employer_name'].invalid && (formData['employer_name'].touched || formData['employer_name'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
                                         <ng-container *ngIf="formData['employer_name'].errors?.['required']">
@@ -403,7 +465,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                        <!-- <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Education Detail*</label>
                                 <div class="form-group">
@@ -418,13 +480,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="form-group-wrap">
-                                <label for="inlineFormInputGroupUsername">Graduation Completion Year*</label>
+                                <label for="inlineFormInputGroupUsername">Highest Education Completion Year*</label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" id="autoSizingInput"
-                                        placeholder="Enter completion of graduation year"
+                                        placeholder="Enter year of completion"
                                         formControlName="graduation_completion_year">
 
                                     <div *ngIf="(formData['graduation_completion_year'].invalid && (formData['graduation_completion_year'].touched || formData['graduation_completion_year'].dirty || isFieldsValid()))"
@@ -476,66 +538,6 @@
 
                         <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
                             <div class="row">
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-6"
-                                    [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
-                                    <div class="form-group-wrap">
-                                        <label for="inlineFormInputGroupUsername">Profile Image</label>
-                                        <div class="form-group">
-                                            <div class="form">
-                                                <div class="dropzone" fileDragDrop
-                                                    (filesChangeEmiter)="onFileChange($event)">
-                                                    <div class="text-wrapper">
-                                                        <div class="centered">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="50"
-                                                                height="35" fill="currentColor" class="bi bi-upload"
-                                                                viewBox="0 0 16 16"
-                                                                style="color: #559AFF;margin-bottom: 6px;">
-                                                                <path
-                                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                                                <path
-                                                                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-                                                            </svg>
-                                                        </div>
-                                                        <div class="centered">
-                                                            <input type="file" name="file" id="file"
-                                                                accept=".png, .jpg, .jpeg"
-                                                                (change)="onFileChange($event)" formControlName="logo">
-                                                            <label for="file" class="dropFile"><span
-                                                                    class="textLink">Browser</span></label>
-                                                        </div>
-                                                        <div class="centered">
-                                                            <span class="dropFile">drop a file here</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
-                                                    class="required-txt-error">
-                                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                        Logo required
-                                                    </ng-container>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
-                                    @if (imgURLBase64()) {
-                                    <div class="col-12 col-lg-4 col-md-12 col-xl-5">
-                                        <div class="form-group-wrap">
-                                            <label for="inlineFormInputGroupUsername">Selected Logo</label>
-                                            <div class="logo_edit">
-                                                <button class="btn btn-danger btn-design"
-                                                    (click)="CrossBtn()">X</button>
-                                                <img src="{{imgURLBase64()}}" class="file-preview" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
-                            <div class="row">
                                 <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                     <div class="form-group-wrap">
                                         <label for="inlineFormInputGroupUsername">Add Resume</label>
@@ -559,7 +561,337 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="create-form-he">
+                                    <h2>Employment History</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container formArrayName="employment_history">
+                            <ng-container [formGroupName]="i"
+                                *ngFor="let employment of employment_history.controls;let i=index">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Company Name*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="company_name"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter company name">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="employment.get('company_name')?.invalid && (employment.get('company_name')?.dirty || employment.get('company_name')?.touched || isFieldsValid())">
+                                                            <div
+                                                                *ngIf="employment.get('company_name')?.errors?.['required']">
+                                                                Company name required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">From*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="date" class="form-control"
+                                                                formControlName="from_date" id="autoSizingInput">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="employment.get('from_date')?.invalid && (employment.get('from_date')?.dirty || employment.get('from_date')?.touched || isFieldsValid())">
+                                                            <div
+                                                                *ngIf="employment.get('from_date')?.errors?.['required']">
+                                                                Date required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">To*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="date" class="form-control"
+                                                                formControlName="to_date" id="autoSizingInput">
+                                                            <div class="current-date">
+                                                                <p> Currently working </p>
+                                                                <input type="checkbox" id="curr_work"
+                                                                    (change)="determineWorkStatus($event, i, 'required')"
+                                                                    name="curr_work" />
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            *ngIf="employment.get('to_date')?.invalid && (employment.get('to_date')?.dirty || employment.get('to_date')?.touched || isFieldsValid())">
+                                                            <div
+                                                                *ngIf="employment.get('to_date')?.errors?.['required']">
+                                                                Date required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeSkill(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="col-xl-12">
+                            <div class="form-group-btn-center">
+                                <!-- disabled when {{this.employment_history.invalid}} -->
+                                <a class="btn btn-theme" (click)="addSkills()"> + Add</a>
+                            </div>
+                        </div>
+                        <!-- ------------------ -->
 
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="create-form-he">
+                                    <h2>Education Detail</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container formArrayName="education_detail">
+                            <ng-container [formGroupName]="i"
+                                *ngFor="let education of education_detail.controls;let i=index">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Qualification*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="qualification"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter qualification">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="education.get('qualification')?.invalid && (education.get('qualification')?.dirty || education.get('qualification')?.touched || isFieldsValid())">
+                                                            <div
+                                                                *ngIf="education.get('qualification')?.errors?.['required']">
+                                                                Qualification required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Course*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" class="form-control"
+                                                                formControlName="course" id="autoSizingInput"
+                                                                placeholder="Enter Course">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="education.get('course')?.invalid && (education.get('course')?.dirty || education.get('course')?.touched || isFieldsValid())">
+                                                            <div *ngIf="education.get('course')?.errors?.['required']">
+                                                                Course required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">University</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Enter University"
+                                                                formControlName="university" id="autoSizingInput">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="education.get('university')?.invalid && (education.get('university')?.dirty || education.get('university')?.touched || isFieldsValid())">
+                                                            <div
+                                                                *ngIf="education.get('university')?.errors?.['required']">
+                                                                University required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeEducation(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="col-xl-12">
+                            <div class="form-group-btn-center">
+                                <a class="btn btn-theme" (click)="addEducation()"> + Add</a>
+                            </div>
+                        </div>
+                        <!-- ------------------ -->
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="create-form-he">
+                                    <h2>Certificates</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container formArrayName="certificate">
+                            <ng-container [formGroupName]="i" *ngFor="let cert of certificate.controls;let i=index">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Name*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="name"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter name of certification">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="cert.get('name')?.invalid && (cert.get('name')?.dirty || cert.get('name')?.touched || isFieldsValid())">
+                                                            <div *ngIf="cert.get('name')?.errors?.['required']">
+                                                                Name required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Validity*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="date" class="form-control"
+                                                                formControlName="validity" id="autoSizingInput"
+                                                                placeholder="Enter validity">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="cert.get('validity')?.invalid && (cert.get('validity')?.dirty || cert.get('validity')?.touched || isFieldsValid())">
+                                                            <div *ngIf="cert.get('validity')?.errors?.['required']">
+                                                                Validity required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Attachment</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="file" id="avatar" name="avatar"
+                                                                formControlName="attachment" class="cand-cert-upload"
+                                                                accept=".doc, .docx, .pdf" />
+                                                        </div>
+                                                        <div
+                                                            *ngIf="cert.get('attachment')?.invalid && (cert.get('attachment')?.dirty || cert.get('attachment')?.touched || isFieldsValid())">
+                                                            <div *ngIf="cert.get('attachment')?.errors?.['required']">
+                                                                Atachment required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeCertificate(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="col-xl-12">
+                            <div class="form-group-btn-center">
+                                <a class="btn btn-theme" (click)="addCert()"> + Add</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-12">

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, SALARY_TYPE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
@@ -15,7 +15,6 @@ export class ManageCandidateComponent {
 
   addCandidateForm!: FormGroup;
   isFieldsValid = signal<boolean>(false);
-  showEmployerDD = signal<boolean>(false);
   modeHire = signal<any>(MODE_OF_HIRE);
   state = signal<any>(STATE_CONST);
   relocationList = signal<any>(RELOCATION);
@@ -32,6 +31,9 @@ export class ManageCandidateComponent {
 
   constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,) {
     this.createCandidateForm();
+    this.addSkills();
+    this.addEducation();
+    this.addCert();
   }
 
   ngOnInit() { }
@@ -61,12 +63,69 @@ export class ManageCandidateComponent {
       relocation: new FormControl('', [Validators.required]),
       current_project_status: new FormControl('', [Validators.required]),
       joining_availability: new FormControl('', [Validators.required]),
-      education_detail: new FormControl('', [Validators.required]),
+      // education_detail: new FormControl('', [Validators.required]),
       graduation_completion_year: new FormControl('', [Validators.required]),
       resume_source: new FormControl('', [Validators.required]),
       logo: new FormControl('', [Validators.required]),
-      notes: new FormControl('', [Validators.required])
+      notes: new FormControl('', [Validators.required]),
+      employment_history: this.fb.array([], Validators.required),
+      education_detail: this.fb.array([]),
+      certificate: this.fb.array([]),
     });
+
+  }
+
+  get employment_history(): FormArray {
+    return this.addCandidateForm.get("employment_history") as FormArray
+  }
+
+  get education_detail(): FormArray {
+    return this.addCandidateForm.get("education_detail") as FormArray
+  }
+
+  get certificate(): FormArray {
+    return this.addCandidateForm.get("certificate") as FormArray
+  }
+
+  addSkills() {
+    this.employment_history.push(
+      this.fb.group({
+        company_name: new FormControl('', [Validators.required]),
+        from_date: new FormControl('', [Validators.required]),
+        to_date: new FormControl('', [Validators.required])
+      }));
+  }
+
+  addEducation() {
+    this.education_detail.push(
+      this.fb.group({
+        qualification: new FormControl('', [Validators.required]),
+        course: new FormControl('', [Validators.required]),
+        university: new FormControl('', [Validators.required])
+      })
+    );
+  }
+
+  addCert() {
+    this.certificate.push(
+      this.fb.group({
+        name: new FormControl('', [Validators.required]),
+        validity: new FormControl('', [Validators.required]),
+        attachment: new FormControl('', [Validators.required])
+      })
+    );
+  }
+
+  removeSkill(i: number) {
+    this.employment_history.removeAt(i);
+  }
+
+  removeEducation(i: number) {
+    this.education_detail.removeAt(i);
+  }
+
+  removeCertificate(i: number) {
+    this.certificate.removeAt(i);
   }
 
   convertImageToBase64(file_event: any) {
@@ -106,10 +165,6 @@ export class ManageCandidateComponent {
     this.addCandidateForm.get('logo')?.setValue('');
     this.addCandidateForm.controls['logo'].addValidators(Validators.required);
     this.addCandidateForm.controls['logo'].updateValueAndValidity();
-  }
-
-  selectMode(event: any) {
-    this.showEmployerDD.set(event.target.value == 'c2c' ? true : false);
   }
 
   onFileChangePDF(event: any) {
@@ -157,24 +212,44 @@ export class ManageCandidateComponent {
   }
 
   saveCandidateForm() {
+    console.log('this.addCandidateForm.invalid: ', this.addCandidateForm.invalid);
     if (this.addCandidateForm.invalid) {
       console.log('this.addCandidateForm: ', this.addCandidateForm.value);
       this.isFieldsValid.set(true);
-      return;
+      // return;
     }
     let req = { ...this.addCandidateForm.value, documents: this.documentList(), logo: this.imgURLBase64() }
-    this.communicate.isLoaderLoad.next(true);
-    this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
-      this.communicate.isLoaderLoad.next(false);
-      if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Candidate created successfully", "")
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
-      } else {
-        this.toastr.error("Something went wrong", "");
-      }
-    });
+    console.log('req: ', req);
+    // this.communicate.isLoaderLoad.next(true);
+    // this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
+    //   this.communicate.isLoaderLoad.next(false);
+    //   if (res['error'] != true) {
+    //     if (res['data']) {
+    //       this.toastr.success("Candidate created successfully", "")
+    //     } else {
+    //       this.toastr.error("Something went wrong", "");
+    //     }
+    //   } else {
+    //     this.toastr.error("Something went wrong", "");
+    //   }
+    // });
   }
+
+  determineWorkStatus(event: any, index: number, validatorName: string) {
+    const employmentGroup = this.employment_history.at(index) as FormGroup;
+    const toDateControl = employmentGroup.get('to_date');
+
+    if (event.target.checked) {
+      toDateControl?.clearValidators();
+    } else {
+      toDateControl?.setValidators(Validators.required);
+    }
+
+    toDateControl?.updateValueAndValidity();
+
+    console.log("this.employment_history : ", this.employment_history);
+
+
+  }
+
 }
