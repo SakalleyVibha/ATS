@@ -64,6 +64,23 @@ export class RecruitsTypeComponent {
       }
     });
   }
+  deleteRecruitsType(id:number){
+    this.communicate.isLoaderLoad.next(true);
+      this.api.allPostMethod('recruits-type/delete-recruits-type',{ id }).subscribe({
+        next: (res:any)=>{
+           if(!res.error){
+              this.getRecruitsTypeList();
+              this.reqObj.keyword = '';
+              this.searchByKey.reset()
+              this.toastr.success(res.message,'');
+              this.communicate.isLoaderLoad.next(false);
+           }else{
+            this.toastr.error(res.message || res.error, '');
+            this.communicate.isLoaderLoad.next(false);
+           }
+        }
+      })
+  }
 
   onScroll() {
     if (this.reqObj.pageNumber < this.totalPages) {

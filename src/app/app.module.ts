@@ -16,6 +16,7 @@ import { CreateOrganizationComponent } from './create-organization/create-organi
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { SharedModule } from './shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { PermissionComponent } from './permission/permission.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     SignupComponent,
     VerifyEmailComponent,
     CreateOrganizationComponent,
-    PasswordChangeComponent
+    PasswordChangeComponent,
+    PermissionComponent
   ],
   imports: [
     CoreModule,

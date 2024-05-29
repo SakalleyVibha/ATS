@@ -64,7 +64,23 @@ export class EmploymentTypeFormComponent {
       }
     });
   }
-
+  deleteEmployment(id:number){
+    this.communicate.isLoaderLoad.next(true);
+      this.api.allPostMethod('employement-type/delete-employment-type',{ id }).subscribe({
+        next: (res:any)=>{
+           if(!res.error){
+              this.getEmploymentTypeList();
+              this.reqObj.keyword = '';
+              this.searchByKey.reset()
+              this.toastr.success(res.message,'');
+              this.communicate.isLoaderLoad.next(false);
+           }else{
+            this.toastr.error(res.message || res.error, '');
+            this.communicate.isLoaderLoad.next(false);
+           }
+        }
+      })
+  }
   onScroll() {
     if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
