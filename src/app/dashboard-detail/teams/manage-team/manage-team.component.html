@@ -39,7 +39,7 @@
                                         <label for="inlineFormInputGroupUsername">Name*</label>
                                         <div class="form-group">
                                             <input type="text" class="form-control" id="autoSizingInput"
-                                                formControlName="name" placeholder="Enter name">
+                                                formControlName="name" placeholder="Enter name" [readonly]="Teamedit()">
                                             <div *ngIf="(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
                                                 class="required-txt-error">
                                                 <ng-container *ngIf="formData['name'].errors?.['required']">
@@ -95,6 +95,7 @@
                                                                 <div class="centered">
                                                                     <input type="file" name="file" id="file"
                                                                         (change)="onFileChange($event)"
+                                                                        accept=".png, .jpg, .jpeg"
                                                                         formControlName="logo">
                                                                     <label for="file" class="dropFile"><span
                                                                             class="textLink">Browser</span></label>
@@ -150,8 +151,124 @@
                             </div>
                         </div>
 
+                        <div class="add-user-team">
+                            <div class="search-sec-bdy">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="d-flex  search-filter-main" role="search">
+                                            <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
+                                            <input class="form-control" type="search" placeholder="Search here . . ."
+                                                [(ngModel)]="searchString" type="text"
+                                                (ngModelChange)="this.searchValue.next($event)" aria-label="Search">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrapper">
+                                <div class="col-xl-11 d-flex table-wrapper-user">
+                                    <div class="table-responsive col-xl-6 p-2 table-matching" infiniteScroll
+                                        [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+                                        (scrolled)="onScroll()">
+                                        <label for="inlineFormInputGroupUsername">User List</label>
+                                        <table class="table table-tamplate-style table-user">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">User</th>
+                                                    <th scope="col">Role</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (user of user_list(); track $index) {
+                                                <tr class="table-color-chng">
+                                                    <td class="fonts-n3 user-img-desc">
+                                                        <input type="checkbox" [value]="user.id" name="scales"
+                                                            [id]="'id_'+user.id" (change)="selectedEvent($event)"
+                                                            [checked]="user['checked']" />
+                                                        <span class="image-user"> {{$index+ 1}}</span>
+                                                    </td>
+                                                    <td class="fonts-n3">
+                                                        <span class="txt-tb">{{(user?.f_name || user?.l_name) ?
+                                                            user?.f_name+"
+                                                            "+user?.l_name : 'N/A'}}</span>
+                                                    </td>
+                                                    <td class="status-font background-grey-table">
+                                                        <span class="txt-tb">{{user['role_master']?.role_name ??
+                                                            'N/A'}}</span>
+                                                    </td>
+                                                </tr>
+                                                } @empty {
+                                                <tr class="text-center" *ngIf="user_list()?.length == 0">
+                                                    <td colspan="7">
+                                                        <button class="btn btn-add-doc">No User Found</button>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="table-responsive col-xl-6 p-2 table-matching">
+                                        <label for="inlineFormInputGroupUsername">Selected User</label>
+                                        <table class="table table-tamplate-style table-user">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col-lg-1">Id</th>
+                                                    <th scope="col-lg-4">User</th>
+                                                    <th scope="col-lg-5">Role</th>
+                                                    <th scope="col-lg-2">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (user of assignUserForm.value.userList; track $index) {
+                                                <tr class="table-color-chng">
+                                                    <td class="fonts-n3 user-img-desc col-lg-2">
+                                                        <span class="image-user"> {{$index+ 1}}</span>
+                                                    </td>
+                                                    <td class="fonts-n3 col-lg-4">
+                                                        <span class="txt-tb">{{user?.username ?? 'N/A'}}</span>
+                                                    </td>
+                                                    <td class="status-font background-grey-table col-lg-4">
+                                                        <span class="txt-tb">{{user?.role ??
+                                                            'N/A'}}</span>
+                                                    </td>
+                                                    <td class="action_button col-lg-2" (click)="deleteTeam($index)">
+                                                        <div class="actiondelete-button action-team">
+                                                            <a>
+                                                                <img src="assets/images/trash-2.svg"
+                                                                    class="img-fluid unselected-icon">
+                                                                <img src="assets/images/trash-2white.svg"
+                                                                    class="img-fluid selected-white-icon">
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                } @empty {
+                                                <tr class="text-center"
+                                                    *ngIf="assignUserForm.value.userList?.length == 0">
+                                                    <td colspan="7">
+                                                        <button class="btn btn-add-doc">No User Found</button>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="form-group-btn-center">
+                                        <a class="btn btn-theme" (click)="assignUserTeam()">Assign</a>
+                                        <a routerLink="/dashboard-detail/team" class="btn btn-theme-two">Cancel</a>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12" *ngIf="showValidation() == true">
+                                    <div class="form-group-btn-center error-valid">
+                                        <span class="text-danger">User must be selected.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- <form [formGroup]="assignUserForm"> -->
-                        <div class="row ">
+                        <!-- <div class="row ">
                             <div class="col-12">
                                 <form [formGroup]="assignUserForm">
                                     <div class="row ">
@@ -160,10 +277,10 @@
                                                 <table class="table table-tamplate-style table-user">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Id</th>
-                                                            <th scope="col">Role</th>
-                                                            <th scope="col">User</th>
-                                                            <th scope="col">Action</th>
+                                                            <th scope="col-lg-2">Id</th>
+                                                            <th scope="col-lg-3">Role</th>
+                                                            <th scope="col-lg-6">User</th>
+                                                            <th scope="col-lg-1">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody formArrayName="userList">
@@ -171,16 +288,12 @@
                                                         i=$index)
                                                         {
                                                         <tr [formGroupName]="i">
-                                                            <td class="fonts-n3 user-img-desc">
+                                                            <td class="fonts-n3 user-img-desc col-lg-2">
                                                                 <div class="form-check">
-                                                                    <!-- <input class="form-check-input" type="checkbox"
-                                                                        [value]='user?.id' id="flexCheckDefault"
-                                                                        [disabled]="user?.is_owner == true"
-                                                                        (change)="onCheckChange($event)"> -->
                                                                     {{i + 1}}
                                                                 </div>
                                                             </td>
-                                                            <td class="fonts-n3">
+                                                            <td class="fonts-n3 col-lg-3">
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
                                                                         <select class="form-control"
@@ -190,23 +303,18 @@
                                                                             editedRoleList().length > 0){
 
                                                                             <option value="" hidden selected>
-                                                                                {{(editedRoleList() &&
-                                                                                editedRoleList().length
-                                                                                >
-                                                                                0) ?(getRoleValue(i) != 'false' ?
-                                                                                getRoleValue(i) : 'Role Selected')
-                                                                                :'No
-                                                                                role
-                                                                                found'}}</option>
+                                                                                {{getRoleValue(i)}}
+                                                                            </option>
                                                                             @for (role of editedRoleList(); track
                                                                             $index){
                                                                             <option *ngIf="role?.role_name != 'Admin'"
                                                                                 [value]="role?.id">
-                                                                                {{role?.role_name}}</option>
+                                                                                {{role?.role_name}}
+                                                                            </option>
                                                                             }
                                                                             } @else {
-                                                                            <option value="" hidden selected>
-                                                                                Select Role</option>
+                                                                            <option value="" hidden selected>Select Role
+                                                                            </option>
                                                                             @for (role of role_list(); track
                                                                             $index){
                                                                             <option *ngIf="role?.role_name != 'Admin'"
@@ -218,7 +326,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="status-font background-grey-table">
+                                                            <td class="status-font background-grey-table col-lg-6">
                                                                 <div class="form-group-wrap">
                                                                     <div class="form-group ">
                                                                         <ng-multiselect-dropdown
@@ -230,15 +338,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <!-- <td class="fonts-n3">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        role="switch" id="flexSwitchCheckChecked"
-                                                                        checked (change)="onCheckStatus($event, i)">
-
-                                                                </div>
-                                                            </td> -->
-                                                            <td class="action_button">
+                                                            <td class="action_button col-lg-1">
                                                                 <div class="actiondelete-button">
                                                                     <a (click)="deleteFromForm(i)">
                                                                         <img src="assets/images/trash-2.svg"
@@ -272,8 +372,7 @@
                                     <span class="text-danger">User must be selected.</span>
                                 </div>
                             </div>
-                        </div>
-                        <!-- </form> -->
+                        </div> -->
                     </div>
                 </div>
             </div>

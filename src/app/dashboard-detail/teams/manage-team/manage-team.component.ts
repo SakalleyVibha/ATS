@@ -2,11 +2,10 @@ import { Component, signal } from '@angular/core';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { delay, of, single } from 'rxjs';
+import { Subject, debounceTime, delay, distinctUntilChanged, filter, of, single } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-manage-team',
@@ -22,13 +21,14 @@ export class ManageTeamComponent {
   Teamedit = signal(false);
   sql_validation = signal(environment.SQL_validation);
   isActive = signal(true);
-  user_list = signal<any>([]);//changermade
+  user_list = signal<any>([]);
   role_list = signal<any>([]);
   team_id = signal<number>(-1);
-  dropdownSettings = {};
-  filteredUser = signal<any>(undefined);
-  editedRoleList = signal<any>(undefined);
   showValidation = signal<boolean>(false);
+  searchValue = new Subject<Event>();
+  searchString: string = ''
+  userReqObj = signal<any>({});
+  totalPages = signal<number>(0);
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private formbuild: FormBuilder, private toastr: ToastrService, private router: Router, private activeRout: ActivatedRoute) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -41,65 +41,34 @@ export class ManageTeamComponent {
       status: new FormControl('')
     });
 
+    this.userReqObj.set({ account_id: user_data?.account_id, pageNumber: 1, pageSize: 10, keyword: '' })
 
-
-    this.getAllRoles()
+    this.getAllRoles();
     this.createAssignUser(user_data?.account_id);
-    this.getUserList(user_data?.account_id);
+    this.getUserList();
   }
 
   ngOnInit() {
-    ////changermade
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'id',
-      textField: 'name',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
-    //changermade
-    this.activeRout.queryParams.subscribe((res: any) => {
-      if (res.id != null || res.id != undefined) {
-        this.communicate.isLoaderLoad.next(true);
-        this.api.allPostMethod("team/getTeam", res).subscribe((updateData: any) => {
-          this.Teamedit.set(true);
-          updateData = updateData.data;
-          this.teamForm.patchValue({
-            name: updateData?.name,
-            about: updateData?.about,
-            account_id: updateData?.account_id
-          });
 
-          updateData.user_team_relations.map((data: any) => {
-            this.userList.push(this.formbuild.group({
-              role: data['account_user']?.role_id,
-              user_id: data['account_user']?.id,
-              status: data?.status
-            }));
-            // itemToSetArr.push({ user_id: data['account_user'].id, role: data['account_user'].role_id, status: data?.status })
-          })
-          // this.assignUserForm?.get(['userList', 0])?.setValue(itemToSetArr);
-          this.isActive.set(updateData?.status);
-          this.imgURLBase64.set(updateData?.logo);
-          this.teamForm.addControl('id', new FormControl(updateData?.id));
-          this.teamForm.controls['logo'].removeValidators(Validators.required);
-          this.teamForm.controls['logo'].updateValueAndValidity();
-          this.communicate.isLoaderLoad.next(false);
-        });
-      }
-    });
+    this.searchValue.pipe(filter((value: any) => value.length >= 3 || value == ''), debounceTime(1000), distinctUntilChanged()).subscribe(
+      (value: any) => {
+        this.userReqObj().keyword = value;
+        this.getUserList();
+      });
+
+
+    this.getDetailonEdit();
+
   }
-  //changermade
 
-  //changermade
   get formData() { return this.teamForm.controls };
 
   onFormSubmit() {
     return new Promise((resolve, reject) => {
       if (this.teamForm.invalid) {
         this.isFieldsValid.set(true);
+        this.toastr.error("Kindly complete form.", "");
+        this.communicate.isLoaderLoad.next(false);
         return;
       }
 
@@ -126,6 +95,8 @@ export class ManageTeamComponent {
 
       if (this.teamForm.invalid) {
         this.isFieldsValid.set(true);
+        this.toastr.error("Kindly complete form", "");
+        this.communicate.isLoaderLoad.next(false);
         return;
       }
       let payload;
@@ -150,19 +121,19 @@ export class ManageTeamComponent {
   }
 
   convertImageToBase64(file_event: any) {
-    new Promise((resolve, reject) => {//changermade
+    new Promise((resolve, reject) => {
 
       const reader = new FileReader();
       reader.readAsDataURL(file_event);
       reader.onload = async () => {
         this.imgURLBase64.set(reader.result);
-        //changermade
+
         if (this.imgURLBase64()) {
           resolve(true);
         } else {
           resolve(false);
         }
-        //changermade
+
       };
     })
   }
@@ -174,31 +145,39 @@ export class ManageTeamComponent {
     this.teamForm.controls['logo'].updateValueAndValidity();
   }
 
-  async onFileChange(event: any) {//changermade
+  async onFileChange(event: any) {
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.teamForm.controls['logo'].removeValidators(Validators.required);
       this.teamForm.controls['logo'].updateValueAndValidity();
-      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
+      let bs64Value = await this.convertImageToBase64(file[0]);
       return
     }
     if (event.srcElement && event.srcElement != undefined) {
       let file = event.srcElement.files
-      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
+      let bs64Value = await this.convertImageToBase64(file[0]);
     }
   }
 
-  getUserList(acc_id: number) {
-    this.api.allPostMethod("users/getUserList", { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((response: any) => {
+  getUserList() {
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod("users/getUserList", this.userReqObj()).subscribe((response: any) => {
+      this.communicate.isLoaderLoad.next(false);
       if (response['error'] == false) {
-        this.user_list.set(response['data']);
+        response['data'] = response['data'].filter((data: any) => data.is_owner != true)
+        if ((response['data'] && response['data'].length > 0)) {
+          if (this.userReqObj().pageNumber == 1) {
+            this.user_list.set(response['data']);
+          } else {
+            this.user_list.set([...this.user_list(), ...response['data']])
 
+          }
+          this.totalPages.set(response['totalPages']);
+        } else {
+          this.user_list.set([]);
+        }
       }
     })
-  }
-
-  get userList() {
-    return this.assignUserForm.controls['userList'] as FormArray;
   }
 
   createAssignUser(acc_id: number) {
@@ -210,22 +189,11 @@ export class ManageTeamComponent {
   }
 
   async assignUserTeam() {
-    let reqData: any = [];
 
-    this.userList.value.map((data: any) => {
-      if (Array.isArray(data['user_id']) && data['user_id'].length > 0) {
-        data['user_id'].map((item: any) => {
-          reqData.push({ status: data.status, user_id: item.id })
-        });
-      } else {
-        this.showValidation.set(true);
-      }
-    });
-
-    if (this.showValidation() == true) {
+    if (this.assignUserForm.value.userList && this.assignUserForm.value.userList.length == 0) {
+      this.showValidation.set(true);
       return;
     }
-
     this.communicate.isLoaderLoad.next(true);
     if (this.Teamedit()) {
       let editTeam = await this.onEditTeam();
@@ -233,40 +201,19 @@ export class ManageTeamComponent {
       let editTeam = await this.onFormSubmit();
     }
 
-    // this.assignUserForm.patchValue({
-    //   team_id: this.team_id(),
-    // });
+    this.assignUserForm.patchValue({
+      team_id: this.team_id()
+    });
 
-    let req = {
-      team_id: this.team_id(),
-      account_id: this.assignUserForm.value.account_id,
-      userList: reqData
-    }
-    this.api.allPostMethod('team/assingUser', req).subscribe((response: any) => {
+    this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (response['error'] == true) {
         this.toastr.error("Something went wrong", "");
       } else {
-        this.toastr.success(response['message'], "");
+        this.toastr.success("User assigned successfully.", "");
         this.router.navigate(['dashboard-detail/team']);
       }
     });
-  }
-
-  onCheckStatus(eve: any, id: number) {
-    if (eve.target.checked == false) {
-      this.assignUserForm.value.userList[id].status = 0;
-    } else {
-      this.assignUserForm.value.userList[id].status = 1;
-    }
-  }
-
-  // deleteFromForm(id: number) {
-  //   
-  // }
-
-  deleteFromForm(i: number) {
-    this.userList.removeAt(i);
   }
 
   getAllRoles() {
@@ -276,31 +223,71 @@ export class ManageTeamComponent {
     }
   }
 
-  selectedRole(event: any) {
-    this.filteredUser.set(this.user_list().filter((user: any) => user.role_master?.id == event.target.value));
+  onScroll() {
+    if (this.userReqObj().pageNumber < this.totalPages()) {
+      this.userReqObj().pageNumber += 1;
+      this.getUserList();
+    }
 
-    let index = this.assignUserForm.value.userList.findIndex((user: any) => user.role == event.target.value);
-    if (index != -1) {
-      let idx = this.role_list().filter((user: any) => user.id != event.target.value)
-      this.editedRoleList.set(idx);
+  }
+
+  selectedEvent(event: any) {
+
+    if (event.target.checked == true) {
+      let idxObj = this.user_list().findIndex((data: any) => data.id == event.target.value);
+      if (idxObj != -1) {
+        this.user_list()[idxObj]['checked'] = true;
+        this.assignUserForm.value.userList.push({ user_id: event.target.value, status: 1, checked: this.user_list()[idxObj]['checked'], username: this.user_list()[idxObj]?.f_name + ' ' + this.user_list()[idxObj]?.l_name, role: this.user_list()[idxObj]['role_master']?.role_name });
+      }
+    } else {
+      let idx = this.assignUserForm.value.userList.findIndex((data: any) => data.user_id == event.target.value);
+      if (idx != -1) {
+        this.assignUserForm.value.userList.splice(idx, 1);
+      }
     }
   }
 
-  addUser() {
-    this.userList.push(this.formbuild.group({
-      role: new FormControl(''), user_id: new FormControl(0, [Validators.required]), status: new FormControl(1)
-    }));
-  }
+  getDetailonEdit() {
 
-  getRoleValue(i: number) {
-    let obj = this.role_list().find((data: any) => data.id == this.assignUserForm.value.userList[i].role);
-    return obj?.role_name ?? 'false';
-  }
+    this.activeRout.queryParams.subscribe((res: any) => {
+      if (res?.id) {
+        this.communicate.isLoaderLoad.next(true);
+        this.api.allPostMethod("team/getTeam", res).subscribe((res: any) => {
+          this.communicate.isLoaderLoad.next(false);
+          if (res['error'] != true) {
+            this.Teamedit.set(true);
+            res = res.data;
+            this.teamForm.patchValue({
+              name: res?.name,
+              about: res?.about,
+              account_id: res?.account_id
+            });
+            res.user_team_relations.map((data: any) => {
+              let element = document.getElementById('id_' + data['account_user']?.id);
+              if (element) {
+                element.click()
+              }
+            })
 
-  getDataValues() {
-    let finalArray = (!this.filteredUser() ? this.user_list() : this.filteredUser()).map((data: any) => {
-      return { id: data.id, name: data.f_name + " " + data.l_name }
+            this.isActive.set(res?.status);
+            this.imgURLBase64.set(res?.logo);
+            this.teamForm.addControl('id', new FormControl(res?.id));
+            this.teamForm.controls['logo'].removeValidators(Validators.required);
+            this.teamForm.controls['logo'].updateValueAndValidity();
+
+          }
+        });
+      }
     });
-    return finalArray;
+
+  }
+
+  deleteTeam(idx: number) {
+    let val = this.assignUserForm.value.userList[idx];
+    let idxObj = this.user_list().findIndex((data: any) => data.id == val.user_id);
+    if (idxObj != -1) {
+      this.user_list()[idxObj]['checked'] = false;
+    }
+    this.assignUserForm.value.userList.splice(idx, 1);
   }
 }
