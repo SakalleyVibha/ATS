@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="row">
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-6"
+                                <div class="col-lg-8 col-md-4 col-xl-8"
                                     [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
                                     <div class="form-group-wrap">
                                         <label for="inlineFormInputGroupUsername">Profile Image</label>
@@ -150,7 +150,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                <div class="col-lg-4 col-md-4 col-xl-4 btn-view-wrap">
+                                    <button class="btn btn-view">view</button>
+
                                     @if (imgURLBase64()) {
                                     <div class="col-12 col-lg-4 col-md-12 col-xl-5">
                                         <div class="form-group-wrap">
@@ -538,13 +540,20 @@
 
                         <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
                             <div class="row">
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                <div class="col-lg-12 col-md-8 col-xl-12">
                                     <div class="form-group-wrap">
                                         <label for="inlineFormInputGroupUsername">Add Resume</label>
                                         <div class="form-group">
-                                            <div class="form">
+                                            <div class="form resume-wrapper">
                                                 <div class="">
-                                                    <input type="file" name="pdf" id="pdf" multiple
+
+                                                    <div class="file-upload-wrapper upload-candid-profile"
+                                                        data-text="Select your file!">
+                                                        <input name="file-upload-field" type="file"
+                                                            class="file-upload-field" value="">
+                                                    </div>
+
+                                                    <!-- <input type="file" name="pdf" id="pdf" multiple
                                                         accept=".doc, .docx, .pdf" (change)="onFileChangePDF($event)">
                                                     <label for="pdf" class="dropFile"><span class="resume-add">Add
                                                             Resume + </span></label>
@@ -553,8 +562,11 @@
                                                         <span class="resume-added">{{pdf}} <span class="cross-icon"
                                                                 (click)="deleteFromArray($index)">x</span></span>
                                                     </div>
-                                                    }
+                                                    } -->
+
+
                                                 </div>
+                                                <button class="btn btn-view">view</button>
                                             </div>
                                         </div>
                                     </div>
@@ -585,8 +597,7 @@
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('company_name')?.invalid && (employment.get('company_name')?.dirty || employment.get('company_name')?.touched || isFieldsValid())">
-                                                            <div
-                                                                *ngIf="employment.get('company_name')?.errors?.['required']">
+                                                            <div *ngIf="employment.get('company_name')?.errors?.['required']" class="required-txt-error">
                                                                 Company name required.
                                                             </div>
                                                         </div>
@@ -610,7 +621,7 @@
                                                         <div
                                                             *ngIf="employment.get('from_date')?.invalid && (employment.get('from_date')?.dirty || employment.get('from_date')?.touched || isFieldsValid())">
                                                             <div
-                                                                *ngIf="employment.get('from_date')?.errors?.['required']">
+                                                                *ngIf="employment.get('from_date')?.errors?.['required']" class="required-txt-error">
                                                                 Date required
                                                             </div>
                                                         </div>
@@ -640,7 +651,7 @@
                                                         <div
                                                             *ngIf="employment.get('to_date')?.invalid && (employment.get('to_date')?.dirty || employment.get('to_date')?.touched || isFieldsValid())">
                                                             <div
-                                                                *ngIf="employment.get('to_date')?.errors?.['required']">
+                                                                *ngIf="employment.get('to_date')?.errors?.['required']" class="required-txt-error">
                                                                 Date required
                                                             </div>
                                                         </div>
@@ -670,7 +681,7 @@
                             </ng-container>
                         </ng-container>
                         <div class="col-xl-12">
-                            <div class="form-group-btn-center">
+                            <div class="form-group-add-btn-center">
                                 <!-- disabled when {{this.employment_history.invalid}} -->
                                 <a class="btn btn-theme" (click)="addSkills()"> + Add</a>
                             </div>
@@ -702,7 +713,7 @@
                                                         <div
                                                             *ngIf="education.get('qualification')?.invalid && (education.get('qualification')?.dirty || education.get('qualification')?.touched || isFieldsValid())">
                                                             <div
-                                                                *ngIf="education.get('qualification')?.errors?.['required']">
+                                                                *ngIf="education.get('qualification')?.errors?.['required']" class="required-txt-error">
                                                                 Qualification required.
                                                             </div>
                                                         </div>
@@ -726,7 +737,7 @@
                                                         </div>
                                                         <div
                                                             *ngIf="education.get('course')?.invalid && (education.get('course')?.dirty || education.get('course')?.touched || isFieldsValid())">
-                                                            <div *ngIf="education.get('course')?.errors?.['required']">
+                                                            <div *ngIf="education.get('course')?.errors?.['required']" class="required-txt-error">
                                                                 Course required.
                                                             </div>
                                                         </div>
@@ -751,7 +762,7 @@
                                                         <div
                                                             *ngIf="education.get('university')?.invalid && (education.get('university')?.dirty || education.get('university')?.touched || isFieldsValid())">
                                                             <div
-                                                                *ngIf="education.get('university')?.errors?.['required']">
+                                                                *ngIf="education.get('university')?.errors?.['required']" class="required-txt-error">
                                                                 University required.
                                                             </div>
                                                         </div>
@@ -781,7 +792,7 @@
                             </ng-container>
                         </ng-container>
                         <div class="col-xl-12">
-                            <div class="form-group-btn-center">
+                            <div class="form-group-add-btn-center">
                                 <a class="btn btn-theme" (click)="addEducation()"> + Add</a>
                             </div>
                         </div>
@@ -810,7 +821,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('name')?.invalid && (cert.get('name')?.dirty || cert.get('name')?.touched || isFieldsValid())">
-                                                            <div *ngIf="cert.get('name')?.errors?.['required']">
+                                                            <div *ngIf="cert.get('name')?.errors?.['required']"
+                                                                class="required-txt-error" class="required-txt-error">
                                                                 Name required.
                                                             </div>
                                                         </div>
@@ -834,7 +846,7 @@
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('validity')?.invalid && (cert.get('validity')?.dirty || cert.get('validity')?.touched || isFieldsValid())">
-                                                            <div *ngIf="cert.get('validity')?.errors?.['required']">
+                                                            <div *ngIf="cert.get('validity')?.errors?.['required']" class="required-txt-error">
                                                                 Validity required.
                                                             </div>
                                                         </div>
@@ -846,19 +858,24 @@
                                 </div>
                                 <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
                                     <div class="row">
-                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                        <div class="col-lg-8 col-md-4 col-xl-8">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Attachment</label>
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="">
-                                                            <input type="file" id="avatar" name="avatar"
+                                                            <!-- <input type="file" id="avatar" name="avatar"
                                                                 formControlName="attachment" class="cand-cert-upload"
-                                                                accept=".doc, .docx, .pdf" />
+                                                                accept=".doc, .docx, .pdf" /> -->
+                                                            <div class="file-upload-wrapper upload-candid-profile"
+                                                                data-text="Select your file!">
+                                                                <input name="file-upload-field" type="file"
+                                                                    class="file-upload-field" value="">
+                                                            </div>
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('attachment')?.invalid && (cert.get('attachment')?.dirty || cert.get('attachment')?.touched || isFieldsValid())">
-                                                            <div *ngIf="cert.get('attachment')?.errors?.['required']">
+                                                            <div *ngIf="cert.get('attachment')?.errors?.['required']" class="required-txt-error">
                                                                 Atachment required.
                                                             </div>
                                                         </div>
@@ -888,7 +905,7 @@
                             </ng-container>
                         </ng-container>
                         <div class="col-xl-12">
-                            <div class="form-group-btn-center">
+                            <div class="form-group-add-btn-center">
                                 <a class="btn btn-theme" (click)="addCert()"> + Add</a>
                             </div>
                         </div>
