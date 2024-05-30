@@ -437,7 +437,7 @@ aside {
 }
 
 main {
-    margin-top: 59px;
+    /* margin-top: 59px; */
     margin-left: 260px;
     padding: 20px;
     min-height: 100vh;
@@ -636,6 +636,7 @@ a.btn.btn-create>i {
     position: relative;
     z-index: 2;
     min-height: calc(100vh - 110px);
+    margin-top: 60px;
 }
 
 .search-sec-bdy {
@@ -1876,7 +1877,7 @@ table.table.table-vcenter.line-table tr:last-child {
 }
 
 .table-wrapper>.table-responsive {
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 /* Swapnil Sharma - Validation error */
