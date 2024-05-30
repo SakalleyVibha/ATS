@@ -17,17 +17,6 @@ export class ManageRoleComponent {
   isEditForm:boolean = false;
   isActive:boolean = true;
   roleId:any;
-  sectionList = [];
-  dropdownSettings:IDropdownSettings = {
-    singleSelection: false,
-    idField: 'id',
-    textField: 'section_name',
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 3,
-    maxHeight:100,
-    allowSearchFilter: true
-  };
   
   constructor(private api:CommonApiService,private router:Router,private communicate:CommunicateService,private formBuild:FormBuilder,private toastr:ToastrService,private activeRouter:ActivatedRoute){
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -36,12 +25,8 @@ export class ManageRoleComponent {
     this.roleForm = this.formBuild.group({
       name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
       description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),
-      section: new FormControl([]),
       status: new FormControl(true)
     });
-    this.communicate.isLoaderLoad.next(true);
-    this.getSectionList()
-   
   }
   get formData() { return this.roleForm.controls };
 
@@ -55,22 +40,7 @@ export class ManageRoleComponent {
         }
      })
   }
-  
-  getSectionList(){
-    let payload = {
-       pageNumber: 1,
-       pageSize: 100,
-       keyword: ''
-    }
-    this.api.allPostMethod('section/sections',payload).subscribe({
-      next: (res:any)=>{
-        this.communicate.isLoaderLoad.next(false);
-         if(!res.error){
-           this.sectionList = res.data;
-         }
-      }
-    })
-  }
+
 
   getRoleDetails(id:number){
       this.api.allPostMethod('role/getrole',{ id }).subscribe({
@@ -102,7 +72,6 @@ export class ManageRoleComponent {
     let payload = {
       role_name: formVal.name,
       role_description: formVal.description,
-      section_ids: formVal.section.map((v:any)=> v.id)
     }
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('role/addrole',payload).subscribe({
@@ -110,7 +79,7 @@ export class ManageRoleComponent {
           if(!res.error){
             this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
               this.communicate.isLoaderLoad.next(false);
-              this.router.navigate(['dashboard-detail','role'])
+              this.router.navigate(['super-admin/role'])
             });
           }else{
             this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
