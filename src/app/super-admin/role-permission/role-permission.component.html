@@ -1,0 +1,82 @@
+<div class="container mt-5">
+    <button class="btn btn-primary" (click)="onApply()">Apply</button>
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th rowspan="2">Module</th>
+            <th rowspan="2">Features</th>
+            <th rowspan="2">Sub-Features</th>
+            <th rowspan="2">Details</th>
+            <th [attr.colspan]="roles.length">Role</th>
+          </tr>
+          <tr>
+            <th *ngFor="let role of roles">{{role.role_name}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of modules; let rowIndex = index;">
+            <ng-container *ngIf="data.section_masters.length; else noSectionMaster">
+                <ng-container *ngFor="let sm of data.section_masters; let smIndex = index;">
+                    <ng-container *ngIf="sm.permission_masters.length; else noPMRowTpl">
+                        <ng-container *ngFor="let pm of sm.permission_masters; let pmIndex = index;">
+                            <tr>
+                                <td *ngIf="smIndex === 0 && pmIndex === 0"
+                                    [attr.rowspan]="data.rowsCount">
+                                    {{data.module_name}}
+                                </td>
+                                <td *ngIf="pmIndex === 0"
+                                    [attr.rowspan]="sm.permission_masters.length">
+                                    {{sm.section_name}}
+                                </td>
+                                <td>{{pm.permission_name}}</td>
+                                <td>{{pm.permission_description}}</td>
+                                <td *ngFor="let role of roles">
+                                    <input type="checkbox" [checked]="checkPermission(role.id,pm)" (change)="changeBox(role.id,pm)">
+                                </td>
+                                
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+           
+                    <ng-template #noPMRowTpl>
+                        <tr>
+                            <td *ngIf="smIndex === 0">
+                                {{data.module_name}}
+                            </td>
+                            <td>
+                                {{sm.section_name}}
+                            </td>
+                            <!-- <td></td> -->
+                            <!-- <td>description</td>
+                            <td *ngFor="let role of roles">
+                                <input type="checkbox">
+                            </td> -->
+                           
+                        </tr>
+                    </ng-template>
+                    
+                </ng-container> 
+                              
+            </ng-container>
+            <ng-template #noSectionMaster>
+                <tr>
+                    <td>
+                        {{data.module_name}}
+                    </td>
+                    <!-- <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngFor="let role of roles">
+                        <input type="checkbox">
+                    </td> -->
+                </tr>
+            </ng-template>
+         </ng-container>
+        </tbody>
+      </table>
+  
+     
+    </div>
+  
+  
+  

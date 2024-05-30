@@ -1,0 +1,11 @@
+@if(!isLoginPath){
+<section class="admin-panel">
+  <app-sidebar></app-sidebar>
+  <header></header>
+  <main>
+    <router-outlet />
+  </main>
+</section>
+}@else{
+    <router-outlet /> 
+}
