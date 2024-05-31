@@ -21,7 +21,7 @@ export class RolePermissionComponent {
 
   getRoles(){
     this.communicate.isLoaderLoad.next(true);
-    this.api.allgetMethod('role/roles',{}).subscribe({
+    this.api.allPostMethod('role/roles',{}).subscribe({
       next: (res:any)=>{
           if(!res.error){
             this.communicate.isLoaderLoad.next(false);
