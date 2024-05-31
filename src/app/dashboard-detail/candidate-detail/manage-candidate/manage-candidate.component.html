@@ -137,13 +137,14 @@
                                                 <div class="file-upload-wrapper upload-candid-profile"
                                                     data-text="Select your file!">
                                                     <input name="file-upload-field" type="file"
-                                                        class="file-upload-field" value="">
+                                                        (change)="onFileChange($event)" formControlName="logo"
+                                                        accept=".png, .jpg, .jpeg" class="file-upload-field" value="">
                                                 </div>
 
                                                 <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
                                                     class="required-txt-error">
                                                     <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                        Logo required
+                                                        Profile image required
                                                     </ng-container>
                                                 </div>
                                             </div>
@@ -485,6 +486,20 @@
                         </div> -->
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Date of Birth*</label>
+                                <div class="form-group">
+                                    <input type="date" class="form-control" id="autoSizingInput" formControlName="dob">
+                                    <div *ngIf="(formData['dob'].invalid && (formData['dob'].touched || formData['dob'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['dob'].errors?.['required']">
+                                            Date of birth required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Highest Education Completion Year*</label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" id="autoSizingInput"
@@ -597,7 +612,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('company_name')?.invalid && (employment.get('company_name')?.dirty || employment.get('company_name')?.touched || isFieldsValid())">
-                                                            <div *ngIf="employment.get('company_name')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="employment.get('company_name')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Company name required.
                                                             </div>
                                                         </div>
@@ -620,8 +636,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('from_date')?.invalid && (employment.get('from_date')?.dirty || employment.get('from_date')?.touched || isFieldsValid())">
-                                                            <div
-                                                                *ngIf="employment.get('from_date')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="employment.get('from_date')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Date required
                                                             </div>
                                                         </div>
@@ -650,8 +666,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('to_date')?.invalid && (employment.get('to_date')?.dirty || employment.get('to_date')?.touched || isFieldsValid())">
-                                                            <div
-                                                                *ngIf="employment.get('to_date')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="employment.get('to_date')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Date required
                                                             </div>
                                                         </div>
@@ -712,8 +728,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="education.get('qualification')?.invalid && (education.get('qualification')?.dirty || education.get('qualification')?.touched || isFieldsValid())">
-                                                            <div
-                                                                *ngIf="education.get('qualification')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="education.get('qualification')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Qualification required.
                                                             </div>
                                                         </div>
@@ -737,7 +753,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="education.get('course')?.invalid && (education.get('course')?.dirty || education.get('course')?.touched || isFieldsValid())">
-                                                            <div *ngIf="education.get('course')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="education.get('course')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Course required.
                                                             </div>
                                                         </div>
@@ -761,8 +778,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="education.get('university')?.invalid && (education.get('university')?.dirty || education.get('university')?.touched || isFieldsValid())">
-                                                            <div
-                                                                *ngIf="education.get('university')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="education.get('university')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 University required.
                                                             </div>
                                                         </div>
@@ -805,8 +822,8 @@
                                 </div>
                             </div>
                         </div>
-                        <ng-container formArrayName="certificate">
-                            <ng-container [formGroupName]="i" *ngFor="let cert of certificate.controls;let i=index">
+                        <ng-container formArrayName="certificates">
+                            <ng-container [formGroupName]="i" *ngFor="let cert of certificates.controls;let i=index">
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -841,12 +858,12 @@
                                                     <div class="form">
                                                         <div class="">
                                                             <input type="date" class="form-control"
-                                                                formControlName="validity" id="autoSizingInput"
-                                                                placeholder="Enter validity">
+                                                                formControlName="validity" id="autoSizingInput">
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('validity')?.invalid && (cert.get('validity')?.dirty || cert.get('validity')?.touched || isFieldsValid())">
-                                                            <div *ngIf="cert.get('validity')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="cert.get('validity')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Validity required.
                                                             </div>
                                                         </div>
@@ -875,7 +892,8 @@
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('attachment')?.invalid && (cert.get('attachment')?.dirty || cert.get('attachment')?.touched || isFieldsValid())">
-                                                            <div *ngIf="cert.get('attachment')?.errors?.['required']" class="required-txt-error">
+                                                            <div *ngIf="cert.get('attachment')?.errors?.['required']"
+                                                                class="required-txt-error">
                                                                 Atachment required.
                                                             </div>
                                                         </div>

@@ -9,7 +9,6 @@ export const authErrorHandleInterceptor: HttpInterceptorFn = (req, next) => {
   const communicate = inject(CommunicateService);
   const toastr = inject(ToastrService);
   const Route = inject(Router);
-  debugger
   let authToken = localStorage.getItem('token');
   let supertoken = localStorage.getItem('supertoken');
   const authReq = req.clone({
