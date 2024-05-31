@@ -9,8 +9,6 @@ import { CoreModule } from '../core/core.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authErrorHandleInterceptor } from '../core/interceptors/auth-error-handle.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,7 +27,7 @@ import { authErrorHandleInterceptor } from '../core/interceptors/auth-error-hand
     NgOptimizedImage
   ],
   providers: [
-    provideHttpClient(withInterceptors([authErrorHandleInterceptor])),
+   
   ]
 })
 export class DashboardDetailModule { }
