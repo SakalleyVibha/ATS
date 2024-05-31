@@ -5,6 +5,7 @@ import { CommunicateService } from '../../../core/services/communicate.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-manage-section',
@@ -33,14 +34,14 @@ export class ManageSectionComponent {
     private communicate: CommunicateService,
     private activeRoute: ActivatedRoute,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    public location: Location
   ){
     this.getModuleList()
      this.sectionForm = this.fb.group({
        name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
        description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),         
        module_id: new FormControl('',[Validators.required]),         
-       status: new FormControl(true)
      })
   }
 

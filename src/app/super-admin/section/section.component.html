@@ -30,13 +30,13 @@
                     <tr>
                         <th scope="col">List Of Section</th>
                         <th scope="col">Description</th>
-                        <!-- <th scope="col">Status</th> -->
+                        <th scope="col">Module</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                     @if(sectionList && sectionList.length){
-                        <tr *ngFor="let section of sectionList">
+                     @for(section of sectionList;track section.id){
+                        <tr>
                             <td class="fonts-n3 user-img-desc">
                                 <!-- <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1"
                                         class="user_img"></span> -->
@@ -45,10 +45,9 @@
                             <td class="fonts-n3">
                                 <span class="txt-tb">{{section?.section_description}}</span>
                             </td>
-                            <!-- <td class="status-font background-grey-table">
-                                <div class="statuslabel completed-bages" *ngIf="section?.status == true">Active </div>
-                                <div class="statuslabel deactive-bages" *ngIf="section?.status == false">Deactive </div>
-                            </td> -->
+                            <td class="fonts-n3">
+                                <span class="txt-tb">{{section?.module_master.module_name}}</span>
+                            </td>
                             <td class="action_button">
                                 <div class="actiondelete-button">
                                     <a routerLink="edit" [queryParams]="{id:section?.id}">
@@ -62,7 +61,7 @@
                                 </div>
                             </td>
                         </tr>
-                     }@else{
+                     }@empty{
                         <tr class="text-center">
                             <td colspan="7">
                                 <button class="btn btn-add-doc">No Record Found</button>

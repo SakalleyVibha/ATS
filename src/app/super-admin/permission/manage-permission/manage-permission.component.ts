@@ -4,6 +4,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-manage-permission',
@@ -23,7 +24,8 @@ export class ManagePermissionComponent {
     private toastr: ToastrService,
     private fb: FormBuilder,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public location: Location
   ){
     this.getModuleList();
     this.permissionForm = this.fb.group({

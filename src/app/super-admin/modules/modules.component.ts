@@ -66,6 +66,11 @@ export class ModulesComponent {
     this.api.allPostMethod('module/deletemodule',{ id }).subscribe({
       next: (res:any)=>{
          if(!res.error){
+          this.payload.keyword = '';
+          this.payload.pageNumber = 1;
+          this.searchKeyword.reset();
+          this.moduleList = [];
+          this.getModuleList()
           this.toastr.success(res.message,"",{closeButton:true,timeOut:1000}).onHidden.subscribe(()=>{
             this.communicate.isLoaderLoad.next(false);
           });

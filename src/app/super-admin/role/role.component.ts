@@ -40,6 +40,10 @@ export class RoleComponent {
     this.api.allPostMethod("role/deleterole",{ id }).subscribe({
       next: (res:any)=>{
         if(!res.error){
+          this.payload.keyword = '';
+          this.payload.pageNumber = 1;
+          this.roleList = [];
+          this.getRoleList()
           this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
             this.communicate.isLoaderLoad.next(false);
           });

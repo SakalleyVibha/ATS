@@ -109,7 +109,7 @@ input.form-control {
     border-color: #559AFF;
 }
 
-a.btn.btn-sign-in {
+.btn.btn-sign-in {
     background-color: #559AFF;
     color: #fff;
     width: 100%;
@@ -266,7 +266,7 @@ section.create-wrapper {
     margin-bottom: 10px;
 }
 
-a.btn.btn-theme {
+.btn.btn-theme {
     background-color: #559AFF;
     color: #fff;
     padding: 6px 52px;
