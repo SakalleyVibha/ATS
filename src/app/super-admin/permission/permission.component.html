@@ -30,13 +30,14 @@
                     <tr>
                         <th scope="col">List Of Permission</th>
                         <th scope="col">Description</th>
-                        <!-- <th scope="col">Status</th> -->
+                        <th scope="col">Section</th>
+                        <th scope="col">Module</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                     @if(permissionList && permissionList.length){
-                        <tr *ngFor="let permission of permissionList">
+                     @for(permission of permissionList;track permission.id){
+                        <tr>
                             <td class="fonts-n3 user-img-desc">
                                 <!-- <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1"
                                         class="user_img"></span> -->
@@ -45,10 +46,13 @@
                             <td class="fonts-n3">
                                 <span class="txt-tb">{{permission?.permission_description}}</span>
                             </td>
-                            <!-- <td class="status-font background-grey-table">
-                                <div class="statuslabel completed-bages" *ngIf="permission?.status == true">Active </div>
-                                <div class="statuslabel deactive-bages" *ngIf="permission?.status == false">Deactive </div>
-                            </td> -->
+                            <td class="fonts-n3">
+                                <span class="txt-tb">{{permission?.section_master.section_name}}</span>
+                            </td>
+                            <td class="fonts-n3">
+                                <span class="txt-tb">{{permission?.module_master.module_name}}</span>
+                            </td>
+                            
                             <td class="action_button">
                                 <div class="actiondelete-button">
                                     <a routerLink="edit" [queryParams]="{id:permission?.id}">
@@ -62,7 +66,7 @@
                                 </div>
                             </td>
                         </tr>
-                     }@else{
+                     }@empty{
                         <tr class="text-center">
                             <td colspan="7">
                                 <button class="btn btn-add-doc">No Record Found</button>

@@ -1,0 +1,28 @@
+button.btn.btn-primary {
+    background-color: #559AFF;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 0px;
+    border-radius: 14px;
+    width: 170px;
+    height: 46px;
+    line-height: 22px;
+}
+ 
+.section.role-table-wrapper {
+    margin-top: 20px;
+}
+ 
+th.check-haed-table>span {
+    display: flex;
+    align-items: baseline;
+    column-gap: 6px;
+    white-space: nowrap;
+}
+ 
+.section.role-table-wrapper {
+    height: 75vh;
+    overflow-y: auto;
+    overflow-x: auto;
+}

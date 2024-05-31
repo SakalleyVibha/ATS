@@ -4,7 +4,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-manage-role',
@@ -15,17 +15,22 @@ export class ManageRoleComponent {
   roleForm:FormGroup;
   isFormValid:boolean = false;
   isEditForm:boolean = false;
-  isActive:boolean = true;
   roleId:any;
   
-  constructor(private api:CommonApiService,private router:Router,private communicate:CommunicateService,private formBuild:FormBuilder,private toastr:ToastrService,private activeRouter:ActivatedRoute){
-    let user_data: any = localStorage.getItem('Shared_Data');
-    user_data = JSON.parse(user_data);
+  constructor(
+    private api:CommonApiService,
+    private router:Router,
+    private communicate:CommunicateService,
+    private formBuild:FormBuilder,
+    private toastr:ToastrService,
+    private activeRouter:ActivatedRoute,
+    public location: Location
+  ){
 
     this.roleForm = this.formBuild.group({
       name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
       description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),
-      status: new FormControl(true)
+      // status: new FormControl(true)
     });
   }
   get formData() { return this.roleForm.controls };
@@ -47,15 +52,13 @@ export class ManageRoleComponent {
         next: (res:any)=>{
             if(!res.error){
               this.communicate.isLoaderLoad.next(false); 
-              let sections = res.data.role_section_relations.map((v:any) => v.section_master);
               this.roleForm.patchValue({
                 name: res.data?.role_name,
                 description: res.data?.role_description,
-                section: sections,
                // status: res.data?.status
               })
             }else{
-              this.toastr.error(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+              this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
                 this.communicate.isLoaderLoad.next(false);
               });
             }
@@ -77,7 +80,7 @@ export class ManageRoleComponent {
     this.api.allPostMethod('role/addrole',payload).subscribe({
       next: (res:any)=>{
           if(!res.error){
-            this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+            this.toastr.success(res.message,"",{closeButton:true,timeOut:1000}).onHidden.subscribe(()=>{
               this.communicate.isLoaderLoad.next(false);
               this.router.navigate(['super-admin/role'])
             });
@@ -100,15 +103,14 @@ export class ManageRoleComponent {
       id: this.roleId,
       role_name: formVal.name,
       role_description: formVal.description,
-      section_ids: formVal.section.map((v:any) => v.id),
     }
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('role/editrole',payload).subscribe({
       next: (res:any)=>{
           if(!res.error){
-            this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
+            this.toastr.success(res.message,"",{closeButton:true,timeOut:1000}).onHidden.subscribe(()=>{
               this.communicate.isLoaderLoad.next(false);
-              this.router.navigate(['dashboard-detail','role'])
+              this.router.navigate(['super-admin/role'])
             });
           }else{
             this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{

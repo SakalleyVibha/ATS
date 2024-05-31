@@ -44,25 +44,20 @@
                     formControlName="name"
                     placeholder="Enter name"
                   />
-                  <div
-                    *ngIf="
-                      formData['name'].invalid &&
-                      (formData['name'].touched ||
-                        formData['name'].dirty ||
-                        isFormValid)
-                    "
-                    class="required-txt-error"
-                  >
-                    <ng-container *ngIf="formData['name'].errors?.['required']">
-                      Name required
-                    </ng-container>
-                    <ng-container *ngIf="formData['name'].errors?.['minlength']">
-                      Name atleast contain 2 characters
-                    </ng-container>
-                    <ng-container *ngIf="formData['name'].errors?.['pattern']">
-                      Valid name required
-                    </ng-container>
-                  </div>
+                  @if(formData['name'].invalid && (formData['name'].touched || formData['name'].dirty || isFormValid)){
+                    <div class="required-txt-error">
+                      @if(formData['name'].errors?.['required']){
+                         <span> Name required</span>
+                      }
+                      @if(formData['name'].errors?.['minlength']){
+                        <span>Name atleast contain 2 characters</span>
+                      }
+                      @if(formData['name'].errors?.['pattern']){
+                         <span>Valid name required</span>
+                      }
+                    </div>
+                  }
+                 
                 </div>
               </div>
             </div>
@@ -76,31 +71,19 @@
                     placeholder="Description here"
                     formControlName="description"
                   ></textarea>
-                  <div
-                    *ngIf="
-                      formData['description'].invalid &&
-                      (formData['description'].touched ||
-                        formData['description'].dirty ||
-                        isFormValid)
-                    "
-                    class="required-txt-error"
-                  >
-                    <ng-container
-                      *ngIf="formData['description'].errors?.['required']"
-                    >
-                      Description required
-                    </ng-container>
-                    <ng-container
-                      *ngIf="formData['description'].errors?.['maxlength']"
-                    >
-                      Maximum 150 characters allowed
-                    </ng-container>
-                    <ng-container
-                      *ngIf="formData['description'].errors?.['pattern']"
-                    >
-                      Valid description required
-                    </ng-container>
-                  </div>
+                  @if(formData['description'].invalid && (formData['description'].touched || formData['description'].dirty || isFormValid)){
+                    <div class="required-txt-error">
+                      @if(formData['description'].errors?.['required']){
+                         <span>Description required</span>
+                      }
+                      @if(formData['description'].errors?.['maxlength']){
+                        <span>Maximum 150 characters allowed</span>
+                      }
+                      @if(formData['description'].errors?.['pattern']){
+                         <span> Valid description required</span>
+                      }
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -128,12 +111,13 @@
                             <option *ngFor="let module of moduleList" [value]="module.id">{{module.module_name}}
                             </option>
                         </select>
-                        <div *ngIf="formData['module_id'].invalid && (formData['module_id'].touched || formData['module_id'].dirty || isFormValid)"
-                            class="required-txt-error">
-                            <ng-container *ngIf="formData['module_id'].errors?.['required']">
-                                Select module for section
-                            </ng-container>
-                        </div>
+                        @if(formData['module_id'].invalid && (formData['module_id'].touched || formData['module_id'].dirty || isFormValid)){
+                          <div class="required-txt-error">
+                            @if(formData['module_id'].errors?.['required']){
+                               <span>Select module for section</span>
+                            }
+                          </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -147,7 +131,7 @@
                   (click)="isEditForm ? onEditForm() : onSubmitForm()"
                   >{{ isEditForm ? "Edit" : "Save" }}</a
                 >
-                <a routerLink="/dashboard-detail/role" class="btn btn-theme-two"
+                <a (click)="location.back()" class="btn btn-theme-two"
                   >Cancel</a
                 >
               </div>

@@ -6,7 +6,6 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateOrganizationComponent } from './create-organization/create-organization.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { authenticateGuard } from './core/guards/authenticate.guard';
-import { PermissionComponent } from './permission/permission.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard-detail', pathMatch: 'full' },
@@ -14,7 +13,6 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'password-change', component: PasswordChangeComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
-  { path: 'permission', component: PermissionComponent },
   { path: 'create-organization', component: CreateOrganizationComponent, canActivate: [authenticateGuard] },
   { path: 'dashboard-detail', loadChildren: () => import('./dashboard-detail/dashboard-detail.module').then(m => m.DashboardDetailModule), canActivate: [authenticateGuard] },
   { path: 'super-admin', loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule) }

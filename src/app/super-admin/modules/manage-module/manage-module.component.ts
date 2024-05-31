@@ -4,6 +4,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-manage-module',
@@ -22,7 +23,8 @@ export class ManageModuleComponent {
     private toastr: ToastrService,
     private fb: FormBuilder,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public location: Location
   ){
     
     this.moduleForm = this.fb.group({
@@ -71,6 +73,7 @@ export class ManageModuleComponent {
     let formVal = this.moduleForm.value;
     let payload = {
       module_name: formVal.name,
+      module_description: formVal.description
     }
     this.api.allPostMethod('module/addmodule',payload).subscribe({
       next: (res:any)=>{
@@ -97,13 +100,14 @@ export class ManageModuleComponent {
     let payload = {
       id: this.moduleId,
       module_name: formVal.name,
+      module_description: formVal.description
     }
     this.api.allPostMethod('module/editmodule',payload).subscribe({
       next: (res:any)=>{
         if(!res.error){
           this.toastr.success(res.message,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{
             this.communicate.isLoaderLoad.next(false);
-            this.router.navigate(['super-admin/permission'])
+            this.router.navigate(['super-admin/modules'])
           });
         }else{
           this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:5000}).onHidden.subscribe(()=>{

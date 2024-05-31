@@ -16,7 +16,6 @@ import { CreateOrganizationComponent } from './create-organization/create-organi
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { SharedModule } from './shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { PermissionComponent } from './permission/permission.component';
 import { SuperAdminModule } from './super-admin/super-admin.module';
 
 @NgModule({
@@ -27,7 +26,6 @@ import { SuperAdminModule } from './super-admin/super-admin.module';
     VerifyEmailComponent,
     CreateOrganizationComponent,
     PasswordChangeComponent,
-    PermissionComponent
   ],
   imports: [
     CoreModule,

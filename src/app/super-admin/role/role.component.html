@@ -35,8 +35,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                     @if(roleList?.length){
-                        <tr *ngFor="let role of roleList">
+                     @for(role of roleList;track role.id){
+                        <tr>
                             <td class="fonts-n3 user-img-desc">
                                 <!-- <span class="image-user"><img src="assets/images/Ellipseu1.png" alt="Profile image 1"
                                         class="user_img"></span> -->
@@ -62,7 +62,7 @@
                                 </div>
                             </td>
                         </tr>
-                     }@else{
+                     }@empty{
                         <tr class="text-center">
                             <td colspan="7">
                                 <button class="btn btn-add-doc">No Record Found</button>

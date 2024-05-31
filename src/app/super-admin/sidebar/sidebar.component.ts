@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,8 +8,10 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
 
-
+  router:Router = inject(Router);
   onLogout(){
-    
+    localStorage.removeItem('supertoken');
+    localStorage.removeItem('superdetails');
+    this.router.navigate(['super-admin/login'])
   }
 }
