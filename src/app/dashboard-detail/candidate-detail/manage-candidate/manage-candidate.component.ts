@@ -27,10 +27,15 @@ export class ManageCandidateComponent {
   selectedFiles: FileList | null = null;
   documentList = signal<any>([]);
   resumeFileNames = signal<any>([]);
+  imgBs64 = signal<string>('');
   sql_validation = signal(environment.SQL_validation);
 
   constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,) {
-    this.createCandidateForm();
+    let userData: any = localStorage.getItem('Shared_Data');
+    if (userData) {
+      userData = JSON.parse(userData)
+    }
+    this.createCandidateForm(userData?.account_id);
     this.addSkills();
     this.addEducation();
     this.addCert();
@@ -40,9 +45,9 @@ export class ManageCandidateComponent {
 
   get formData() { return this.addCandidateForm.controls };
 
-  createCandidateForm() {
+  createCandidateForm(acc_id: number) {
     this.addCandidateForm = this.fb.group({
-      account_id: new FormControl(12),
+      account_id: new FormControl(acc_id),
       name: new FormControl('', [Validators.required, Validators.minLength(2)]),
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       position: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -60,6 +65,7 @@ export class ManageCandidateComponent {
       salary: new FormControl('', [Validators.required]),
       employer_name: new FormControl('', [Validators.required]),
       visa_validity: new FormControl('', [Validators.required]),
+      dob: new FormControl('', [Validators.required]),
       relocation: new FormControl('', [Validators.required]),
       current_project_status: new FormControl('', [Validators.required]),
       joining_availability: new FormControl('', [Validators.required]),
@@ -70,7 +76,7 @@ export class ManageCandidateComponent {
       notes: new FormControl('', [Validators.required]),
       employment_history: this.fb.array([], Validators.required),
       education_detail: this.fb.array([]),
-      certificate: this.fb.array([]),
+      certificates: this.fb.array([]),
     });
 
   }
@@ -83,8 +89,8 @@ export class ManageCandidateComponent {
     return this.addCandidateForm.get("education_detail") as FormArray
   }
 
-  get certificate(): FormArray {
-    return this.addCandidateForm.get("certificate") as FormArray
+  get certificates(): FormArray {
+    return this.addCandidateForm.get("certificates") as FormArray
   }
 
   addSkills() {
@@ -107,7 +113,7 @@ export class ManageCandidateComponent {
   }
 
   addCert() {
-    this.certificate.push(
+    this.certificates.push(
       this.fb.group({
         name: new FormControl('', [Validators.required]),
         validity: new FormControl('', [Validators.required]),
@@ -125,38 +131,37 @@ export class ManageCandidateComponent {
   }
 
   removeCertificate(i: number) {
-    this.certificate.removeAt(i);
+    this.certificates.removeAt(i);
   }
 
   convertImageToBase64(file_event: any) {
-    new Promise((resolve, reject) => {//changermade
+    return new Promise((resolve, reject) => {
 
       const reader = new FileReader();
       reader.readAsDataURL(file_event);
       reader.onload = async () => {
         this.imgURLBase64.set(reader.result);
-        //changermade
         if (this.imgURLBase64()) {
           resolve(true);
         } else {
           resolve(false);
         }
-        //changermade
+
       };
     })
   }
 
-  async onFileChange(event: any) {//changermade
+  async onFileChange(event: any) {
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.addCandidateForm.controls['logo'].removeValidators(Validators.required);
       this.addCandidateForm.controls['logo'].updateValueAndValidity();
-      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
+      let bs64Value = await this.convertImageToBase64(file[0]);
       return
     }
     if (event.srcElement && event.srcElement != undefined) {
       let file = event.srcElement.files
-      let bs64Value = await this.convertImageToBase64(file[0]);//changermade
+      let bs64Value = await this.convertImageToBase64(file[0]);
     }
   }
 
@@ -188,8 +193,6 @@ export class ManageCandidateComponent {
 
       reader.onload = (event: any) => {
         base64Files[file.name] = event.target.result.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        console.log('event.target.result: ', event.target.result);
-        console.log('base64Files: ', base64Files[file.type]);
         this.documentList().push({ docType: 'resume', doc: base64Files[file.name], fileName: file.name })
       };
       console.log("this.resumeFileNames() : ", this.resumeFileNames());
@@ -204,7 +207,6 @@ export class ManageCandidateComponent {
 
   deleteFromArray(index: number) {
     this.resumeFileNames().slice(index, 1);
-    console.log('this.resumeFileNames(): ', this.resumeFileNames());
     let idx = this.documentList().findIndex((data: any) => data.fileName == this.resumeFileNames()[index]);
     if (idx != -1) {
       this.documentList().slice(idx, 1);
@@ -212,27 +214,31 @@ export class ManageCandidateComponent {
   }
 
   saveCandidateForm() {
-    console.log('this.addCandidateForm.invalid: ', this.addCandidateForm.invalid);
-    if (this.addCandidateForm.invalid) {
-      console.log('this.addCandidateForm: ', this.addCandidateForm.value);
-      this.isFieldsValid.set(true);
-      // return;
+    if (this.addCandidateForm.value.mode_of_hire != 'c2c') {
+      this.addCandidateForm.controls['employer_name'].removeValidators(Validators.required);
+      this.addCandidateForm.controls['employer_name'].updateValueAndValidity();
     }
-    let req = { ...this.addCandidateForm.value, documents: this.documentList(), logo: this.imgURLBase64() }
+    this.addCandidateForm.value.logo = this.imgURLBase64();
+    if (this.addCandidateForm.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+    let req = { ...this.addCandidateForm.value, documents: this.documentList() };
     console.log('req: ', req);
-    // this.communicate.isLoaderLoad.next(true);
-    // this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
-    //   this.communicate.isLoaderLoad.next(false);
-    //   if (res['error'] != true) {
-    //     if (res['data']) {
-    //       this.toastr.success("Candidate created successfully", "")
-    //     } else {
-    //       this.toastr.error("Something went wrong", "");
-    //     }
-    //   } else {
-    //     this.toastr.error("Something went wrong", "");
-    //   }
-    // });
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data']) {
+          this.toastr.success("Candidate created successfully", "")
+        } else {
+          this.toastr.error("Something went wrong", "");
+        }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+    });
   }
 
   determineWorkStatus(event: any, index: number, validatorName: string) {
@@ -249,7 +255,34 @@ export class ManageCandidateComponent {
 
     console.log("this.employment_history : ", this.employment_history);
 
-
   }
 
+  async handleUpload(event: any, i: number) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    let valueImg = await new Promise((resolve, reject) => {
+      reader.onload = () => {
+        const cert = this.certificates.at(i) as FormGroup;
+        const base64String = reader.result as string;
+        this.imgBs64.set(base64String);
+        if (this.imgBs64() != '') {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      };
+    })
+
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+    };
+
+    if (valueImg) {
+      const cert = this.certificates.at(i) as FormGroup;
+      cert.value.attachment = this.imgBs64()
+    }
+
+  }
 }
