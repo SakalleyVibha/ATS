@@ -1,5 +1,4 @@
-<div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-    (scrolled)="onScroll()">
+<div class="location-sec-bdy">
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
@@ -23,7 +22,8 @@
         </div>
     </div>
     <div class="table-wrapper">
-        <div class="table-responsive">
+        <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+            (scrolled)="onScroll()">
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>
@@ -55,6 +55,18 @@
                                 <a (click)="deleteCandidate(cand?.id)">
                                     <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
+                                </a>
+                                <a routerLink="edit" [queryParams]="{id:cand?.id, section : 'edit-emp'}">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">emp
+                                </a>
+                                <a routerLink="edit" [queryParams]="{id:cand?.id, section : 'edit-edu'}">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">edu
+                                </a>
+                                <a routerLink="edit" [queryParams]="{id:cand?.id, section : 'edit-cert'}">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">cert
+                                </a>
+                                <a routerLink="edit" [queryParams]="{id:cand?.id, section : 'edit-doc'}">
+                                    <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">doc
                                 </a>
                             </div>
                         </td>

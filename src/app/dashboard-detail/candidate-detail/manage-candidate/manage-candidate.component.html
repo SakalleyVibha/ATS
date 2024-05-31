@@ -101,8 +101,7 @@
                         </div>
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="row">
-                                <div class="col-lg-8 col-md-4 col-xl-8"
-                                    [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
+                                <div class="col-lg-8 col-md-4 col-xl-8">
                                     <div class="form-group-wrap">
                                         <label for="inlineFormInputGroupUsername">Profile Image</label>
                                         <div class="form-group upload">
@@ -152,9 +151,20 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-xl-4 btn-view-wrap">
-                                    <button class="btn btn-view">view</button>
+                                    <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''" (click)="viewImagePopup()">view</button>
+                                    <ng-template #imageModal let-modal="modal">  <div class="modal-header">
+                                        <h4 class="modal-title">Selected Image</h4>
+                                        <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
+                                        <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
+                                      </div>
+                                    </ng-template>
 
-                                    @if (imgURLBase64()) {
+                                    <!-- @if (imgURLBase64()) {
                                     <div class="col-12 col-lg-4 col-md-12 col-xl-5">
                                         <div class="form-group-wrap">
                                             <label for="inlineFormInputGroupUsername">Selected Logo</label>
@@ -165,7 +175,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    }
+                                    } -->
                                 </div>
                             </div>
                         </div>
@@ -565,7 +575,7 @@
                                                     <div class="file-upload-wrapper upload-candid-profile"
                                                         data-text="Select your file!">
                                                         <input name="file-upload-field" type="file"
-                                                            class="file-upload-field" value="">
+                                                        accept=".doc, .docx, .pdf" class="file-upload-field" value="">
                                                     </div>
 
                                                     <!-- <input type="file" name="pdf" id="pdf" multiple
@@ -581,7 +591,6 @@
 
 
                                                 </div>
-                                                <button class="btn btn-view">view</button>
                                             </div>
                                         </div>
                                     </div>
@@ -886,15 +895,15 @@
                                                                 accept=".doc, .docx, .pdf" /> -->
                                                             <div class="file-upload-wrapper upload-candid-profile"
                                                                 data-text="Select your file!">
-                                                                <input name="file-upload-field" type="file"
-                                                                    class="file-upload-field" value="">
+                                                                <input name="file-upload-field" type="file" formControlName="attachment" 
+                                                                accept=".pdf" class="file-upload-field" value="">
                                                             </div>
                                                         </div>
                                                         <div
                                                             *ngIf="cert.get('attachment')?.invalid && (cert.get('attachment')?.dirty || cert.get('attachment')?.touched || isFieldsValid())">
                                                             <div *ngIf="cert.get('attachment')?.errors?.['required']"
                                                                 class="required-txt-error">
-                                                                Atachment required.
+                                                                Attachment required.
                                                             </div>
                                                         </div>
                                                     </div>

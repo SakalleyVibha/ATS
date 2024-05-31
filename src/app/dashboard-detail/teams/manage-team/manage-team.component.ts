@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, ViewChild, signal } from '@angular/core';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { Subject, debounceTime, delay, distinctUntilChanged, filter, of, single 
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-manage-team',
@@ -13,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './manage-team.component.css'
 })
 export class ManageTeamComponent {
-
+  @ViewChild('imageModal') content: any;  
   imgURLBase64 = signal<ArrayBuffer | any>('');
   teamForm: FormGroup;
   assignUserForm!: FormGroup;
@@ -29,8 +30,9 @@ export class ManageTeamComponent {
   searchString: string = ''
   userReqObj = signal<any>({});
   totalPages = signal<number>(0);
+  modalRef: any;
 
-  constructor(private api: CommonApiService, private communicate: CommunicateService, private formbuild: FormBuilder, private toastr: ToastrService, private router: Router, private activeRout: ActivatedRoute) {
+  constructor(private api: CommonApiService, private communicate: CommunicateService, private formbuild: FormBuilder, private toastr: ToastrService, private router: Router, private activeRout: ActivatedRoute, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
     this.teamForm = this.formbuild.group({
@@ -289,5 +291,17 @@ export class ManageTeamComponent {
       this.user_list()[idxObj]['checked'] = false;
     }
     this.assignUserForm.value.userList.splice(idx, 1);
+  }
+
+  viewImagePopup(){
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+
+    // Handle modal dismiss reason (optional)
+  }
+  
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss('cross click'); // Dismiss the modal
+    }
   }
 }

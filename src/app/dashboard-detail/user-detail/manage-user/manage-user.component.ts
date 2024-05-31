@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, ViewChild, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-manage-user',
@@ -12,7 +13,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './manage-user.component.css'
 })
 export class ManageUserComponent {
-
+  @ViewChild('imageModal') content: any;  
   userForm!: FormGroup;
   isFormValid = signal(false);
   user_roles: any = [];
@@ -26,8 +27,10 @@ export class ManageUserComponent {
   website_validate = signal(environment.website_validation);
   number_validation = signal(environment.Phone_Mobile_valid);
   imgURLBase64 = signal<ArrayBuffer | any>('');
+  modalRef: any;
 
-  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService) {
+
+  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
 
@@ -241,6 +244,18 @@ export class ManageUserComponent {
     if (event.srcElement && event.srcElement != undefined) {
       let file = event.srcElement.files
       this.convertImageToBase64(file[0]);
+    }
+  }
+
+  viewImagePopup(){
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+
+    // Handle modal dismiss reason (optional)
+  }
+  
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss('cross click'); // Dismiss the modal
     }
   }
 
