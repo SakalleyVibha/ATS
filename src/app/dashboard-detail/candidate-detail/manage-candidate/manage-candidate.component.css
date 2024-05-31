@@ -38,10 +38,6 @@ span.resume-added {
 .file-upload-wrapper.upload-candid-profile {
     background: #d3e6f9;
     border-radius: 10px;
-    box-shadow: 0 1.7px 1.4px rgba(0, 0, 0, 0.02),
-        0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgba(0, 0, 0, 0.035),
-        0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgba(0, 0, 0, 0.05),
-        0 60px 50px rgba(0, 0, 0, 0.07);
     overflow: hidden;
     transform: rotate(0);
     border: 1px solid #d3e6f9;
@@ -66,10 +62,7 @@ span.resume-added {
     display: inline-flex;
     background: #d3e6f9;
     border-radius: 10px;
-    box-shadow: 0 1.7px 1.4px rgba(0, 0, 0, 0.02),
-        0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgba(0, 0, 0, 0.035),
-        0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgba(0, 0, 0, 0.05),
-        0 60px 50px rgba(0, 0, 0, 0.07);
+    box-shadow:0 1.7px 1.4px rgb(139 139 139 / 2%), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgb(168 168 168 / 4%), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgb(168 168 168 / 5%), 0 60px 50px rgb(170 170 170 / 7%);
     overflow: hidden;
     transform: rotate(0);
 }
@@ -118,4 +111,50 @@ span.resume-added {
 
 input#avatar {
     display: block !important;
+}
+
+button.btn.btn-view {
+    background-color: #559AFF;
+    color: #fff;
+    padding: 4px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+}
+
+.btn-view-wrap {
+    display: flex;
+    align-items: center;
+    margin-top: 27px;
+}
+
+span.resume-added {
+    /* number of lines to show */
+    -webkit-line-clamp: 1; /* number of lines to show */
+    white-space: nowrap;
+    display: flex;
+}
+span.resume-added > span.cross-icon {
+    color: #000;
+    font-size: 20px;
+    margin-left: 7px;
+    flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.form-group-add-btn-center {
+    background-color: #ededed78;
+    border-radius: 12px;
+    text-align: center;
+    padding: 7px 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.form.resume-wrapper {
+    display: flex;
+    column-gap: 15px;
+    margin-bottom: 20px;
 }

@@ -72,13 +72,20 @@
                                 </div>
                                 <div class="col-6 col-lg-4 col-md-4 col-xl-12">
                                     <div class="row">
-                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6"
+                                        <div class="col-12 col-lg-12 col-md-12 col-xl-12 my-class"
                                             [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Logo</label>
-                                                <div class="form-group">
+                                                <div class="form-group upload">
                                                     <div class="form">
-                                                        <div class="dropzone" fileDragDrop
+
+                                                        <div class="file-upload-wrapper upload-candid-profile"
+                                                        data-text="Select your file!">
+                                                        <input name="file-upload-field" type="file"
+                                                            class="file-upload-field" value="">
+                                                    </div>
+
+                                                        <!-- <div class="dropzone" fileDragDrop
                                                             (filesChangeEmiter)="onFileChange($event)">
                                                             <div class="text-wrapper">
                                                                 <div class="centered">
@@ -104,7 +111,8 @@
                                                                     <span class="dropFile">drop a file here</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+
                                                         <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
                                                             class="required-txt-error">
                                                             <ng-container *ngIf="formData['logo'].errors?.['required']">
@@ -114,6 +122,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button class="btn btn-view">view</button>
                                         </div>
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             @if (imgURLBase64()) {

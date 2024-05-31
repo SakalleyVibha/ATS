@@ -60,3 +60,102 @@ table.table.table-tamplate-style.table-user tbody tr td {
     overflow-y: auto;
     height: 413px;
 }
+
+
+/* priyanshu for form */
+
+.upload-candid-profile>input[type="file"] {
+    display: block;
+}
+
+.file-upload-wrapper.upload-candid-profile {
+    background: #d3e6f9;
+    border-radius: 10px;
+    overflow: hidden;
+    transform: rotate(0);
+    border: 1px solid #d3e6f9;
+}
+
+.upload {
+    --color-black-softest: #485461;
+    /* softer black */
+    --color-black-soft: #363F48;
+    /* softer black */
+    --color-black-hard: #2d353c;
+    /* harder black */
+    --color-black-hardest: #21282e;
+    /* hardest black */
+    --color-green-light: #65cca9;
+    /* light green */
+    --color-green: #29b586;
+    /* medium green */
+    --ease-in-out-quartic: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    position: relative;
+    display: inline-flex;
+    background: #d3e6f9;
+    border-radius: 10px;
+    box-shadow:0 1.7px 1.4px rgb(139 139 139 / 2%), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgb(168 168 168 / 4%), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgb(168 168 168 / 5%), 0 60px 50px rgb(170 170 170 / 7%);
+    overflow: hidden;
+    transform: rotate(0);
+}
+
+.file-upload-wrapper:before {
+    content: "Upload";
+    position: absolute;
+    top: -8px;
+    right: 0px;
+    display: inline-block;
+    z-index: 25;
+    font-size: 14px;
+    line-height: 34px;
+    text-transform: uppercase;
+    pointer-events: none;
+    padding: 8px 16px;
+    color: white;
+    background-color: #589efa;
+    border-radius: inherit;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 200ms ease, box-shadow 300ms ease;
+    width: auto;
+    border: none;
+    text-align: center;
+}
+
+.file-upload-wrapper:after {
+    content: attr(data-text);
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background: #d2e5fb;
+    padding: 16px 12px;
+    display: block;
+    width: calc(100% - 40px);
+    pointer-events: none;
+    z-index: 20;
+    line-height: 0px;
+    color: #181818;
+    border-radius: 5px 10px 10px 5px;
+    font-weight: 500;
+    border: none;
+}
+
+button.btn.btn-view {
+    background-color: #559AFF;
+    color: #fff;
+    padding: 4px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    height: fit-content;
+    margin-top: 38px;
+}
+
+.my-class {
+    display: flex;
+    column-gap: 12px;
+
+}
+
