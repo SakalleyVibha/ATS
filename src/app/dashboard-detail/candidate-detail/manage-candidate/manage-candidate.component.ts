@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, ViewChild, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, SALARY_TYPE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'app-manage-candidate',
@@ -13,6 +14,8 @@ import { environment } from '../../../../environments/environment';
 })
 export class ManageCandidateComponent {
 
+
+ @ViewChild('imageModal') content: any;  
   addCandidateForm!: FormGroup;
   isFieldsValid = signal<boolean>(false);
   modeHire = signal<any>(MODE_OF_HIRE);
@@ -29,8 +32,8 @@ export class ManageCandidateComponent {
   resumeFileNames = signal<any>([]);
   imgBs64 = signal<string>('');
   sql_validation = signal(environment.SQL_validation);
-
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,) {
+  modalRef: any;
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,private modalService: NgbModal) {
     let userData: any = localStorage.getItem('Shared_Data');
     if (userData) {
       userData = JSON.parse(userData)
@@ -284,5 +287,17 @@ export class ManageCandidateComponent {
       cert.value.attachment = this.imgBs64()
     }
 
+  }
+
+  viewImagePopup(){
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+
+    // Handle modal dismiss reason (optional)
+  }
+  
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss('cross click'); // Dismiss the modal
+    }
   }
 }

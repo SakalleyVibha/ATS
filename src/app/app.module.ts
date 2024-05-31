@@ -17,6 +17,7 @@ import { PasswordChangeComponent } from './password-change/password-change.compo
 import { SharedModule } from './shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SuperAdminModule } from './super-admin/super-admin.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { SuperAdminModule } from './super-admin/super-admin.module';
     NgMultiSelectDropDownModule.forRoot(),
     NgxUiLoaderModule,
     SharedModule,
-    SuperAdminModule
+    SuperAdminModule,
+    NgbModule
   ],
   providers: [
 

@@ -68,12 +68,12 @@
                                             Maximum 150 characters allowed
                                         </ng-container>
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 col-md-6" [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
+                    <div class="col-12 col-lg-3 col-md-6">
                         <div class="col-lg-12 col-md-12 col-xl-12 my-class">
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Logo</label>
@@ -96,19 +96,21 @@
                                                 </div>
                                             </div>
                                         </div> -->
-                                                    <div class="file-upload-wrapper upload-candid-profile"
-                                                        data-text="Select your file!">
-                                                        <input name="file-upload-field" type="file"
-                                                            class="file-upload-field" value="">
-                                                    </div>
+                                        <div class="file-upload-wrapper upload-candid-profile"
+                                            data-text="Select your file!">
+                                            <input name="file-upload-field" type="file" (change)="onFileChange($event)"
+                                                formControlName="logo" accept=".png, .jpg, .jpeg"
+                                                class="file-upload-field" value="">
+                                        </div>
+                                        <div *ngIf="formData['logo'].invalid && (formData['logo'].dirty || formData['logo'].touched || isFormValid())"
+                                            class="required-txt-error">
+                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                Location logo required.
+                                            </ng-container>
+                                        </div>
                                     </div>
 
-                                    <div *ngIf="formData['logo'].invalid && (formData['logo'].dirty || formData['logo'].touched || isFormValid())"
-                                    class="required-txt-error">
-                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                        Location logo required.
-                                    </ng-container>
-                                    </div>
+
                                     <!-- <div class="form">
                                         @if(imgURLBase64){
                                         <div class="logo_edit">
@@ -131,23 +133,34 @@
                                     </div> -->
                                 </div>
                             </div>
-                            <button class="btn btn-view">view</button>
+                            <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''" (click)="viewImagePopup()">view</button>
+                            <ng-template #imageModal let-modal="modal">  <div class="modal-header">
+                                <h4 class="modal-title">Selected Image</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
+                                <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
+                              </div>
+                            </ng-template>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 col-md-6">
+                    <!-- <div class="col-12 col-lg-3 col-md-6">
                         @if (imgURLBase64()) {
-                            <div class="col-12 col-lg-4 col-md-12 col-xl-6">
-                                <div class="form-group-wrap">
-                                    <label for="inlineFormInputGroupUsername">Selected Logo</label>
-                                    <div class="logo_edit">
+                        <div class="col-12 col-lg-4 col-md-12 col-xl-6">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Selected Logo</label>
+                                <div class="logo_edit">
                                     <button class="btn btn-danger btn-design" (click)="CrossBtn()">X</button>
                                     <img src="{{imgURLBase64()}}" class="file-preview" alt="">
-                                    </div>
                                 </div>
                             </div>
+                        </div>
                         }
-                    </div>
-                    
+                    </div> -->
+
                 </div>
                 <!-- </form>
                 </div>

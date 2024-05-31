@@ -1,16 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, ViewChild, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-manage-location',
   templateUrl: './manage-location.component.html',
   styleUrl: './manage-location.component.css'
 })
 export class ManageLocationComponent {
+  @ViewChild('imageModal') content: any;  
   addLocationForm: FormGroup;
   isFormValid = signal(false);
   editLocation: boolean = false;
@@ -20,8 +22,9 @@ export class ManageLocationComponent {
   sql_validation = signal(environment.SQL_validation);
   website_validate = signal(environment.website_validation);
   number_validation = signal(environment.Phone_Mobile_valid);
+  modalRef: any;
 
-  constructor(private api: CommonApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private communicate: CommunicateService) {
+  constructor(private api: CommonApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private communicate: CommunicateService, private modalService: NgbModal) {
     this.addLocationForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]],
       about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(this.sql_validation())]],
@@ -175,6 +178,18 @@ export class ManageLocationComponent {
     if(event.srcElement && event.srcElement!= undefined){
       let file = event.srcElement.files
       this.convertImageToBase64(file[0]);
+    }
+  }
+
+  viewImagePopup(){
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+
+    // Handle modal dismiss reason (optional)
+  }
+  
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss('cross click'); // Dismiss the modal
     }
   }
 }
