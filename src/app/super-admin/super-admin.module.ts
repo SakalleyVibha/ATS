@@ -6,8 +6,7 @@ import { SuperAdminComponent } from './super-admin.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { superAdminInterceptor } from './interceptor/super-admin.interceptor';
+import { CoreModule } from '../core/core.module';
 
 
 @NgModule({
@@ -20,10 +19,10 @@ import { superAdminInterceptor } from './interceptor/super-admin.interceptor';
     CommonModule,
     SuperAdminRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CoreModule
   ],
-  providers: [
-    provideHttpClient(withInterceptors([superAdminInterceptor])),
+  providers: [   
   ]
 })
 export class SuperAdminModule { }

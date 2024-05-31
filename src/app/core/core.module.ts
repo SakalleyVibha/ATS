@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authErrorHandleInterceptor } from './interceptors/auth-error-handle.interceptor';
 
 
 
@@ -10,7 +12,7 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   providers: [
-   
+    provideHttpClient(withInterceptors([authErrorHandleInterceptor])),
   ]
 })
 export class CoreModule { }
