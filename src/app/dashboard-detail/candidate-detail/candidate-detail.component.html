@@ -48,7 +48,38 @@
                         </td>
                         <td class="action_button">
                             <div class="actiondelete-button">
-                                <a routerLink="edit" [queryParams]="{id:cand?.id}">
+
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Edit Details
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" routerLink="edit" [queryParams]="{id:cand?.id}"
+                                                href="javascript:void(0)">Edit Candidate</a></li>
+                                        <li><a class="dropdown-item" routerLink="edit"
+                                                [queryParams]="{id:cand?.id, section : 'edit-emp'}"
+                                                href="javascript:void(0)">
+                                                Employee History</a></li>
+                                        <li><a class="dropdown-item" routerLink="edit"
+                                                [queryParams]="{id:cand?.id, section : 'edit-edu'}"
+                                                href="javascript:void(0)">
+                                                Education Details</a></li>
+                                        <li><a class="dropdown-item" routerLink="edit"
+                                                [queryParams]="{id:cand?.id, section : 'edit-cert'}"
+                                                href="javascript:void(0)">
+                                                Certificate</a></li>
+                                        <li><a class="dropdown-item" routerLink="edit"
+                                                [queryParams]="{id:cand?.id, section : 'edit-doc'}"
+                                                href="javascript:void(0)">
+                                                Resume</a></li>
+                                        <li><a class="dropdown-item" (click)="deleteCandidate(cand?.id)"
+                                                href="javascript:void(0)">Delete</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- <a routerLink="edit" [queryParams]="{id:cand?.id}">
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
                                 </a>
@@ -67,7 +98,7 @@
                                 </a>
                                 <a routerLink="edit" [queryParams]="{id:cand?.id, section : 'edit-doc'}">
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">doc
-                                </a>
+                                </a> -->
                             </div>
                         </td>
                     </tr>

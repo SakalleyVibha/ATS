@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatestWith, map } from 'rxjs';
 
 @Component({
@@ -38,17 +38,18 @@ export class ManageCandidateComponent {
   determineSubmission = signal<any>({});
   account_id = signal<number>(0);
   resCandidate = signal<any>([]);
+  educationDeletion = signal<any>([]);
+  employmentDeletion = signal<any>([]);
+  candidateId = signal<any>(0);
 
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
+  constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
     let userData: any = localStorage.getItem('Shared_Data');
     if (userData) {
       userData = JSON.parse(userData)
       this.account_id.set(userData?.account_id);
     }
     this.createCandidateForm(userData?.account_id);
-    this.addSkills();
-    this.addEducation();
-    this.addCert();
+
   }
 
   ngOnInit() {
@@ -62,6 +63,10 @@ export class ManageCandidateComponent {
         console.log('results: ', results);
         if (results.path == 'edit') {
           this.setDataToEdit(results);
+        } else {
+          this.addSkills();
+          this.addEducation();
+          this.addCert();
         }
       });
   }
@@ -146,10 +151,21 @@ export class ManageCandidateComponent {
   }
 
   removeSkill(i: number) {
+    if (this.determineSubmission().path == 'edit') {
+      const control = this.employment_history.at(i) as FormGroup;
+      control.addControl('delete', new FormControl(true));
+      this.employmentDeletion.set(this.employment_history.value);
+    }
+    console.log('this.employment_history.value: ', this.employment_history.value);
     this.employment_history.removeAt(i);
   }
 
   removeEducation(i: number) {
+    if (this.determineSubmission().path == 'edit') {
+      const control = this.education_detail.at(i) as FormGroup;
+      control.addControl('delete', new FormControl(true));
+      this.educationDeletion.set(this.education_detail.value);
+    }
     this.education_detail.removeAt(i);
   }
 
@@ -254,7 +270,8 @@ export class ManageCandidateComponent {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if (res['data']) {
-          this.toastr.success("Candidate created successfully", "")
+          this.toastr.success("Candidate created successfully", "");
+          this.router.navigate(['dashboard-detail/candidate-detail'])
         } else {
           this.toastr.error("Something went wrong", "");
         }
@@ -323,6 +340,7 @@ export class ManageCandidateComponent {
     this.api.allPostMethod("candidates/getcandidate", { account_id: this.account_id(), id: results.id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['data'] != true) {
+        this.candidateId.set(res['data'].id)
         this.resCandidate.set(results.section);
         console.log('this.resCandidate: ', this.resCandidate());
         if (res['data']) {
@@ -330,20 +348,21 @@ export class ManageCandidateComponent {
             case 'edit-emp': {
               if (res['data'].candidate_companies && res['data'].candidate_companies.length > 0) {
                 res['data'].candidate_companies.map((data: any, index: number) => {
-                  if (index > 0) {
-                    this.employment_history.push(
-                      this.fb.group({
-                        company_name: new FormControl('', [Validators.required]),
-                        from_date: new FormControl('', [Validators.required]),
-                        to_date: new FormControl('', [Validators.required])
-                      })
-                    );
-                  }
+                  this.employment_history.push(
+                    this.fb.group({
+                      company_name: new FormControl('', [Validators.required]),
+                      from_date: new FormControl('', [Validators.required]),
+                      to_date: new FormControl('', [Validators.required]),
+                      id: new FormControl('')
+                    })
+                  );
                   this.employment_history.at(index).patchValue({
                     company_name: data?.company_name,
                     from_date: data?.from_date,
-                    to_date: data?.to_date
+                    to_date: data?.to_date,
+                    id: data?.id
                   });
+
                 })
               }
               break;
@@ -351,19 +370,19 @@ export class ManageCandidateComponent {
             case 'edit-edu': {
               if (res['data'].candidate_education_details && res['data'].candidate_education_details.length > 0) {
                 res['data'].candidate_education_details.map((data: any, index: number) => {
-                  if (index > 0) {
-                    this.education_detail.push(
-                      this.fb.group({
-                        qualification: new FormControl('', [Validators.required]),
-                        course: new FormControl('', [Validators.required]),
-                        university: new FormControl('', [Validators.required])
-                      })
-                    );
-                  }
+                  this.education_detail.push(
+                    this.fb.group({
+                      qualification: new FormControl('', [Validators.required]),
+                      course: new FormControl('', [Validators.required]),
+                      university: new FormControl('', [Validators.required]),
+                      id: new FormControl(''),
+                    })
+                  );
                   this.education_detail.at(index).patchValue({
                     qualification: data?.qualification,
                     course: data?.course,
-                    university: data?.university
+                    university: data?.university,
+                    id: data?.id
                   });
                 })
               }
@@ -469,8 +488,23 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = this.employment_history.value
+    let reqData = { companyData: this.employmentDeletion() && this.employmentDeletion().length > 0 ? this.employmentDeletion() : this.employment_history.value, account_id: this.account_id(), candidate_id: this.candidateId() };
     console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/updateCompanyDetails', reqData).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data']) {
+          this.toastr.success("Updated successfully", "")
+          this.router.navigate(['dashboard-detail/candidate-detail'])
+        } else {
+          this.toastr.error("Something went wrong", "");
+        }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+
+    })
   }
 
   editEducationSubmission() {
@@ -478,8 +512,22 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = this.employment_history.value
-    console.log('reqData: ', reqData);
+    let req = { educationList: this.educationDeletion() && this.educationDeletion().length > 0 ? this.educationDeletion() : this.education_detail.value, account_id: this.account_id(), candidate_id: this.candidateId() };
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/updateEducationDetails', req).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data']) {
+          this.toastr.success("Updated successfully", "")
+          this.router.navigate(['dashboard-detail/candidate-detail'])
+        } else {
+          this.toastr.error("Something went wrong", "");
+        }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+
+    })
   }
 
   editCertificateSubmission() {
