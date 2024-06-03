@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { ActivatedRoute } from '@angular/router';
+import { combineLatestWith, map } from 'rxjs';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -15,7 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 export class ManageCandidateComponent {
 
 
- @ViewChild('imageModal') content: any;  
+  @ViewChild('imageModal') content: any;
   addCandidateForm!: FormGroup;
   isFieldsValid = signal<boolean>(false);
   modeHire = signal<any>(MODE_OF_HIRE);
@@ -33,10 +35,15 @@ export class ManageCandidateComponent {
   imgBs64 = signal<string>('');
   sql_validation = signal(environment.SQL_validation);
   modalRef: any;
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService,private modalService: NgbModal) {
+  determineSubmission = signal<any>({});
+  account_id = signal<number>(0);
+  resCandidate = signal<any>([]);
+
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
     let userData: any = localStorage.getItem('Shared_Data');
     if (userData) {
       userData = JSON.parse(userData)
+      this.account_id.set(userData?.account_id);
     }
     this.createCandidateForm(userData?.account_id);
     this.addSkills();
@@ -44,7 +51,20 @@ export class ManageCandidateComponent {
     this.addCert();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.activeRoute.url
+      .pipe(
+        combineLatestWith(this.activeRoute.queryParams),
+        map(([url, queryParams]) => ({ path: url[0].path, id: queryParams['id'], section: queryParams['section'] }))
+      )
+      .subscribe(results => {
+        this.determineSubmission.set(results);
+        console.log('results: ', results);
+        if (results.path == 'edit') {
+          this.setDataToEdit(results);
+        }
+      });
+  }
 
   get formData() { return this.addCandidateForm.controls };
 
@@ -72,7 +92,6 @@ export class ManageCandidateComponent {
       relocation: new FormControl('', [Validators.required]),
       current_project_status: new FormControl('', [Validators.required]),
       joining_availability: new FormControl('', [Validators.required]),
-      // education_detail: new FormControl('', [Validators.required]),
       graduation_completion_year: new FormControl('', [Validators.required]),
       resume_source: new FormControl('', [Validators.required]),
       logo: new FormControl('', [Validators.required]),
@@ -102,7 +121,8 @@ export class ManageCandidateComponent {
         company_name: new FormControl('', [Validators.required]),
         from_date: new FormControl('', [Validators.required]),
         to_date: new FormControl('', [Validators.required])
-      }));
+      })
+    );
   }
 
   addEducation() {
@@ -256,8 +276,6 @@ export class ManageCandidateComponent {
 
     toDateControl?.updateValueAndValidity();
 
-    console.log("this.employment_history : ", this.employment_history);
-
   }
 
   async handleUpload(event: any, i: number) {
@@ -289,15 +307,200 @@ export class ManageCandidateComponent {
 
   }
 
-  viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+  viewImagePopup() {
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'xl' });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
-  
+
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal
     }
+  }
+  setDataToEdit(results: any) {
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod("candidates/getcandidate", { account_id: this.account_id(), id: results.id }).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['data'] != true) {
+        this.resCandidate.set(results.section);
+        console.log('this.resCandidate: ', this.resCandidate());
+        if (res['data']) {
+          switch (results.section) {
+            case 'edit-emp': {
+              if (res['data'].candidate_companies && res['data'].candidate_companies.length > 0) {
+                res['data'].candidate_companies.map((data: any, index: number) => {
+                  if (index > 0) {
+                    this.employment_history.push(
+                      this.fb.group({
+                        company_name: new FormControl('', [Validators.required]),
+                        from_date: new FormControl('', [Validators.required]),
+                        to_date: new FormControl('', [Validators.required])
+                      })
+                    );
+                  }
+                  this.employment_history.at(index).patchValue({
+                    company_name: data?.company_name,
+                    from_date: data?.from_date,
+                    to_date: data?.to_date
+                  });
+                })
+              }
+              break;
+            }
+            case 'edit-edu': {
+              if (res['data'].candidate_education_details && res['data'].candidate_education_details.length > 0) {
+                res['data'].candidate_education_details.map((data: any, index: number) => {
+                  if (index > 0) {
+                    this.education_detail.push(
+                      this.fb.group({
+                        qualification: new FormControl('', [Validators.required]),
+                        course: new FormControl('', [Validators.required]),
+                        university: new FormControl('', [Validators.required])
+                      })
+                    );
+                  }
+                  this.education_detail.at(index).patchValue({
+                    qualification: data?.qualification,
+                    course: data?.course,
+                    university: data?.university
+                  });
+                })
+              }
+              break;
+            }
+            case 'edit-cert': {
+              if (res['data'].candidate_certifications && res['data'].candidate_certifications.length > 0) {
+                res['data'].candidate_certifications.map((data: any, index: number) => {
+                  if (index > 0) {
+                    this.certificates.push(
+                      this.fb.group({
+                        name: new FormControl('', [Validators.required]),
+                        validity: new FormControl('', [Validators.required]),
+                        attachment: new FormControl('', [Validators.required])
+                      })
+                    );
+                  }
+                  this.certificates.at(index).patchValue({
+                    name: data?.name,
+                    validity: data?.validity,
+                    attachment: data?.attachment
+                  });
+                })
+              }
+              break;
+            }
+            case 'edit-doc': {
+              if (res['data'].candidate_documents && res['data'].candidate_documents.length > 0) {
+                // res['data'].candidate_documents.map((data: any, index: number) => {
+
+                // })
+              }
+              break;
+            }
+            default: {
+              this.addCandidateForm.patchValue({
+                name: res['data'].name,
+                title: res['data'].title,
+                position: res['data'].position,
+                total_experience: res['data'].total_experience,
+                relevant_experience: res['data'].relevant_experience,
+                email: res['data'].email,
+                linkedin: res['data'].linkedin,
+                contact: res['data'].contact,
+                alternate_contact: res['data'].alternate_contact,
+                city: res['data'].city,
+                state: res['data'].state,
+                mode_of_hire: res['data'].mode_of_hire,
+                visa_status: res['data'].visa_status,
+                salary_type: res['data'].salary_type,
+                salary: res['data'].salary,
+                employer_name: res['data'].employer_name,
+                visa_validity: res['data'].visa_validity,
+                dob: res['data'].dob,
+                relocation: res['data'].relocation,
+                current_project_status: res['data'].current_project_status,
+                joining_availability: res['data'].joining_availability,
+                graduation_completion_year: res['data'].graduation_completion_year,
+                resume_source: res['data'].resume_source,
+                logo: res['data'].logo,
+                notes: res['data'].notes
+              });
+              break;
+            }
+          }
+        }
+      }
+
+    });
+  }
+
+  determineFormSubmission() {
+    if (this.determineSubmission().path == 'edit') {
+      switch (this.resCandidate()) {
+        case 'edit-emp': {
+          this.editEmployeeSubmission();
+          break;
+        }
+        case 'edit-edu': {
+          this.editEducationSubmission();
+          break;
+        }
+        case 'edit-cert': {
+          this.editCertificateSubmission();
+          break;
+        }
+        case 'edit-doc': {
+          this.editDocumentSubmission();
+          break;
+        }
+        default: {
+          this.editCandidate();
+          break;
+        }
+      }
+    } else {
+      this.saveCandidateForm();
+    }
+  }
+
+  editEmployeeSubmission() {
+    if (this.employment_history.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+    let reqData = this.employment_history.value
+    console.log('reqData: ', reqData);
+  }
+
+  editEducationSubmission() {
+    if (this.education_detail.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+    let reqData = this.employment_history.value
+    console.log('reqData: ', reqData);
+  }
+
+  editCertificateSubmission() {
+    if (this.certificates.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+    let reqData = this.employment_history.value
+    console.log('reqData: ', reqData);
+  }
+
+  editDocumentSubmission() {
+    if (this.documentList() && this.documentList().length == 0) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+    let reqData = this.employment_history.value
+    console.log('reqData: ', reqData);
+  }
+
+  editCandidate() {
+    // this.addCandidateForm.get('employment_history')?.removeControl('address2');
   }
 }
