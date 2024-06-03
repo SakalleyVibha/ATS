@@ -26,3 +26,16 @@ th.check-haed-table>span {
     overflow-y: auto;
     overflow-x: auto;
 }
+
+
+@media only screen and (max-width: 1400px) {
+    table.table.table-bordered {
+        zoom: .8;
+    }
+}
+ 
+@media only screen and (max-width: 992px) {
+    table.table.table-bordered {
+        zoom: normal;
+    }
+}

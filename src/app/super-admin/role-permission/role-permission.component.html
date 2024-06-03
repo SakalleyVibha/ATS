@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <th class="check-haed-table" *ngFor="let role of roles">
-                        <span><input type="checkbox">{{role.role_name}}</span>
+                        <span><input type="checkbox" [checked]="role.selectAll" (change)="checkAll(role)">{{role.role_name}}</span>
                     </th>
                 </tr>
             </thead>
@@ -41,12 +41,17 @@
                                             {{sm.section_name}}
                                         </td>
                                         <td>{{pm.permission_name}} <span class="info-icon-detail">
-                                                <i class="fa fa-info-circle" data-bs-toggle="tooltip"
-                                                    data-bs-placement="right"
-                                                    data-bs-title="Tooltip on right"></i></span></td>
+                                                <i class="fa fa-info-circle"
+                                                    [ngbPopover]="content"
+                                                    triggers="mouseenter:mouseleave"
+                                                    [popoverTitle]="title"
+                                                    placement="right"
+                                                    (mouseenter)="popContent = pm.permission_description;popTitle = pm.permission_name"
+                                                    popoverClass="custompopoverclass"
+                                                    ></i></span></td>
                                         <td *ngFor="let role of roles">
                                             <input type="checkbox" [checked]="checkPermission(role.id,pm)"
-                                                (change)="changeBox(role.id,pm)">
+                                                (change)="changeBox(role,pm)">
                                         </td>
  
                                     </tr>
@@ -93,3 +98,10 @@
  
     </div>
 </div>
+
+<ng-template #title>
+   <span>{{popTitle}}</span>
+</ng-template>
+<ng-template #content>
+   <span>{{popContent}}</span>
+</ng-template>

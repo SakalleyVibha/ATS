@@ -22,9 +22,11 @@ export const authErrorHandleInterceptor: HttpInterceptorFn = (req, next) => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           console.error('Unauthorized request:', err);
-          communicate.isLoaderLoad.next(false);
           toastr.error("Token has been expired. Please login again", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
-            Route.navigate(['/login'])
+            communicate.isLoaderLoad.next(false);
+            let url = Route.url;
+            let routeTo = url.includes('super-admin') ? 'super-admin/login': '/login';
+            Route.navigate([routeTo])
           });
         } else {
           console.error('HTTP error:', err);

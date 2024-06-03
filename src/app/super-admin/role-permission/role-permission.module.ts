@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { RolePermissionRoutingModule } from './role-permission-routing.module';
 import { RolePermissionComponent } from './role-permission.component';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { RolePermissionComponent } from './role-permission.component';
   ],
   imports: [
     CommonModule,
-    RolePermissionRoutingModule
+    RolePermissionRoutingModule,
+    NgbPopoverModule
   ]
 })
 export class RolePermissionModule { }
