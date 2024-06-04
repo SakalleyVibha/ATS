@@ -249,7 +249,7 @@ export class ManageUserComponent {
   }
 
   viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm'});  // Open the modal with template reference
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm', backdrop: 'static', keyboard: false});  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }

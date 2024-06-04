@@ -5,7 +5,7 @@ import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatestWith, map } from 'rxjs';
 
@@ -337,7 +337,8 @@ export class ManageCandidateComponent {
   }
 
   viewImagePopup() {
-    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm' });  // Open the modal with template reference
+  
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false } );  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
