@@ -41,8 +41,12 @@ export class ManageCandidateComponent {
   educationDeletion = signal<any>([]);
   employmentDeletion = signal<any>([]);
   candidateId = signal<any>(0);
-
+  selectedImageName: string = '';
+  selectedAttachmentName: string = '';
+  selectedResumeName: string = '';
   constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
+
+
     let userData: any = localStorage.getItem('Shared_Data');
     if (userData) {
       userData = JSON.parse(userData)
@@ -191,6 +195,7 @@ export class ManageCandidateComponent {
   }
 
   async onFileChange(event: any) {
+    this.selectedImageName = event.target.files[0]?.name;
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.addCandidateForm.controls['logo'].removeValidators(Validators.required);
@@ -202,6 +207,13 @@ export class ManageCandidateComponent {
       let file = event.srcElement.files
       let bs64Value = await this.convertImageToBase64(file[0]);
     }
+  }
+
+  onAttachmentFileChange(event: any) {
+    this.selectedAttachmentName = event.target.files[0]?.name;
+  }
+  onResumeFileChange(event: any) {
+    this.selectedResumeName = event.target.files[0]?.name;
   }
 
   CrossBtn() {
@@ -325,7 +337,7 @@ export class ManageCandidateComponent {
   }
 
   viewImagePopup() {
-    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'xl' });  // Open the modal with template reference
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm' });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }

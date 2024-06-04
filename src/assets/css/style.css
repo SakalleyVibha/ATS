@@ -202,7 +202,7 @@ section.create-wrapper {
     background-repeat: no-repeat;
 }
 
-.create-form-body::after {
+/* .create-form-body::after {
     content: '';
     position: absolute;
     bottom: -60px;
@@ -213,7 +213,7 @@ section.create-wrapper {
     /* Path to your image */
     background-size: cover;
     background-repeat: no-repeat;
-}
+} */
 
 .create-heading-bdy {
     display: flex;
@@ -1882,7 +1882,7 @@ table.table.table-vcenter.line-table tr:last-child {
 
 /* Swapnil Sharma - Validation error */
 .required-txt-error {
-    font-size: 11px;
+    font-size: 12px;
     color: #e93434;
     margin-top: 3px;
     /* text-transform: capitalize; */

@@ -28,7 +28,7 @@ export class ManageUserComponent {
   number_validation = signal(environment.Phone_Mobile_valid);
   imgURLBase64 = signal<ArrayBuffer | any>('');
   modalRef: any;
-
+  selectedFileName : string = '';
 
   constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -234,6 +234,7 @@ export class ManageUserComponent {
   }
 
   onFileChange(event: any) {
+    this.selectedFileName = event.target.files[0]?.name
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.userForm.controls['profile_img'].clearValidators();
@@ -248,7 +249,7 @@ export class ManageUserComponent {
   }
 
   viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm'});  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }

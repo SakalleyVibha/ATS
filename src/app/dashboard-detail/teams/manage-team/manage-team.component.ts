@@ -15,6 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ManageTeamComponent {
   @ViewChild('imageModal') content: any;  
+  
   imgURLBase64 = signal<ArrayBuffer | any>('');
   teamForm: FormGroup;
   assignUserForm!: FormGroup;
@@ -31,7 +32,7 @@ export class ManageTeamComponent {
   userReqObj = signal<any>({});
   totalPages = signal<number>(0);
   modalRef: any;
-
+  selectedFile: string = '';
   constructor(private api: CommonApiService, private communicate: CommunicateService, private formbuild: FormBuilder, private toastr: ToastrService, private router: Router, private activeRout: ActivatedRoute, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
@@ -148,6 +149,7 @@ export class ManageTeamComponent {
   }
 
   async onFileChange(event: any) {
+    this.selectedFile = event.target.files[0]?.name
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
       this.teamForm.controls['logo'].removeValidators(Validators.required);
@@ -294,7 +296,7 @@ export class ManageTeamComponent {
   }
 
   viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm'});  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
