@@ -79,8 +79,9 @@
                                                     <div class="form">
 
                                                         <div class="file-upload-wrapper upload-candid-profile"
-                                                            data-text="Select your file!">
-                                                            <input name="file-upload-field" type="file" (change)="onFileChange($event)"
+                                                            [attr.data-text]="selectedFile ? selectedFile :'Select your file!'">
+                                                            <input name="file-upload-field" type="file"
+                                                                (change)="onFileChange($event)"
                                                                 accept=".png, .jpg, .jpeg" class="file-upload-field"
                                                                 value="" formControlName="logo">
                                                         </div>
@@ -113,18 +114,19 @@
                                                             </div>
                                                         </div> -->
 
-                                                        <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
-                                                            class="required-txt-error">
-                                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                                logo required
-                                                            </ng-container>
-                                                        </div>
+
                                                     </div>
                                                 </div>
+                                                <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
+                                                    class="required-txt-error">
+                                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                        logo required
+                                                    </ng-container>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-view"
-                                                [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''"
-                                                (click)="viewImagePopup()">view</button>
+                                            @if(imgURLBase64()){
+                                            <button class="btn btn-view" (click)="viewImagePopup()">view</button>
+                                            }
                                             <ng-template #imageModal let-modal="modal">
                                                 <div class="modal-header">
                                                     <h4 class="modal-title">Selected Image</h4>
@@ -191,7 +193,7 @@
                             </div>
                             <div class="table-wrapper">
                                 <div class="col-xl-11 d-flex table-wrapper-user">
-                                    <div class="table-responsive col-xl-6 p-2 table-matching" infiniteScroll
+                                    <div class="table-responsive col-xl-6 p-2 table-matching" id="targetDiv" infiniteScroll
                                         [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
                                         (scrolled)="onScroll()">
                                         <label for="inlineFormInputGroupUsername">User List</label>

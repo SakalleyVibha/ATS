@@ -23,6 +23,7 @@ export class ManageLocationComponent {
   website_validate = signal(environment.website_validation);
   number_validation = signal(environment.Phone_Mobile_valid);
   modalRef: any;
+  selectedFileName : string = '';
 
   constructor(private api: CommonApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private communicate: CommunicateService, private modalService: NgbModal) {
     this.addLocationForm = this.formBuilder.group({
@@ -168,6 +169,8 @@ export class ManageLocationComponent {
   }
 
   onFileChange(event:any){
+    // console.log(event.target.files[0]?.name);
+    this.selectedFileName = event.target.files[0]?.name;
     if(event.dataTransfer){
       let file = event.dataTransfer.files
       this.addLocationForm.controls['logo'].clearValidators();
@@ -182,7 +185,7 @@ export class ManageLocationComponent {
   }
 
   viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'xl'});  // Open the modal with template reference
+    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm'});  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }

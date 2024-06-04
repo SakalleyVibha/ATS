@@ -164,9 +164,10 @@
                                     <div class="form logo-wrapper">
 
                                         <div class="file-upload-wrapper upload-candid-profile"
-                                            data-text="Select your file!">
-                                            <input name="file-upload-field" type="file" formControlName="profile_img" (change)="onFileChange($event)"
-                                            accept=".png, .jpg, .jpeg" class="file-upload-field" value="">
+                                            [attr.data-text]="selectedFileName ? selectedFileName :'Select your file!'">
+                                            <input name="file-upload-field" type="file" formControlName="profile_img"
+                                                (change)="onFileChange($event)" accept=".png, .jpg, .jpeg"
+                                                class="file-upload-field" value="">
                                         </div>
 
                                         <!-- <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)">
@@ -194,12 +195,6 @@
                                             </div>
                                         </div> -->
                                     </div>
-                                    <div *ngIf="formData['profile_img'].invalid && (formData['profile_img'].dirty || formData['profile_img'].touched || isFormValid())"
-                                        class="required-txt-error">
-                                        <ng-container *ngIf="formData['profile_img'].errors?.['required']">
-                                            Profile image required.
-                                        </ng-container>
-                                    </div>
 
                                     <!-- <div class="form">
                                     @if(imgURLBase64){
@@ -223,18 +218,28 @@
                                 </div> -->
 
                                 </div>
+                                <div *ngIf="formData['profile_img'].invalid && (formData['profile_img'].dirty || formData['profile_img'].touched || isFormValid())"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['profile_img'].errors?.['required']">
+                                        Profile image required.
+                                    </ng-container>
+                                </div>
                             </div>
-                            <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''" (click)="viewImagePopup()">view</button>
-                            <ng-template #imageModal let-modal="modal">  <div class="modal-header">
-                                <h4 class="modal-title">Selected Image</h4>
-                                <button type="button" class="close" aria-label="Close" (click)="closeModal()">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
-                                <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
-                              </div>
+                            @if(imgURLBase64()){
+                            <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''"
+                                (click)="viewImagePopup()">view</button>
+                            }
+                            <ng-template #imageModal let-modal="modal">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Selected Image</h4>
+                                    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
+                                    <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
+                                </div>
                             </ng-template>
                         </div>
                     </div>

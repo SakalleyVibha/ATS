@@ -136,25 +136,26 @@
                                                     </div> -->
 
                                                 <div class="file-upload-wrapper upload-candid-profile"
-                                                    data-text="Select your file!">
+                                                    [attr.data-text]="selectedImageName ? selectedImageName :'Select your file!'">
                                                     <input name="file-upload-field" type="file"
                                                         (change)="onFileChange($event)" formControlName="logo"
                                                         accept=".png, .jpg, .jpeg" class="file-upload-field" value="">
                                                 </div>
 
-                                                <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
-                                                    class="required-txt-error">
-                                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                        Profile image required
-                                                    </ng-container>
-                                                </div>
                                             </div>
+                                        </div>
+                                        <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
+                                            class="required-txt-error">
+                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                Profile image required
+                                            </ng-container>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-xl-4 btn-view-wrap">
-                                    <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''"
-                                        (click)="viewImagePopup()">view</button>
+                                    @if(imgURLBase64()){
+                                    <button class="btn btn-view" (click)="viewImagePopup()">view</button>
+                                    }
                                     <ng-template #imageModal let-modal="modal">
                                         <div class="modal-header">
                                             <h4 class="modal-title">Selected Image</h4>
@@ -588,8 +589,9 @@
                                                 <div class="">
 
                                                     <div class="file-upload-wrapper upload-candid-profile"
-                                                        data-text="Select your file!">
+                                                        [attr.data-text]="selectedResumeName ? selectedResumeName :'Select your file!'">
                                                         <input name="file-upload-field" type="file"
+                                                            (change)="onResumeFileChange($event)"
                                                             accept=".doc, .docx, .pdf" class="file-upload-field"
                                                             value="">
                                                     </div>
@@ -919,11 +921,11 @@
                                                                     formControlName="attachment" class="cand-cert-upload"
                                                                     accept=".doc, .docx, .pdf" /> -->
                                                             <div class="file-upload-wrapper upload-candid-profile"
-                                                                data-text="Select your file!">
+                                                                [attr.data-text]="selectedAttachmentName ? selectedAttachmentName :'Select your file!'">
                                                                 <input name="file-upload-field" type="file"
-                                                                    formControlName="attachment"
-                                                                    class="file-upload-field" value=""
-                                                                    (change)="handleUpload($event, i)" accept=".pdf">
+                                                                    (change)="onAttachmentFileChange($event)"
+                                                                    formControlName="attachment" accept=".pdf"
+                                                                    class="file-upload-field" value="">
                                                             </div>
                                                         </div>
                                                         <div

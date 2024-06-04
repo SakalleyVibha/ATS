@@ -1,5 +1,4 @@
-<div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-    (scrolled)="onScroll()">
+<div class="location-sec-bdy">
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
@@ -23,7 +22,8 @@
         </div>
     </div>
     <div class="table-wrapper">
-        <div class="table-responsive">
+        <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()">
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>

@@ -140,6 +140,9 @@ table.table.table-tamplate-style.table-user tbody tr td {
     border-radius: 5px 10px 10px 5px;
     font-weight: 500;
     border: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: "----";
 }
 
 button.btn.btn-view {
@@ -151,6 +154,7 @@ button.btn.btn-view {
     border-radius: 12px;
     height: fit-content;
     margin-top: 38px;
+    margin-left: -30px;
 }
 
 .my-class {
@@ -159,3 +163,28 @@ button.btn.btn-view {
 
 }
 
+.modal-body > img {
+    width: -webkit-fill-available;
+}
+
+button.close {
+    opacity: 1;
+    position: absolute;
+    right: -14px;
+    top: -10px;
+    width: 42px;
+    height: 42px;
+    background-color: #1b6dba;
+    border: 2px solid #ffffff;
+    border-radius: 14px;
+}
+
+button.close > span {
+    color: #fff;
+    font-size: 27px;
+    font-weight: bolder;
+}
+
+.create-form-body {
+    margin-top: 105px;
+}

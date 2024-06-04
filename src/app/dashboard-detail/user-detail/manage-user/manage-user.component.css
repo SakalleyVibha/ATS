@@ -75,6 +75,9 @@
     border-radius: 5px 10px 10px 5px;
     font-weight: 500;
     border: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: "----";
 }
 
 button.btn.btn-view {
@@ -92,4 +95,26 @@ button.btn.btn-view {
     display: flex;
     column-gap: 12px;
 
+}
+
+.modal-body > img {
+    width: -webkit-fill-available;
+}
+
+button.close {
+    opacity: 1;
+    position: absolute;
+    right: -14px;
+    top: -10px;
+    width: 42px;
+    height: 42px;
+    background-color: #1b6dba;
+    border: 2px solid #ffffff;
+    border-radius: 14px;
+}
+
+button.close > span {
+    color: #fff;
+    font-size: 27px;
+    font-weight: bolder;
 }
