@@ -188,3 +188,7 @@ button.close > span {
 .create-form-body {
     margin-top: 105px;
 }
+
+.add-user-team{
+    min-height: auto !important;
+}
