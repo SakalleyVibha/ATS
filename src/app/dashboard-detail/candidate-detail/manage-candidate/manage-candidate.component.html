@@ -138,15 +138,15 @@
                                                 <div class="file-upload-wrapper upload-candid-profile"
                                                     [attr.data-text]="selectedImageName ? selectedImageName :'Select your file!'">
                                                     <input name="file-upload-field" type="file"
-                                                        (change)="onFileChange($event)" formControlName="logo"
+                                                        (change)="onFileChange($event)" formControlName="profile_image"
                                                         accept=".png, .jpg, .jpeg" class="file-upload-field" value="">
                                                 </div>
 
                                             </div>
                                         </div>
-                                        <div *ngIf="(formData['logo'].invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
+                                        <div *ngIf="(formData['profile_image'].invalid && (formData['profile_image'].touched || formData['profile_image'].dirty || isFieldsValid()))"
                                             class="required-txt-error">
-                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                            <ng-container *ngIf="formData['profile_image'].errors?.['required']">
                                                 Profile image required
                                             </ng-container>
                                         </div>
@@ -579,42 +579,97 @@
 
                         @if((this.resCandidate() == 'edit-doc' && this.determineSubmission().path == 'edit') ||
                         this.determineSubmission().path == 'add'){
-                        <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-8 col-xl-12">
-                                    <div class="form-group-wrap">
-                                        <label for="inlineFormInputGroupUsername">Add Resume</label>
-                                        <div class="form-group">
-                                            <div class="form resume-wrapper">
-                                                <div class="">
-
-                                                    <div class="file-upload-wrapper upload-candid-profile"
-                                                        [attr.data-text]="selectedResumeName ? selectedResumeName :'Select your file!'">
-                                                        <input name="file-upload-field" type="file"
-                                                            (change)="onResumeFileChange($event)"
-                                                            accept=".doc, .docx, .pdf" class="file-upload-field"
-                                                            value="">
-                                                    </div>
-
-                                                    <!-- <input type="file" name="pdf" id="pdf" multiple
-                                                            accept=".doc, .docx, .pdf" (change)="onFileChangePDF($event)">
-                                                        <label for="pdf" class="dropFile"><span class="resume-add">Add
-                                                                Resume + </span></label>
-                                                        @for(pdf of resumeFileNames();track $index){
-                                                        <div class="resume-name">
-                                                            <span class="resume-added">{{pdf}} <span class="cross-icon"
-                                                                    (click)="deleteFromArray($index)">x</span></span>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="create-form-he">
+                                    <h2>Resume</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container formArrayName="documents">
+                            <ng-container [formGroupName]="i" *ngFor="let doc of documents.controls;let i=index">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Name*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="name"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter name of document">
                                                         </div>
-                                                        } -->
-
-
+                                                        <div
+                                                            *ngIf="doc.get('name')?.invalid && (doc.get('name')?.dirty || doc.get('name')?.touched || isFieldsValid())">
+                                                            <div *ngIf="doc.get('name')?.errors?.['required']"
+                                                                class="required-txt-error" class="required-txt-error">
+                                                                Name required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Document*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="file-upload-wrapper upload-candid-profile"
+                                                            [attr.data-text]="selectedResumeName ? selectedResumeName :'Select your file!'">
+                                                            <input name="file-upload-field" type="file"
+                                                                (change)="onFileChangePDF($event, i)"
+                                                                formControlName="doc" accept=".doc, .docx, .pdf"
+                                                                class="file-upload-field" value="">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="doc.get('doc')?.invalid && (doc.get('doc')?.dirty || doc.get('doc')?.touched || isFieldsValid())">
+                                                            <div *ngIf="doc.get('doc')?.errors?.['required']"
+                                                                class="required-txt-error">
+                                                                Document required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(this.resCandidate() == 'edit-doc' && this.determineSubmission().path == 'edit'){
+
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeDocument(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </ng-container>
+                        </ng-container>
+                        @if(this.resCandidate() == 'edit-doc' && this.determineSubmission().path == 'edit'){
+
+                        <div class="col-xl-12">
+                            <div class="form-group-add-btn-center">
+                                <a class="btn btn-theme" (click)="addDoc()"> + Add</a>
                             </div>
                         </div>
+                        }
                         }
                         @if((this.resCandidate() == 'edit-emp' && this.determineSubmission().path == 'edit') ||
                         this.determineSubmission().path == 'add'){
@@ -628,6 +683,9 @@
                         <ng-container formArrayName="employment_history">
                             <ng-container [formGroupName]="i"
                                 *ngFor="let employment of employment_history.controls;let i=index">
+                                <!-- employee: {{employment.value.company_name == ''}} -->
+                                @if(employment.value.delete != 1){
+
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -724,6 +782,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                }
                             </ng-container>
                         </ng-container>
                         <div class="col-xl-12">
@@ -747,6 +806,7 @@
                         <ng-container formArrayName="education_detail">
                             <ng-container [formGroupName]="i"
                                 *ngFor="let education of education_detail.controls;let i=index">
+                                @if(education.value.delete != 1){
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -839,6 +899,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                }
                             </ng-container>
                         </ng-container>
                         <div class="col-xl-12">
@@ -859,7 +920,59 @@
                             </div>
                         </div>
                         <ng-container formArrayName="certificates">
+                            <ng-container
+                                *ngFor="let data of this.getCandidateData().candidate_certifications; let i = index">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Name*</label>
+                                                <p>{{data?.name}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Validity*</label>
+                                                <p>{{data?.validity}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-4 col-xl-8">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Attachment</label>
+                                                <a class="btn btn-theme" [attr.href]="data?.attachment"
+                                                    target="_blank">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeCertificate(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </ng-container>
                             <ng-container [formGroupName]="i" *ngFor="let cert of certificates.controls;let i=index">
+
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -921,9 +1034,9 @@
                                                                     formControlName="attachment" class="cand-cert-upload"
                                                                     accept=".doc, .docx, .pdf" /> -->
                                                             <div class="file-upload-wrapper upload-candid-profile"
-                                                                [attr.data-text]="selectedAttachmentName ? selectedAttachmentName :'Select your file!'">
+                                                                [attr.data-text]="cert.value.fileName ? cert.value.fileName :'Select your file!'">
                                                                 <input name="file-upload-field" type="file"
-                                                                    (change)="onAttachmentFileChange($event)"
+                                                                    (change)="handleUpload($event, i)"
                                                                     formControlName="attachment" accept=".pdf"
                                                                     class="file-upload-field" value="">
                                                             </div>
