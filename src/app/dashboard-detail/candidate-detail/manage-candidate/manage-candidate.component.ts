@@ -71,7 +71,7 @@ export class ManageCandidateComponent {
         } else {
           this.addSkills();
           this.addEducation();
-          // this.addCert();
+          this.addCert();
           this.addDoc();
         }
       });
@@ -107,7 +107,7 @@ export class ManageCandidateComponent {
       resume_source: new FormControl('Linked In', [Validators.required]),
       profile_image: new FormControl('', [Validators.required]),
       notes: new FormControl('ABC', [Validators.required]),
-      employment_history: this.fb.array([], Validators.required),
+      employment_history: this.fb.array([]),
       education_detail: this.fb.array([]),
       certificates: this.fb.array([]),
       documents: this.fb.array([]),
@@ -187,6 +187,9 @@ export class ManageCandidateComponent {
         control.get('to_date')?.updateValueAndValidity();
       }
 
+    } else {
+
+      this.employment_history.removeAt(i);
     }
     // this.employment_history.removeAt(i);
   }
@@ -206,6 +209,9 @@ export class ManageCandidateComponent {
         control.get('university')?.updateValueAndValidity();
         control.get('course')?.updateValueAndValidity();
       }
+    } else {
+
+      this.education_detail.removeAt(i);
     }
   }
 
@@ -279,8 +285,9 @@ export class ManageCandidateComponent {
 
       reader.onload = (event: any) => {
         base64Files[file.name] = event.target.result.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        this.documents.at(i).value.doc = base64Files[file.name]
-        this.documents.at(i).value.fileName = file.name
+        let control = this.documents.at(i) as FormGroup;
+        control.value.doc = base64Files[file.name]
+        control.value.fileName = file.name
       };
 
       reader.readAsDataURL(file);
@@ -397,6 +404,7 @@ export class ManageCandidateComponent {
       if (res['data'] != true) {
         this.candidateId.set(res['data'].id)
         this.resCandidate.set(results.section);
+        this.getCandidateData.set(res['data']);
         console.log('this.resCandidate: ', this.resCandidate());
         if (res['data']) {
           switch (results.section) {
@@ -444,7 +452,7 @@ export class ManageCandidateComponent {
               break;
             }
             case 'edit-cert': {
-              this.getCandidateData.set(res['data']);
+              // this.getCandidateData.set(res['data']);
               // if (res['data'].candidate_certifications && res['data'].candidate_certifications.length > 0) {
               //   res['data'].candidate_certifications.map((data: any, index: number) => {
               //     this.certificates.push(
@@ -466,11 +474,11 @@ export class ManageCandidateComponent {
               break;
             }
             case 'edit-doc': {
-              if (res['data'].candidate_documents && res['data'].candidate_documents.length > 0) {
-                // res['data'].candidate_documents.map((data: any, index: number) => {
+              // if (res['data'].candidate_documents && res['data'].candidate_documents.length > 0) {
+              //   // res['data'].candidate_documents.map((data: any, index: number) => {
 
-                // })
-              }
+              //   // })
+              // }
               break;
             }
             default: {
@@ -594,7 +602,7 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = { certificates: [...this.certificates.value], account_id: this.account_id(), id: this.candidateId() };
+    let reqData = { certificates: this.certificates.value, account_id: this.account_id(), id: this.candidateId() };
     console.log('reqData: ', reqData);
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('candidates/addCertificates', reqData).subscribe((res: any) => {
@@ -614,15 +622,60 @@ export class ManageCandidateComponent {
   }
 
   editDocumentSubmission() {
-    if (this.documentList() && this.documentList().length == 0) {
+    if (this.documents.invalid) {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = this.employment_history.value
+    let reqData = { documents: this.documents.value, account_id: this.account_id(), id: this.candidateId() }
     console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/addResume', reqData).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data']) {
+          this.toastr.success("Updated successfully", "")
+          this.router.navigate(['dashboard-detail/candidate-detail'])
+        } else {
+          this.toastr.error("Something went wrong", "");
+        }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+
+    })
   }
 
   editCandidate() {
-    // this.addCandidateForm.get('employment_history')?.removeControl('address2');
+    if (this.addCandidateForm.value.mode_of_hire != 'c2c') {
+      this.addCandidateForm.controls['employer_name'].removeValidators(Validators.required);
+      this.addCandidateForm.controls['employer_name'].updateValueAndValidity();
+    }
+
+    this.addCandidateForm.value.profile_image = this.imgURLBase64();
+    if (this.addCandidateForm.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+
+    let reqData = { ...this.addCandidateForm.value, account_id: this.account_id(), id: this.candidateId() }
+    console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/updateCandidate', reqData).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['data']) {
+          this.toastr.success("Updated successfully", "")
+          this.router.navigate(['dashboard-detail/candidate-detail'])
+        } else {
+          this.toastr.error("Something went wrong", "");
+        }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+
+    })
+
   }
 }
