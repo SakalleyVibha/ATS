@@ -29,8 +29,8 @@ export class ManagePermissionComponent {
   ){
     this.getModuleList();
     this.permissionForm = this.fb.group({
-      name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
-      description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),         
+      name: new FormControl('',[Validators.required,Validators.minLength(2)]),
+      description: new FormControl('',[Validators.required,Validators.maxLength(150)]),         
       module_id: new FormControl('',[Validators.required]),         
       section_id: new FormControl('',[Validators.required]),         
     });

@@ -71,7 +71,7 @@ export class LoginComponent {
         });
 
       } else {
-        this.toast.error(res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
+        this.toast.error(res.message || res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }
