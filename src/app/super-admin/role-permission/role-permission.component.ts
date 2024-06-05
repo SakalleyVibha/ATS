@@ -16,12 +16,9 @@ export class RolePermissionComponent {
  popContent: string = '';
  popTitle: string = '';
  allPemissions:any = [];
- 
 
   constructor(private api : CommonApiService, private communicate: CommunicateService,private toastr: ToastrService){
-    this.getRolePermissionList()
     this.getModuleList();
-    this.getRoles();
   }
 
   getRoles(){
@@ -66,7 +63,7 @@ export class RolePermissionComponent {
     .subscribe({
       next: (res:any)=>{
           if(!res.error){
-            this.communicate.isLoaderLoad.next(false);
+            this.getRolePermissionList();
             this.modules = res.data;
             this.allPemissions = res.data.flatMap((m:any) => m.section_masters).flatMap((s:any)=> s.permission_masters);
           }else{
@@ -82,6 +79,7 @@ export class RolePermissionComponent {
     this.api.allPostMethod('rolepermission/getrolepermissions',{}).subscribe({
       next: (res:any)=>{
           if(!res.error){
+            this.getRoles();
             this.communicate.isLoaderLoad.next(false);
            this.rolePermission = res.data;
           }else{
