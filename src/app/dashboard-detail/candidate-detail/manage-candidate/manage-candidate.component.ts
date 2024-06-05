@@ -678,4 +678,29 @@ export class ManageCandidateComponent {
     })
 
   }
+
+  removePreCertificate(_id: number) {
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/deleteCertificates', { account_id: this.account_id(), candidate_id: this.candidateId(), id: _id }).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if (res['error']) {
+          this.toastr.error("Something went wrong", "");
+        } else {
+          this.toastr.success("Deleted successfully", "");
+          this.setDataToEdit(this.determineSubmission());
+
+        }
+        console.log('res[data]: ', res['data']);
+        // if (res['data']) {
+        // } else {
+        //   this.toastr.error("Something went wrong", "");
+        // }
+      } else {
+        this.toastr.error("Something went wrong", "");
+      }
+
+    })
+  }
 }
