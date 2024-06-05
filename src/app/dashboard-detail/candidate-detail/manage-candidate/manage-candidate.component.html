@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="form-group-wrap">
-                                <label for="inlineFormInputGroupUsername">Linkedin*</label>
+                                <label for="inlineFormInputGroupUsername">Linkedin</label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" id="autoSizingInput"
                                         placeholder="Enter link" formControlName="linkedin">
@@ -106,7 +106,7 @@
                             <div class="row">
                                 <div class="col-lg-8 col-md-4 col-xl-8">
                                     <div class="form-group-wrap">
-                                        <label for="inlineFormInputGroupUsername">Profile Image</label>
+                                        <label for="inlineFormInputGroupUsername">Profile Image*</label>
                                         <div class="form-group upload">
                                             <div class="form">
                                                 <!-- <div class="dropzone" fileDragDrop
@@ -139,8 +139,8 @@
                                                 <div class="file-upload-wrapper upload-candid-profile"
                                                     [attr.data-text]="selectedImageName ? selectedImageName :'Select your file!'">
                                                     <input name="file-upload-field" type="file"
-                                                        (change)="onFileChange($event)" accept=".png, .jpg, .jpeg"
-                                                        class="file-upload-field" value="">
+                                                        (change)="onFileChange($event)" formControlName="profile_image"
+                                                        accept=".png, .jpg, .jpeg" class="file-upload-field" value="">
                                                 </div>
 
                                             </div>
@@ -591,8 +591,6 @@
                         </div>
                         <ng-container formArrayName="documents">
                             <ng-container *ngFor="let data of this.getCandidateData().candidate_documents">
-                                @if(data?.document_type == "resume"){
-
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -616,22 +614,21 @@
                                 </div>
                                 <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
                                     <!-- <div class="row">
-                                            <div class="col-6 col-lg-4 col-md-4 col-xl-6">
-                                                <div class="form-group-wrap">
-                                                    <label for="inlineFormInputGroupUsername"></label>
-                                                    <div class="form-group">
-                                                        <a (click)="removeDocument(i)">
-                                                            <img src="assets/images/trash-2.svg"
-                                                                class="img-fluid unselected-icon">
-                                                            <img src="assets/images/trash-2white.svg"
-                                                                class="img-fluid selected-white-icon">
-                                                        </a>
-                                                    </div>
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeDocument(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
                                                 </div>
                                             </div>
-                                        </div> -->
+                                        </div>
+                                    </div> -->
                                 </div>
-                                }
                             </ng-container>
                             <ng-container [formGroupName]="i" *ngFor="let doc of documents.controls;let i=index">
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
@@ -907,7 +904,7 @@
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             <div class="form-group-wrap">
-                                                <label for="inlineFormInputGroupUsername">University</label>
+                                                <label for="inlineFormInputGroupUsername">University*</label>
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="">
@@ -999,13 +996,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                <!-- <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername"></label>
                                                 <div class="form-group">
-                                                    <a (click)="removePreCertificate(data?.id)">
+                                                    <a (click)="removeCertificate(i)">
                                                         <img src="assets/images/trash-2.svg"
                                                             class="img-fluid unselected-icon">
                                                         <img src="assets/images/trash-2white.svg"
@@ -1015,7 +1012,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </ng-container>
                             <ng-container [formGroupName]="i" *ngFor="let cert of certificates.controls;let i=index">
 
@@ -1072,7 +1069,7 @@
                                     <div class="row">
                                         <div class="col-lg-8 col-md-4 col-xl-8">
                                             <div class="form-group-wrap">
-                                                <label for="inlineFormInputGroupUsername">Attachment</label>
+                                                <label for="inlineFormInputGroupUsername">Attachment*</label>
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="">

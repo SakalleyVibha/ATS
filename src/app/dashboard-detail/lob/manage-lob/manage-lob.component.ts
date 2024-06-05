@@ -25,8 +25,8 @@ export class ManageLobComponent {
     this.acc_id.set(user_data?.account_id);
     this.addLobForm = this.fb.group({
       account_id: new FormControl(user_data?.account_id),
-      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(this.sql_validation())]),
-      about: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      about: new FormControl('', [Validators.required]),
       status: new FormControl(1),
     });
   }
@@ -75,7 +75,7 @@ export class ManageLobComponent {
           this.toastr.error("Something went wrong", "");
         }
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
     });
   }
@@ -89,14 +89,10 @@ export class ManageLobComponent {
     this.api.allPostMethod("lob/updateLob", this.addLobForm.value).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("LOB updated successfully", "");
-          this.router.navigate(['dashboard-detail/lob-detail']);
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("LOB updated successfully", "");
+        this.router.navigate(['dashboard-detail/lob-detail']);
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
     });
   }
@@ -106,19 +102,15 @@ export class ManageLobComponent {
     this.api.allPostMethod("lob/getLob", { id: id, account_id: this.acc_id() }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.addLobForm.addControl('id', new FormControl(res['data']?.id));
-          this.addLobForm.patchValue({
-            name: res['data']?.name,
-            about: res['data']?.about,
-            account_id: res['data']?.account_id,
-            status: res['data']?.status
-          });
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.addLobForm.addControl('id', new FormControl(res['data']?.id));
+        this.addLobForm.patchValue({
+          name: res['data']?.name,
+          about: res['data']?.about,
+          account_id: res['data']?.account_id,
+          status: res['data']?.status
+        });
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
     });
   }

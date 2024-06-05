@@ -59,6 +59,8 @@ export class TeamsComponent {
         } else {
           this.teamList.set([]);
         }
+      } else {
+        this.toastr.error(res['message'], "")
       }
     });
   }
@@ -66,11 +68,16 @@ export class TeamsComponent {
   deleteTeam(id: number) {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('team/deleteTeam', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
-      this.reqObj.pageNumber = 1;
-      this.getTeamList();
-      this.communicate.isLoaderLoad.next(false);
-      if (res.data && res.data > 0) {
-        this.toastr.success("Teams deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+      if (res['error'] != true) {
+        this.reqObj.pageNumber = 1;
+        this.getTeamList();
+        this.communicate.isLoaderLoad.next(false);
+        if (res.data && res.data > 0) {
+          this.toastr.success("Teams deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+        }
+
+      } else {
+        this.toastr.error(res['message'], "")
       }
     });
   }

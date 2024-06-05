@@ -17,7 +17,7 @@ export class LocationDetailComponent {
   reqObj: any;
   totalPages: number = 0;
 
-  searchByKey:FormControl = new FormControl('');
+  searchByKey: FormControl = new FormControl('');
 
 
 
@@ -38,15 +38,15 @@ export class LocationDetailComponent {
 
   ngOnInit() {
     this.searchByKey.valueChanges.pipe(
-     debounceTime(1000),
-     distinctUntilChanged()
-    ).subscribe(v =>{
-       if(v.length >= 3 || v == ''){
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe(v => {
+      if (v.length >= 3 || v == '') {
         this.location_list = [];
-         this.reqObj.pageNumber = 1;
-          this.reqObj['keyword'] = v;
-          this.getLocation();
-       }
+        this.reqObj.pageNumber = 1;
+        this.reqObj['keyword'] = v;
+        this.getLocation();
+      }
     })
     this.getLocation();
   }
@@ -57,7 +57,7 @@ export class LocationDetailComponent {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
         if (res['data'] && res['data'].length > 0) {
-          this.location_list = [...this.location_list,...res.data]
+          this.location_list = [...this.location_list, ...res.data]
           this.totalPages = res['totalPages'];
         }
       }
@@ -68,11 +68,16 @@ export class LocationDetailComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('locations/deletelocation', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      this.reqObj.pageNumber = 1;
-      this.location_list = [];
-      this.getLocation();
-      if (res.data && res.data > 0) {
-        this.toastr.success("Location deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+      if (res['error'] != true) {
+        this.reqObj.pageNumber = 1;
+        this.location_list = [];
+        this.getLocation();
+        if (res.data && res.data > 0) {
+          this.toastr.success("Location deleted successfully", "")
+        }
+
+      } else {
+        this.toastr.error("Location deleted successfully", "")
       }
     });
 
@@ -80,7 +85,7 @@ export class LocationDetailComponent {
 
 
   onScroll() {
-    if (this.reqObj.pageNumber < this.totalPages ) {
+    if (this.reqObj.pageNumber < this.totalPages) {
       this.reqObj.pageNumber += 1;
       this.getLocation();
     }
