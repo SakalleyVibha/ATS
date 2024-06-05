@@ -24,7 +24,9 @@ const routes: Routes = [{
     { path: 'work-authorization', loadChildren: () => import('./work-authorization/work-authorization.module').then(m => m.WorkAuthorizationModule) },
     { path: 'recruits-type', loadChildren: () => import('./recruits-type/recruits-type.module').then(m => m.RecruitsTypeModule) },
     { path: 'employment-type', loadChildren: () => import('./employment-type-form/employment-type-form.module').then(m => m.EmploymentTypeFormModule) },
-    { path: 'custom-field', loadChildren: () => import('./custom-field-form/custom-field-form.module').then(m => m.CustomFieldFormModule) }
+    { path: 'custom-field', loadChildren: () => import('./custom-field-form/custom-field-form.module').then(m => m.CustomFieldFormModule) },
+    { path: 'role', loadChildren: () => import('./role/role.module').then(m => m.RoleModule) },
+    { path: 'role-permission', loadChildren: () => import('./role-permission/role-permission.module').then(m => m.RolePermissionModule) },
   ]
 },
 ];

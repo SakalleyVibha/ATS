@@ -13,7 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './manage-user.component.css'
 })
 export class ManageUserComponent {
-  @ViewChild('imageModal') content: any;  
+  @ViewChild('imageModal') content: any;
   userForm!: FormGroup;
   isFormValid = signal(false);
   user_roles: any = [];
@@ -28,7 +28,7 @@ export class ManageUserComponent {
   number_validation = signal(environment.Phone_Mobile_valid);
   imgURLBase64 = signal<ArrayBuffer | any>('');
   modalRef: any;
-  selectedFileName : string = '';
+  selectedFileName: string = '';
 
   constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -94,7 +94,7 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allgetMethod("role/roles", {}).subscribe((roles: any) => {
+    this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }).subscribe((roles: any) => {
       if (roles.data?.length > 0) {
         this.user_roles = roles.data;
       }
@@ -248,12 +248,12 @@ export class ManageUserComponent {
     }
   }
 
-  viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm', backdrop: 'static', keyboard: false});  // Open the modal with template reference
+  viewImagePopup() {
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
-  
+
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal

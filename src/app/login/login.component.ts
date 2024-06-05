@@ -79,12 +79,12 @@ export class LoginComponent {
   }
 
   getAllRoles() {
-    this.api.allgetMethod('role/roles', {}).subscribe((res: any) => {
-      if (!res['error']) {
-        this.allRoles = res['data'];
-        localStorage.setItem("role_list", JSON.stringify(this.allRoles));
-      }
-    });
+    // this.api.allgetMethod('role/roles', {}).subscribe((res: any) => {
+    //   if (!res['error']) {
+    //     this.allRoles = res['data'];
+    //     localStorage.setItem("role_list", JSON.stringify(this.allRoles));
+    //   }
+    // });
   }
 
 }
