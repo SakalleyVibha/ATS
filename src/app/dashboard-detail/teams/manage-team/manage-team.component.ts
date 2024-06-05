@@ -14,8 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './manage-team.component.css'
 })
 export class ManageTeamComponent {
-  @ViewChild('imageModal') content: any;  
-  
+  @ViewChild('imageModal') content: any;
+
   imgURLBase64 = signal<ArrayBuffer | any>('');
   teamForm: FormGroup;
   assignUserForm!: FormGroup;
@@ -221,10 +221,11 @@ export class ManageTeamComponent {
   }
 
   getAllRoles() {
-    let get_roles = localStorage.getItem('role_list');
-    if (get_roles) {
-      this.role_list.set(JSON.parse(get_roles));
-    }
+    //  need to call api for getting role please see example at add user section
+    // let get_roles = localStorage.getItem('role_list');
+    // if (get_roles) {
+    //   this.role_list.set(JSON.parse(get_roles));
+    // }
   }
 
   onScroll() {
@@ -295,12 +296,12 @@ export class ManageTeamComponent {
     this.assignUserForm.value.userList.splice(idx, 1);
   }
 
-  viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm', backdrop: 'static', keyboard: false});  // Open the modal with template reference
+  viewImagePopup() {
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
-  
+
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal
