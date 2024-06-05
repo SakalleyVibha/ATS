@@ -1,9 +1,10 @@
 <div class="location-sec-bdy">
     <div class="row">
         <div class="col-xl-12">
-            <div class="loc-heading clb">
+            <div class="loc-heading clb"
+                *ngIf="(this.resCandidate() == undefined && this.determineSubmission().path == 'edit') || this.determineSubmission().path == 'add'">
                 <h3>{{this.determineSubmission().path |titlecase}} Candidate </h3>
-                <div class="on-off-bdy">
+                <!-- <div class="on-off-bdy">
                     <div class="inactact-pop-bdy">
                         <label class="form-check-label inactive-txt">inactive</label>
                         <div class="form-check form-switch">
@@ -11,7 +12,7 @@
                             <label class="form-check-label active-txt">Active</label>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -153,7 +154,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-xl-4 btn-view-wrap">
-                                    @if(imgURLBase64()){
+                                    @if(this.addCandidateForm.value.profile_image != ''){
                                     <button class="btn btn-view" (click)="viewImagePopup()">view</button>
                                     }
                                     <ng-template #imageModal let-modal="modal">
@@ -165,7 +166,9 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
+                                            <img [src]="(this.imgURLBase64() != '') ?this.imgURLBase64(): this.addCandidateForm.value.profile_image"
+                                                *ngIf="this.imgURLBase64() || (this.addCandidateForm.value.profile_image != '')"
+                                                alt="Selected Image">
                                             <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
                                         </div>
                                     </ng-template>
@@ -587,6 +590,46 @@
                             </div>
                         </div>
                         <ng-container formArrayName="documents">
+                            <ng-container *ngFor="let data of this.getCandidateData().candidate_documents">
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Name*</label>
+                                                <p>{{data?.name}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Document*</label>
+                                                <a class="btn btn-theme" [attr.href]="data?.document"
+                                                    target="_blank">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                    <!-- <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername"></label>
+                                                <div class="form-group">
+                                                    <a (click)="removeDocument(i)">
+                                                        <img src="assets/images/trash-2.svg"
+                                                            class="img-fluid unselected-icon">
+                                                        <img src="assets/images/trash-2white.svg"
+                                                            class="img-fluid selected-white-icon">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </ng-container>
                             <ng-container [formGroupName]="i" *ngFor="let doc of documents.controls;let i=index">
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
@@ -621,7 +664,7 @@
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="file-upload-wrapper upload-candid-profile"
-                                                            [attr.data-text]="selectedResumeName ? selectedResumeName :'Select your file!'">
+                                                            [attr.data-text]="doc.value.fileName ? doc.value.fileName :'Select your file!'">
                                                             <input name="file-upload-field" type="file"
                                                                 (change)="onFileChangePDF($event, i)"
                                                                 formControlName="doc" accept=".doc, .docx, .pdf"
