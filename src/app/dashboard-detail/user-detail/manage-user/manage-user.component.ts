@@ -39,9 +39,9 @@ export class ManageUserComponent {
       location: 0
     }
     this.userForm = this.formBuild.group({
-      f_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
-      l_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
-      alias: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      f_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      l_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      alias: new FormControl('', [Validators.required]),
       dob: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       website: new FormControl('', [Validators.required, Validators.pattern(this.website_validate())]),
@@ -49,10 +49,10 @@ export class ManageUserComponent {
       mobile: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       fax: new FormControl('', [Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
       profile_img: ['', [Validators.required]],
-      street: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      city: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      country: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      state: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      street: new FormControl('', [Validators.required]),
+      city: new FormControl('', [Validators.required]),
+      country: new FormControl('', [Validators.required]),
+      state: new FormControl('', [Validators.required]),
       zip: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]),
       role_id: new FormControl('', [Validators.required]),
       account_id: new FormControl(user_data.account_id),
@@ -100,12 +100,12 @@ export class ManageUserComponent {
       }
     });
     this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
+      if (res.data?.length > 0) {
         this.user_location = res.data;
       }
     });
     this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
+      if (res.data?.length > 0) {
         this.client_list = res.data;
       }
     })
@@ -128,17 +128,14 @@ export class ManageUserComponent {
     });
     let payload = { ...this.userForm.value, dob: date, profile_img: this.imgURLBase64() }
     this.api.allPostMethod("users/addUser", payload).subscribe((response: any) => {
-      if (response.error == false) {
+      this.communicate.isLoaderLoad.next(false);
+      if (response['error'] != true) {
         this.userForm.reset();
-        this.toastr.success("User added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.communicate.isDetailSideShow.next(true);
-          this.router.navigate(['/dashboard-detail/user-detail']);
-        });
+        this.toastr.success("User added succesfully", "")
+        this.communicate.isDetailSideShow.next(true);
+        this.router.navigate(['/dashboard-detail/user-detail']);
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(response['message'], "");
       }
     })
   }
@@ -152,32 +149,36 @@ export class ManageUserComponent {
         }
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("users/getUser", data).subscribe((editData: any) => {
-          let editableData = editData['data'];
-          this.userForm.patchValue({
-            f_name: editableData?.f_name,
-            l_name: editableData?.l_name,
-            alias: editableData?.alias,
-            dob: editableData?.dob,
-            email: editableData?.email,
-            website: editableData?.website,
-            phone: editableData?.phone,
-            mobile: editableData?.mobile,
-            fax: editableData?.fax,
-            street: editableData?.street,
-            state: editableData?.state,
-            zip: editableData?.zip,
-            city: editableData?.city,
-            country: editableData?.country,
-          });
-          this.isActive = editableData?.status;
-          this.imgURLBase64.set(editableData?.profile_img);
-          this.userForm.controls['profile_img'].clearValidators();
-          this.userForm.controls['profile_img'].updateValueAndValidity();
-          this.userForm.addControl("id", new FormControl(editableData?.id));
-          this.userForm.removeControl('role_id');
-          this.userForm.removeControl('client_id');
-          this.userForm.removeControl('location_id');
           this.communicate.isLoaderLoad.next(false);
+          if (editData['error'] != true) {
+            let editableData = editData['data'];
+            this.userForm.patchValue({
+              f_name: editableData?.f_name,
+              l_name: editableData?.l_name,
+              alias: editableData?.alias,
+              dob: editableData?.dob,
+              email: editableData?.email,
+              website: editableData?.website,
+              phone: editableData?.phone,
+              mobile: editableData?.mobile,
+              fax: editableData?.fax,
+              street: editableData?.street,
+              state: editableData?.state,
+              zip: editableData?.zip,
+              city: editableData?.city,
+              country: editableData?.country,
+            });
+            this.isActive = editableData?.status;
+            this.imgURLBase64.set(editableData?.profile_img);
+            this.userForm.controls['profile_img'].clearValidators();
+            this.userForm.controls['profile_img'].updateValueAndValidity();
+            this.userForm.addControl("id", new FormControl(editableData?.id));
+            this.userForm.removeControl('role_id');
+            this.userForm.removeControl('client_id');
+            this.userForm.removeControl('location_id');
+          } else {
+
+          }
         })
         this.editUser = true;
       }
@@ -195,16 +196,13 @@ export class ManageUserComponent {
     // this.userForm.value = {...this.userForm.value, id : }
     let payload = { ...this.userForm.value, profile_img: (isBase64 ? this.imgURLBase64() : false) };
     this.api.allPostMethod("users/updateUserProfile", payload).subscribe((res: any) => {
-      console.log("After User update : ", res);
-      if (res && res?.error == false) {
-        this.toastr.success("User profile update successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/dashboard-detail/user-detail']);
-        });
+
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("User profile update successfully", "")
+        this.router.navigate(['/dashboard-detail/user-detail']);
       } else {
-        this.toastr.error("Something went wrong. Try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe((res: any) => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(res['message'], "");
       }
     })
   }

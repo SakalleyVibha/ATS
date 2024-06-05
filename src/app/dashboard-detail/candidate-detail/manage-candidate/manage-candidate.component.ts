@@ -45,6 +45,7 @@ export class ManageCandidateComponent {
   selectedAttachmentName: string = '';
   selectedResumeName: string = '';
   getCandidateData = signal<any>([]);
+  number_validation = signal(environment.Phone_Mobile_valid);
   constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
 
 
@@ -89,7 +90,7 @@ export class ManageCandidateComponent {
       relevant_experience: new FormControl('4', [Validators.required]),
       email: new FormControl('Developer@gmail.com', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
-      contact: new FormControl('9876543211111', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
+      contact: new FormControl('9876543211111', [Validators.required, Validators.pattern(this.number_validation())]),
       alternate_contact: new FormControl(''),
       city: new FormControl('Indore', [Validators.required]),
       state: new FormControl('MP', [Validators.required]),

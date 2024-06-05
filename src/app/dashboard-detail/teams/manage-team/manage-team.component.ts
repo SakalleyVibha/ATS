@@ -39,7 +39,7 @@ export class ManageTeamComponent {
     this.teamForm = this.formbuild.group({
       account_id: new FormControl(user_data?.account_id),
       name: new FormControl('', [Validators.required]),
-      about: new FormControl('', [Validators.required, Validators.maxLength(150), Validators.pattern(this.sql_validation())]),
+      about: new FormControl('', [Validators.required, Validators.maxLength(150)]),
       logo: new FormControl('', [Validators.required]),
       status: new FormControl('')
     });
@@ -78,15 +78,11 @@ export class ManageTeamComponent {
       let token = { ...this.teamForm.value, logo: this.imgURLBase64(), status: Number(this.isActive()) };
       this.api.allPostMethod("team/addTeam", token).subscribe((res: any) => {
         if (res['error'] != true) {
-          if (res['data']) {
-            this.team_id.set(res['data'].id);
-            this.toastr.success("Team created successfully", "")
-          } else {
-            this.toastr.error("Something went wrong", "");
-          }
+          this.team_id.set(res['data']?.id);
+          this.toastr.success("Team created successfully", "")
           resolve(true);
         } else {
-          this.toastr.error("Something went wrong", "");
+          this.toastr.error(res['message'], "");
           resolve(false);
         }
       });
@@ -108,15 +104,11 @@ export class ManageTeamComponent {
       payload = { ...this.teamForm.value, logo: (isBase64 ? this.imgURLBase64() : false), status: Number(this.isActive()) };
       this.api.allPostMethod("team/updateTeam", payload).subscribe((res: any) => {
         if (res['error'] != true) {
-          if (res.data.length > 0) {
-            this.team_id.set(this.teamForm.value.id);
-            this.toastr.success("Team updated successfully", "")
-          } else {
-            this.toastr.error("Something went wrong", "");
-          }
+          this.team_id.set(this.teamForm.value?.id);
+          this.toastr.success("Team updated successfully", "")
           resolve(true);
         } else {
-          this.toastr.error("Something went wrong", "");
+          this.toastr.error(res['message'], "");
           resolve(false);
         }
       });
@@ -167,9 +159,9 @@ export class ManageTeamComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("users/getUserList", this.userReqObj()).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (response['error'] == false) {
-        response['data'] = response['data'].filter((data: any) => data.is_owner != true)
+      if (response['error'] != true) {
         if ((response['data'] && response['data'].length > 0)) {
+          response['data'] = response['data'].filter((data: any) => data.is_owner != true)
           if (this.userReqObj().pageNumber == 1) {
             this.user_list.set(response['data']);
           } else {
@@ -180,6 +172,8 @@ export class ManageTeamComponent {
         } else {
           this.user_list.set([]);
         }
+      } else {
+        this.toastr.error(response['message'], "");
       }
     })
   }
@@ -212,7 +206,7 @@ export class ManageTeamComponent {
     this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (response['error'] == true) {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(response['message'], "");
       } else {
         this.toastr.success("User assigned successfully.", "");
         this.router.navigate(['dashboard-detail/team']);

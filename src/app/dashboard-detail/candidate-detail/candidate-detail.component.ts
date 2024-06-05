@@ -46,7 +46,7 @@ export class CandidateDetailComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('candidates/candidateList', this.reqObj).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (!res['error']) {
+      if (res['error'] != true) {
         if ((res['data'] && res['data'].length > 0)) {
           if (this.reqObj.pageNumber == 1) {
             this.candidateList.set(res['data']);
@@ -65,11 +65,15 @@ export class CandidateDetailComponent {
   deleteCandidate(id: number) {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('team/deleteclient', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
-      this.reqObj.pageNumber = 1;
-      this.getCandidateList();
       this.communicate.isLoaderLoad.next(false);
-      if (res.data && res.data > 0) {
-        this.toastr.success("Candidate deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+      if (res['error'] != true) {
+        this.reqObj.pageNumber = 1;
+        this.getCandidateList();
+        if (res.data && res.data > 0) {
+          this.toastr.success("Candidate deleted successfully", "")
+        }
+      } else {
+        this.toastr.error(res['message'], "")
       }
     });
   }
