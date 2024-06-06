@@ -341,7 +341,7 @@ export class ManageCandidateComponent {
           this.toastr.error("Something went wrong", "");
         }
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res.message || res.error, "");
       }
     });
   }
@@ -645,7 +645,7 @@ export class ManageCandidateComponent {
           this.toastr.error("Something went wrong", "");
         }
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res.message || res.error, "");
       }
 
     })
@@ -677,7 +677,7 @@ export class ManageCandidateComponent {
           this.toastr.error("Something went wrong", "");
         }
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res.message || res.error, "");
       }
 
     })

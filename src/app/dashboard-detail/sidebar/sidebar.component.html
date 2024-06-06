@@ -59,16 +59,19 @@
               </a>
             </div>
           </li>
-          <li>
-            <div class="dropdown btn-group">
-              <a routerLink="candidate-detail"
-                ><img
-                  src="assets/images/side-icon/client.svg"
-                  class="img-side-icon"
-                />Candidate
-              </a>
-            </div>
-          </li>
+          @if(permission.candidate){
+            <li>
+              <div class="dropdown btn-group">
+                <a routerLink="candidate-detail"
+                  ><img
+                    src="assets/images/side-icon/client.svg"
+                    class="img-side-icon"
+                  />Candidate
+                </a>
+              </div>
+            </li>
+          }
+          
           <!-- <li>
                             <div class="dropdown btn-group">
                                 <a routerLink="job"><img src="assets/images/side-icon/job.svg" class="img-side-icon">Job </a>

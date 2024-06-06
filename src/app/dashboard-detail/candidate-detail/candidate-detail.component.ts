@@ -32,9 +32,11 @@ export class CandidateDetailComponent {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
     if(!user_data.is_owner){
-      this.permissions.canAdd = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Add_Candidate): false;
-      this.permissions.canEdit = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Edit_Candidate): false;
-      this.permissions.canDelete = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Delete_Candidate): false;
+      let permissiontoken = localStorage.getItem('permissiontoken');
+      permissiontoken = this.communicate.decryptText(permissiontoken);
+      this.permissions.canAdd = permissiontoken? permissiontoken.includes(PERMISSIONS.Add_Candidate): false;
+      this.permissions.canEdit = permissiontoken? permissiontoken.includes(PERMISSIONS.Edit_Candidate): false;
+      this.permissions.canDelete = permissiontoken? permissiontoken.includes(PERMISSIONS.Delete_Candidate): false;
     }
     this.reqObj = {
       account_id: user_data?.account_id,
@@ -75,6 +77,7 @@ export class CandidateDetailComponent {
   }
 
   deleteCandidate(id: number) {
+    return
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('team/deleteclient', { id: id, account_id: this.reqObj.account_id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
