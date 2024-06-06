@@ -49,6 +49,7 @@ export class LoginComponent {
         }
 
         localStorage.setItem('token', res.data['token']);
+        localStorage.setItem('permissiontoken', res.data['permissions']);
         localStorage.setItem('Shared_Data', JSON.stringify({
           is_email_valid: res.data['is_email_verified'],
           temp_pass: res.data['is_tempPassword'],
@@ -56,7 +57,6 @@ export class LoginComponent {
           is_owner: res.data['is_owner'],
           email_add: res['data']?.email,
           account_id: res['data']?.account_id,
-          permissions: res['data']?.permissions
         }));
         this.toast.success("Login successfully", "Valid user");
         this.login.reset();

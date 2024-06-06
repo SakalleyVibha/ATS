@@ -3,6 +3,7 @@ import { CommonApiService } from '../../core/services/common-api.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommunicateService } from '../../core/services/communicate.service';
+import { PERMISSIONS } from '../../core/Constants/permissions.constant';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +15,9 @@ export class SidebarComponent {
   user_list: any;
   location_list: any;
   isDetailSide:boolean = true;
+  permission = {
+    candidate: true
+  }
 
   constructor(private api: CommonApiService, private router: Router,private communicate: CommunicateService) {
     this.communicate.isDetailSideShow.subscribe(res =>{
@@ -22,6 +26,9 @@ export class SidebarComponent {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
     let isSkip:any = localStorage.getItem('isDashboardDetail');
+    if(!user_data.is_owner){
+      this.checkPermission();
+    }
     if(!JSON.parse(isSkip)){
       this.getUserandLocation(user_data?.account_id);
     }
@@ -63,6 +70,10 @@ export class SidebarComponent {
     localStorage.setItem('isDashboardDetail',JSON.stringify(true));
     this.router.navigate(['dashboard-detail']);
   }
-  
+  checkPermission(){
+      let permissiontoken = localStorage.getItem('permissiontoken');
+      permissiontoken = this.communicate.decryptText(permissiontoken);
+      this.permission['candidate'] = permissiontoken? permissiontoken.includes(PERMISSIONS.View_Candidate): false;
+  }
 
 }

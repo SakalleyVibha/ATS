@@ -59,7 +59,8 @@
                                     </a>
 
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" routerLink="edit" [queryParams]="{id:cand?.id}"
+                                        @if(permissions.canEdit){
+                                            <li><a class="dropdown-item" routerLink="edit" [queryParams]="{id:cand?.id}"
                                                 href="javascript:void(0)">Edit Candidate</a></li>
                                         <li><a class="dropdown-item" routerLink="edit"
                                                 [queryParams]="{id:cand?.id, section : 'edit-emp'}"
@@ -77,8 +78,12 @@
                                                 [queryParams]="{id:cand?.id, section : 'edit-doc'}"
                                                 href="javascript:void(0)">
                                                 Resume</a></li>
-                                        <li><a class="dropdown-item" (click)="deleteCandidate(cand?.id)"
-                                                href="javascript:void(0)">Delete</a></li>
+                                        }
+                                        @if(permissions.canDelete){
+                                            <li><a class="dropdown-item" (click)="deleteCandidate(cand?.id)"
+                                                    href="javascript:void(0)">Delete</a></li>
+                                        }
+                                       
                                     </ul>
                                 </div>
 
