@@ -15,10 +15,13 @@
                         [(ngModel)]="searchString" (ngModelChange)="this.searchValue.next($event)" aria-label="Search">
                 </div>
             </div>
-            <div class="col-lg-6 col-sm-12 text-end">
-                <a routerLink="add" class="btn btn-create ">
-                    <i class="fa-solid fa fa-plus"></i> Add Candidate </a>
-            </div>
+            @if(permissions.canAdd){
+                <div class="col-lg-6 col-sm-12 text-end">
+                    <a routerLink="add" class="btn btn-create ">
+                        <i class="fa-solid fa fa-plus"></i> Add Candidate </a>
+                </div>
+            }
+            
         </div>
     </div>
     <div class="table-wrapper">
