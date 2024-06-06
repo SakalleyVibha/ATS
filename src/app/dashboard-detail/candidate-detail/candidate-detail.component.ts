@@ -4,6 +4,8 @@ import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
 import { ToastrService } from 'ngx-toastr';
+import { PERMISSIONS } from '../../core/Constants/permissions.constant';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -17,13 +19,23 @@ export class CandidateDetailComponent {
   totalPages: number = 0;
   searchByKey: FormControl = new FormControl('');
   searchValue = new Subject<Event>();
-  searchString: string = ''
+  searchString: string = '';
+  permissions = {
+    canAdd: true,
+    canEdit: true,
+    canDelete: true
+  }
 
-  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
+  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService,private location: Location) {
     this.current_role.set(localStorage.getItem('role'));
     this.current_role.set(JSON.parse(this.current_role()));
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
+    if(!user_data.is_owner){
+      this.permissions.canAdd = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Add_Candidate): false;
+      this.permissions.canEdit = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Edit_Candidate): false;
+      this.permissions.canDelete = user_data.permissions? user_data.permissions.includes(PERMISSIONS.Delete_Candidate): false;
+    }
     this.reqObj = {
       account_id: user_data?.account_id,
       pageNumber: 1,

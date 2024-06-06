@@ -58,7 +58,8 @@ export class LoginComponent {
           user_id: res.data['id'],
           is_owner: res.data['is_owner'],
           email_add: res['data']?.email,
-          account_id: res['data']?.account_id
+          account_id: res['data']?.account_id,
+          permissions: res['data']?.permissions
         }));
         this.toast.success("Login successfully", "Valid user", { timeOut: 500, closeButton: true }).onHidden.subscribe(() => {
           this.login.reset();

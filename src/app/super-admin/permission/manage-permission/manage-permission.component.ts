@@ -52,6 +52,7 @@ export class ManagePermissionComponent {
   get formData(){ return this.permissionForm.controls }
   valueChanges(){
     this.permissionForm.get('module_id')?.valueChanges.subscribe(value =>{
+      this.permissionForm.get('section_id')?.setValue('')
       this.getSectionList(Number(value));
     })
   }
