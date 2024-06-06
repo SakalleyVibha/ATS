@@ -68,6 +68,7 @@ export class ManageTeamComponent {
 
   onFormSubmit() {
     return new Promise((resolve, reject) => {
+      this.teamForm.value.logo = this.imgURLBase64();
       if (this.teamForm.invalid) {
         this.isFieldsValid.set(true);
         this.toastr.error("Kindly complete form.", "");
@@ -75,7 +76,7 @@ export class ManageTeamComponent {
         return;
       }
 
-      let token = { ...this.teamForm.value, logo: this.imgURLBase64(), status: Number(this.isActive()) };
+      let token = { ...this.teamForm.value, status: Number(this.isActive()) };
       this.api.allPostMethod("team/addTeam", token).subscribe((res: any) => {
         if (res['error'] != true) {
           this.team_id.set(res['data']?.id);

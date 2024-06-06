@@ -23,12 +23,13 @@
                             <form [formGroup]="organizationForm">
                                 <div class="row">
                                     <div class="col-12 col-lg-6 col-md-12">
-                                        <div class="col-12 col-lg-4 col-md-6 col-xl-10" >
+                                        <div class="col-12 col-lg-4 col-md-6 col-xl-10">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Organization Name*</label>
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="autoSizingInput" [ngClass]="forEdit() ? 'disabledImgSelect':''" placeholder="Enter organization name"
-                                                        formControlName="name">
+                                                    <input type="text" class="form-control" id="autoSizingInput"
+                                                        [ngClass]="forEdit() ? 'disabledImgSelect':''"
+                                                        placeholder="Enter organization name" formControlName="name">
                                                     <div *ngIf="(formData['name']?.invalid && (formData['name'].touched || formData['name'].dirty || isFieldsValid()))"
                                                         class="required-txt-error">
                                                         <ng-container *ngIf="formData['name'].errors?.['required']">
@@ -66,16 +67,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-3 col-md-6" [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
+                                    <div class="col-12 col-lg-3 col-md-6"
+                                        [ngClass]="imgURLBase64() ? 'disabledImgSelect':''">
                                         <div class="col-12 col-lg-12 col-md-12 col-xl-12">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Logo</label>
                                                 <div class="form-group">
                                                     <div class="form">
-                                                        <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)">
+                                                        <div class="dropzone" fileDragDrop
+                                                            (filesChangeEmiter)="onFileChange($event)">
                                                             <div class="text-wrapper">
                                                                 <div class="centered">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="35" fill="currentColor"
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="50"
+                                                                        height="35" fill="currentColor"
                                                                         class="bi bi-upload" viewBox="0 0 16 16"
                                                                         style="color: #559AFF;margin-bottom: 6px;">
                                                                         <path
@@ -85,8 +89,12 @@
                                                                     </svg>
                                                                 </div>
                                                                 <div class="centered">
-                                                                    <input type="file" name="file" id="file" (change)="onFileChange($event)" formControlName="logo">
-                                                                    <label for="file" class="dropFile"><span class="textLink">Browser</span></label>
+                                                                    <input type="file" name="file" id="file"
+                                                                        (change)="onFileChange($event)"
+                                                                        formControlName="logo"
+                                                                        accept=".png, .jpg, .jpeg">
+                                                                    <label for="file" class="dropFile"><span
+                                                                            class="textLink">Browser</span></label>
                                                                 </div>
                                                                 <div class="centered">
                                                                     <span class="dropFile">drop a file here</span>
@@ -94,10 +102,10 @@
                                                             </div>
                                                         </div>
                                                         <div *ngIf="(formData['logo']?.invalid && (formData['logo'].touched || formData['logo'].dirty || isFieldsValid()))"
-                                                        class="required-txt-error">
-                                                        <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                            Organization logo required 
-                                                        </ng-container>
+                                                            class="required-txt-error">
+                                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                                                Organization logo required
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,7 +118,8 @@
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Selected Logo</label>
                                                 <div class="logo_edit">
-                                                    <button class="btn btn-danger btn-design" (click)="CrossBtn()">X</button>
+                                                    <button class="btn btn-danger btn-design"
+                                                        (click)="CrossBtn()">X</button>
                                                     <img src="{{imgURLBase64()}}" class="file-preview" alt="">
                                                 </div>
                                             </div>

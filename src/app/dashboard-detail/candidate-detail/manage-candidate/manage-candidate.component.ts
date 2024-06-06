@@ -46,6 +46,7 @@ export class ManageCandidateComponent {
   selectedResumeName: string = '';
   getCandidateData = signal<any>([]);
   number_validation = signal(environment.Phone_Mobile_valid);
+  date: any;
   constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
 
 
@@ -59,6 +60,9 @@ export class ManageCandidateComponent {
   }
 
   ngOnInit() {
+
+    this.date = new Date;
+
     this.activeRoute.url
       .pipe(
         combineLatestWith(this.activeRoute.queryParams),
@@ -88,7 +92,7 @@ export class ManageCandidateComponent {
       position: new FormControl('Developer', [Validators.required, Validators.minLength(3)]),
       total_experience: new FormControl('4', [Validators.required]),
       relevant_experience: new FormControl('4', [Validators.required]),
-      email: new FormControl('Developer@gmail.com', [Validators.required, Validators.email]),
+      email: new FormControl('DeveloperTesting001@gmail.com', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
       contact: new FormControl('9876543211111', [Validators.required, Validators.pattern(this.number_validation())]),
       alternate_contact: new FormControl(''),
@@ -97,7 +101,7 @@ export class ManageCandidateComponent {
       mode_of_hire: new FormControl('C2H', [Validators.required]),
       visa_status: new FormControl('PR', [Validators.required]),
       salary_type: new FormControl('Monthly', [Validators.required]),
-      salary: new FormControl('300', [Validators.required]),
+      salary: new FormControl('300', [Validators.required, Validators.pattern(/^[0-9]+$/)]),
       employer_name: new FormControl('ABC', [Validators.required]),
       visa_validity: new FormControl('30/4/2022', [Validators.required]),
       dob: new FormControl('13/12/2223', [Validators.required]),
@@ -135,9 +139,9 @@ export class ManageCandidateComponent {
   addSkills() {
     this.employment_history.push(
       this.fb.group({
-        company_name: new FormControl('', [Validators.required]),
-        from_date: new FormControl('', [Validators.required]),
-        to_date: new FormControl('', [Validators.required])
+        company_name: new FormControl('Delloite', [Validators.required]),
+        from_date: new FormControl('10/05/2022', [Validators.required]),
+        to_date: new FormControl('05/07/2022', [Validators.required])
       })
     );
   }
@@ -145,9 +149,9 @@ export class ManageCandidateComponent {
   addEducation() {
     this.education_detail.push(
       this.fb.group({
-        qualification: new FormControl('', [Validators.required]),
-        course: new FormControl('', [Validators.required]),
-        university: new FormControl('', [Validators.required])
+        qualification: new FormControl('MS', [Validators.required]),
+        course: new FormControl('Physics', [Validators.required]),
+        university: new FormControl('MIT', [Validators.required])
       })
     );
   }
@@ -155,8 +159,8 @@ export class ManageCandidateComponent {
   addCert() {
     this.certificates.push(
       this.fb.group({
-        name: new FormControl('', [Validators.required]),
-        validity: new FormControl('', [Validators.required]),
+        name: new FormControl('Satellite Making', [Validators.required]),
+        validity: new FormControl('20/03/2021', [Validators.required]),
         attachment: new FormControl('', [Validators.required])
       })
     );
@@ -179,7 +183,7 @@ export class ManageCandidateComponent {
       if (control.value.id == '' || control.value.id == null) {
         this.employment_history.removeAt(i);
       } else {
-        control.addControl('delete', new FormControl(1));
+        control.addControl('deleted', new FormControl(1));
         control.get('company_name')?.clearValidators();
         control.get('from_date')?.clearValidators();
         control.get('to_date')?.clearValidators();
@@ -202,7 +206,7 @@ export class ManageCandidateComponent {
       if (control.value.id == '' || control.value.id == null) {
         this.education_detail.removeAt(i);
       } else {
-        control.addControl('delete', new FormControl(1));
+        control.addControl('deleted', new FormControl(1));
         control.get('qualification')?.clearValidators();
         control.get('university')?.clearValidators();
         control.get('course')?.clearValidators();

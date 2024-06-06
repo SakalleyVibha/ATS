@@ -193,9 +193,9 @@
                             </div>
                             <div class="table-wrapper">
                                 <div class="col-xl-11 d-flex table-wrapper-user">
-                                    <div class="table-responsive col-xl-6 p-2 table-matching" id="targetDiv" infiniteScroll
-                                        [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-                                        (scrolled)="onScroll()">
+                                    <div class="table-responsive col-xl-6 p-2 table-matching" id="targetDiv"
+                                        [scrollWindow]="false" infiniteScroll [infiniteScrollDistance]="1"
+                                        [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
                                         <label for="inlineFormInputGroupUsername">User List</label>
                                         <table class="table table-tamplate-style table-user">
                                             <thead>
