@@ -4,19 +4,23 @@
             <div class="profile-nav col-md-3">
                 <div class="panel">
                     <div class="user-heading round">
-                        <a href="#">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                        <a>
+                            <img alt="" style="border-radius: 50%;"
+                                placeholder="data:image/webp;base64,UklGRp4EAABXRUJQVlA4WAoAAAAgAAAA4AAA4AAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggsAIAANAiAJ0BKuEA4QA/OZzKXK8qqSSjUWkR4CcJZ27hc0DbG1t3VAnDOGiFvk1qLsKJZUhduJczO6rmIkEjTCrWThAWsueSyrdi+SJACtSh0GbGOUj1BVQYf+tnV2Gbnp/enfUad32m4QqfuLPeYXemFeBBQi9/ui+vl/IVJDD1V7/q4OZxU8KzLle/kLJKj2NlxVdgor9acuszKSrzHrIZaLCTXDIRc5fuRWxZH2sLnVRYaEz7xdDR4DkWnit4AwjU8B2HZ/i66ZlH0sRQCxsUaozdQciU0nH3BpdDsZ67D5Hvf7v1oJzSqcsTrsTdd46SSRyaSRJZXu8NYIkGufzpTYTvZe9EDRoZSAALORgCJe9Oo3zIzSg1WUnDQtvqauAAAP78SZ+V0iyOWCQfGtFcihejiTXDWiQmEaai0HBpJ1vDZYyNzuebCf7iYQ0yq71dIaWeqf6bCx/e8StKi3y3dXVZI5q2qFXBxjIEfB4cs/ixUL52AxgcWEQArTfVRb+XQYC9ehf1DElwf5Mp75ygj4AqUrqnT+J5AL533o0LvYe+lyJWc4fQcbcG35WptdKuLgKYhIUIbWr/JL6t7GxIzKpjp3jJJ91sDYThdxxXg1uKHVrWTB7DgLvjAz3EPwewsMUu1QPh/m5DkiJmYP4EJIbc0SmBFCPQ4QmNLMmNtm6208zJO6M4hOkN5MBqfJJseJzioI0dc1lF4LyQYYdu8jTCM5t74hGf9hL+4vAAc3dsb28DZbqnNxhkQcYqB0xIHw2Pdq7IGEpDU/XhX7SusKhGhcnKQiUrw5AAAL91SjddPD8IILXRl0kc4Lzz0cg5krkolMi/CNNdkSlRGUaimqOAvERvWDAcHjKwqM+E7IcZrSxtGcU68GcUnm9PhyknQ9QUmXCAAAAAAAXNmCkAAAA="
+                                [ngSrc]="this.userData().profile_img ?? 'assets/images/avatar-3814049_1280.png'"
+                                height="50" width="50" priority>
                         </a>
-                        <h1>Camila Smith</h1>
-                        <p>deydey&#64;theEmail.com</p>
+                        <h1> {{(this.userData()?.f_name || this.userData()?.l_name) ? (this.userData()?.f_name +" "+
+                            this.userData()?.l_name) : 'N/A'}}</h1>
+                        <p>{{this.userData()?.email ?? 'N/Add'}} </p>
                     </div>
 
-                    <ul class="nav nav-pills nav-stacked">
+                    <!-- <ul class="nav nav-pills nav-stacked">
                         <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
                         <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span
                                     class="label label-warning pull-right r-activity">9</span></a></li>
                         <li><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
             </div>
             <div class="profile-info col-md-9">
@@ -25,34 +29,40 @@
                         <h1>User Detail</h1>
                         <div class="row">
                             <div class="bio-row">
-                                <p><span>First Name </span>: Camila</p>
+                                <p><span>First Name </span>: {{this.userData()?.f_name ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Last Name </span>: Smith</p>
+                                <p><span>Last Name </span>: {{this.userData()?.l_name ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Country </span>: Australia</p>
+                                <p><span>Country </span>: {{this.userData()?.country ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Birthday</span>: 13 July 1983</p>
+                                <p><span>Birthday</span>: {{this.userData()?.dob ? (this.userData()?.dob | date :
+                                    'mediumDate') : 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Occupation </span>: UI Designer</p>
+                                <p><span>Website </span>: {{this.userData()?.website ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Email </span>: jsmith&#64;flatlab.com</p>
+                                <p><span>Email </span>: {{this.userData()?.email ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Mobile </span>: (12) 03 4567890</p>
+                                <p><span>Mobile </span>: {{this.userData()?.mobile ?? 'N/A'}}</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Phone </span>: 88 (02) 123456</p>
+                                <p><span>Phone </span>: {{this.userData()?.phone ?? 'N/A'}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <div class="row">
+                        @if(this.loader() == true){
+                        <span class="loader"></span>
+                        } @else {
+
+                        @for(team of this.teamList(); track $index){
                         <div class="col-md-6">
                             <div class="panel">
                                 <div class="panel-body">
@@ -60,75 +70,33 @@
                                         <div style="display:inline;width:100px;height:100px;"><canvas width="100"
                                                 height="100px"></canvas><input class="knob" data-width="100"
                                                 data-height="100" data-displayprevious="true" data-thickness=".2"
-                                                value="35" data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8"
-                                                style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;">
-                                        </div>
-                                    </div>
-                                    <div class="bio-desk">
-                                        <h4 class="red">Envato Website</h4>
-                                        <p>Started : 15 July</p>
-                                        <p>Deadline : 15 August</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel">
-                                <div class="panel-body">
-                                    <div class="bio-chart">
-                                        <div style="display:inline;width:100px;height:100px;"><canvas width="100"
-                                                height="100px"></canvas><input class="knob" data-width="100"
-                                                data-height="100" data-displayprevious="true" data-thickness=".2"
-                                                value="63" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8"
+                                                [value]="$index+1" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8"
                                                 style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;">
                                         </div>
                                     </div>
                                     <div class="bio-desk">
-                                        <h4 class="terques">ThemeForest CMS </h4>
-                                        <p>Started : 15 July</p>
-                                        <p>Deadline : 15 August</p>
+                                        <h4 class="terques">{{team.team_master && team.team_master.name ?
+                                            team.team_master.name : 'N/A'}}</h4>
+                                        <p>Created : {{team.team_master && team.team_master.created_at ?
+                                            team.team_master.created_at : 'N/A'}}</p>
+                                        <p>{{team.team_master && team.team_master.about ? team.team_master.about :
+                                            'N/A'}}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        } @empty {
+                        <div class="col-md-12">
                             <div class="panel">
                                 <div class="panel-body">
-                                    <div class="bio-chart">
-                                        <div style="display:inline;width:100px;height:100px;"><canvas width="100"
-                                                height="100px"></canvas><input class="knob" data-width="100"
-                                                data-height="100" data-displayprevious="true" data-thickness=".2"
-                                                value="75" data-fgcolor="#96be4b" data-bgcolor="#e8e8e8"
-                                                style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(150, 190, 75); padding: 0px; -webkit-appearance: none; background: none;">
-                                        </div>
-                                    </div>
                                     <div class="bio-desk">
-                                        <h4 class="green">VectorLab Portfolio</h4>
-                                        <p>Started : 15 July</p>
-                                        <p>Deadline : 15 August</p>
+                                        <h4 class="terques">No Record Found</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="panel">
-                                <div class="panel-body">
-                                    <div class="bio-chart">
-                                        <div style="display:inline;width:100px;height:100px;"><canvas width="100"
-                                                height="100px"></canvas><input class="knob" data-width="100"
-                                                data-height="100" data-displayprevious="true" data-thickness=".2"
-                                                value="50" data-fgcolor="#cba4db" data-bgcolor="#e8e8e8"
-                                                style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(203, 164, 219); padding: 0px; -webkit-appearance: none; background: none;">
-                                        </div>
-                                    </div>
-                                    <div class="bio-desk">
-                                        <h4 class="purple">Adobe Muse Template</h4>
-                                        <p>Started : 15 July</p>
-                                        <p>Deadline : 15 August</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        }
+                        }
                     </div>
                 </div>
             </div>

@@ -48,9 +48,6 @@ export class LoginComponent {
           }
         }
 
-        // localStorage.setItem('role', JSON.stringify({
-        //   id: 1, name: "Admin"
-        // }));
         localStorage.setItem('token', res.data['token']);
         localStorage.setItem('Shared_Data', JSON.stringify({
           is_email_valid: res.data['is_email_verified'],
@@ -61,15 +58,14 @@ export class LoginComponent {
           account_id: res['data']?.account_id,
           permissions: res['data']?.permissions
         }));
-        this.toast.success("Login successfully", "Valid user", { timeOut: 500, closeButton: true }).onHidden.subscribe(() => {
-          this.login.reset();
-          this.communicate.isLoaderLoad.next(false);
-          if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
-            this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
-          } else {
-            this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail/profile']);
-          }
-        });
+        this.toast.success("Login successfully", "Valid user");
+        this.login.reset();
+        this.communicate.isLoaderLoad.next(false);
+        if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
+          this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
+        } else {
+          this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail/profile']);
+        }
 
       } else {
         this.toast.error(res.message || res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
