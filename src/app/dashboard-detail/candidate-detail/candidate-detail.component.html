@@ -23,7 +23,7 @@
     </div>
     <div class="table-wrapper">
         <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-            (scrolled)="onScroll()">
+            (scrolled)="onScroll()" [scrollWindow]="false">
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>

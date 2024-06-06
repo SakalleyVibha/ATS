@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                             <div class="row">
-                                <div class="col-lg-8 col-md-4 col-xl-8">
+                                <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                     <div class="form-group-wrap">
                                         <label for="inlineFormInputGroupUsername">Profile Image*</label>
                                         <div class="form-group upload">
@@ -377,6 +377,9 @@
                                         <ng-container *ngIf="formData['salary'].errors?.['required']">
                                             Salary required
                                         </ng-container>
+                                        <ng-container *ngIf="formData['salary'].errors?.['pattern']">
+                                            Valid salary required
+                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
@@ -514,7 +517,8 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Date of Birth*</label>
                                 <div class="form-group">
-                                    <input type="date" class="form-control" id="autoSizingInput" formControlName="dob">
+                                    <input type="date" class="form-control" id="autoSizingInput" formControlName="dob"
+                                        max="{{date | date:'yyyy-MM-dd'}}">
                                     <div *ngIf="(formData['dob'].invalid && (formData['dob'].touched || formData['dob'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
                                         <ng-container *ngIf="formData['dob'].errors?.['required']">
@@ -656,9 +660,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6 col-sm-12">
                                     <div class="row">
-                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                        <div class="col-6 col-lg-12 col-md-12 col-xl-6 col-sm-12">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Document*</label>
                                                 <div class="form-group">
@@ -727,7 +731,7 @@
                             <ng-container [formGroupName]="i"
                                 *ngFor="let employment of employment_history.controls;let i=index">
                                 <!-- employee: {{employment.value.company_name == ''}} -->
-                                @if(employment.value.delete != 1){
+                                @if(employment.value.deleted != 1){
 
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
@@ -849,7 +853,7 @@
                         <ng-container formArrayName="education_detail">
                             <ng-container [formGroupName]="i"
                                 *ngFor="let education of education_detail.controls;let i=index">
-                                @if(education.value.delete != 1){
+                                @if(education.value.deleted != 1){
                                 <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -987,7 +991,7 @@
                                 </div>
                                 <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
                                     <div class="row">
-                                        <div class="col-lg-8 col-md-4 col-xl-8">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Attachment</label>
                                                 <a class="btn btn-theme" [attr.href]="data?.attachment"
@@ -996,13 +1000,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
+                                <div class="col-6 col-lg-2 col-md-6 col-xl-2 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername"></label>
                                                 <div class="form-group">
-                                                    <a (click)="removeCertificate(i)">
+                                                    <a (click)="removePreCertificate(data?.id)">
                                                         <img src="assets/images/trash-2.svg"
                                                             class="img-fluid unselected-icon">
                                                         <img src="assets/images/trash-2white.svg"
@@ -1012,7 +1016,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
                             </ng-container>
                             <ng-container [formGroupName]="i" *ngFor="let cert of certificates.controls;let i=index">
 
@@ -1067,7 +1071,7 @@
                                 </div>
                                 <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
                                     <div class="row">
-                                        <div class="col-lg-8 col-md-4 col-xl-8">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
                                             <div class="form-group-wrap">
                                                 <label for="inlineFormInputGroupUsername">Attachment*</label>
                                                 <div class="form-group">
