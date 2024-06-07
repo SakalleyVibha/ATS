@@ -7,16 +7,20 @@
         </div>
     </div>
     <div class="search-sec-bdy">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-sm-12">
-                <div class="  search-filter-main" role="search">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-8 col-sm-12 d-flex align-items-center">
+                <div class="col-lg-7 search-filter-main" role="search">
                     <input class="form-control" type="search" placeholder="Search here . . ." type="text"
                         [(ngModel)]="searchString" (ngModelChange)="this.searchValue.next($event)" aria-label="Search">
                     <span id="highlightedSubstring"></span>
                 </div>
+                <div (click)="searchByDetails()" class=" col-lg-5">
+                    <button type="button" class="btn btn-theme">Submit</button>
+                    <!-- <a class="btn btn-theme" (click)="searchByDetails()" href="javascript:void(0)">Submit</a> -->
+                </div>
             </div>
             @if(permissions.canAdd){
-            <div class="col-lg-6 col-sm-12 text-end">
+            <div class="col-lg-3 col-sm-12 text-end">
                 <a routerLink="add" class="btn btn-create ">
                     <i class="fa-solid fa fa-plus"></i> Add Candidate </a>
             </div>
