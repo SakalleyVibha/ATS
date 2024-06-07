@@ -194,25 +194,32 @@ export class ManageTeamComponent {
       return;
     }
     this.communicate.isLoaderLoad.next(true);
+    let editTeam: any = false;
     if (this.Teamedit()) {
-      let editTeam = await this.onEditTeam();
+      editTeam = await this.onEditTeam();
     } else {
-      let editTeam = await this.onFormSubmit();
+      editTeam = await this.onFormSubmit();
     }
 
     this.assignUserForm.patchValue({
       team_id: this.team_id()
     });
 
-    this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
+    if (editTeam == true) {
+      this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
+        this.communicate.isLoaderLoad.next(false);
+        if (response['error'] == true) {
+          this.toastr.error(response['message'], "");
+        } else {
+          this.toastr.success("User assigned successfully.", "");
+          this.router.navigate(['dashboard-detail/team']);
+        }
+      });
+    } else {
       this.communicate.isLoaderLoad.next(false);
-      if (response['error'] == true) {
-        this.toastr.error(response['message'], "");
-      } else {
-        this.toastr.success("User assigned successfully.", "");
-        this.router.navigate(['dashboard-detail/team']);
-      }
-    });
+      return
+    }
+
   }
 
   getAllRoles() {
