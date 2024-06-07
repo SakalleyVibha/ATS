@@ -8,3 +8,11 @@ a.btn.btn-secondary.dropdown-toggle:after {
     border-bottom: 0;
     border-left: .3em solid transparent;
 }
+
+.name-box {
+    background-color: aqua;
+    /* Adjust color as needed */
+    padding: 2px 5px;
+    border: 1px solid black;
+    /* Adjust border as needed */
+}
