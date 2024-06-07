@@ -76,8 +76,9 @@
                                 <div class="teamscard-details">
                                     <p class="terques">Name: {{team.team_master && team.team_master.name ?
                                         team.team_master.name : 'N/A'}}</p>
-                                    <p class="created-date">Created: {{team.team_master && team.team_master.created_at ?
-                                        team.team_master.created_at : 'N/A'}}</p>
+                                    <p class="created-date">Created: {{(team.team_master && team.team_master.created_at
+                                        ?
+                                        team.team_master.created_at : 'N/A') | date: 'dd/MM/yyyy'}}</p>
                                     <p class="about-user">About: {{team.team_master && team.team_master.about ?
                                         team.team_master.about :
                                         'N/A'}}</p>
