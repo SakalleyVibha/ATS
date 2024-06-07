@@ -63,10 +63,8 @@ export class CandidateDetailComponent {
 
 
   inputValue: string = '';
-  // highlightedSubstring: string | null = null;
 
   constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService, private location: Location) {
-    // this.searchString = 'boolean'
 
     this.current_role.set(localStorage.getItem('role'));
     this.current_role.set(JSON.parse(this.current_role()));
@@ -91,23 +89,17 @@ export class CandidateDetailComponent {
     let ele = document.getElementById('highlightedSubstring');
     this.searchValue.subscribe(
       (value: any) => {
-        console.log('value: ', value);
+        this.inputValue = value;
         this.keyWordArray.map((data: any) => {
           let index = value.indexOf(data);
           if (index != -1) {
             let regex = new RegExp(`(${data})`, 'g');
             value = value.replace(regex, `<div class="name-box">$1</div>`)
-            return;
-          } else {
-            console.log("Substring not found");
           }
           if (ele) {
             ele.innerHTML = value;
           }
         })
-        // this.reqObj.keyword = value;
-        // this.reqObj.pageNumber = 1;
-        // this.getCandidateList();
       });
     this.getCandidateList();
   }
@@ -154,5 +146,13 @@ export class CandidateDetailComponent {
       this.reqObj.pageNumber += 1;
       this.getCandidateList();
     }
+  }
+
+  searchByDetails() {
+    console.log("Search String");
+    this.reqObj.keyword = this.inputValue;
+    this.reqObj.pageNumber = 1;
+    console.log('this.reqObj: ', this.reqObj);
+    this.getCandidateList();
   }
 }
