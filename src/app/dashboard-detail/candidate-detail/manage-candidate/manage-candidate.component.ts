@@ -87,31 +87,31 @@ export class ManageCandidateComponent {
   createCandidateForm(acc_id: number) {
     this.addCandidateForm = this.fb.group({
       account_id: new FormControl(acc_id),
-      name: new FormControl('Vibha', [Validators.required, Validators.minLength(2)]),
-      title: new FormControl('Developer', [Validators.required, Validators.minLength(3)]),
-      position: new FormControl('Developer', [Validators.required, Validators.minLength(3)]),
-      total_experience: new FormControl('4', [Validators.required]),
-      relevant_experience: new FormControl('4', [Validators.required]),
-      email: new FormControl('DeveloperTesting001@gmail.com', [Validators.required, Validators.email]),
+      name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      position: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      total_experience: new FormControl('', [Validators.required]),
+      relevant_experience: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
-      contact: new FormControl('9876543211111', [Validators.required, Validators.pattern(this.number_validation())]),
+      contact: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       alternate_contact: new FormControl(''),
-      city: new FormControl('Indore', [Validators.required]),
-      state: new FormControl('MP', [Validators.required]),
-      mode_of_hire: new FormControl('C2H', [Validators.required]),
-      visa_status: new FormControl('PR', [Validators.required]),
-      salary_type: new FormControl('Monthly', [Validators.required]),
-      salary: new FormControl('300', [Validators.required, Validators.pattern(/^[0-9]+$/)]),
-      employer_name: new FormControl('ABC', [Validators.required]),
-      visa_validity: new FormControl('30/4/2022', [Validators.required]),
-      dob: new FormControl('13/12/2223', [Validators.required]),
-      relocation: new FormControl('Yes', [Validators.required]),
-      current_project_status: new FormControl('Ongoing', [Validators.required]),
-      joining_availability: new FormControl('20/03/2024', [Validators.required]),
-      graduation_completion_year: new FormControl('2022', [Validators.required]),
-      resume_source: new FormControl('Linked In', [Validators.required]),
+      city: new FormControl('', [Validators.required]),
+      state: new FormControl('', [Validators.required]),
+      mode_of_hire: new FormControl('', [Validators.required]),
+      visa_status: new FormControl('', [Validators.required]),
+      salary_type: new FormControl('', [Validators.required]),
+      salary: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+$/)]),
+      employer_name: new FormControl('', [Validators.required]),
+      visa_validity: new FormControl('', [Validators.required]),
+      dob: new FormControl('', [Validators.required]),
+      relocation: new FormControl('', [Validators.required]),
+      current_project_status: new FormControl('', [Validators.required]),
+      joining_availability: new FormControl('', [Validators.required]),
+      graduation_completion_year: new FormControl('', [Validators.required]),
+      resume_source: new FormControl('', [Validators.required]),
       profile_image: new FormControl('', [Validators.required]),
-      notes: new FormControl('ABC', [Validators.required]),
+      notes: new FormControl('', [Validators.required]),
       employment_history: this.fb.array([]),
       education_detail: this.fb.array([]),
       certificates: this.fb.array([]),
@@ -139,9 +139,9 @@ export class ManageCandidateComponent {
   addSkills() {
     this.employment_history.push(
       this.fb.group({
-        company_name: new FormControl('Delloite', [Validators.required]),
-        from_date: new FormControl('10/05/2022', [Validators.required]),
-        to_date: new FormControl('05/07/2022', [Validators.required])
+        company_name: new FormControl('', [Validators.required]),
+        from_date: new FormControl('', [Validators.required]),
+        to_date: new FormControl('', [Validators.required])
       })
     );
   }
@@ -149,9 +149,9 @@ export class ManageCandidateComponent {
   addEducation() {
     this.education_detail.push(
       this.fb.group({
-        qualification: new FormControl('MS', [Validators.required]),
-        course: new FormControl('Physics', [Validators.required]),
-        university: new FormControl('MIT', [Validators.required])
+        qualification: new FormControl('', [Validators.required]),
+        course: new FormControl('', [Validators.required]),
+        university: new FormControl('', [Validators.required])
       })
     );
   }
@@ -159,8 +159,8 @@ export class ManageCandidateComponent {
   addCert() {
     this.certificates.push(
       this.fb.group({
-        name: new FormControl('Satellite Making', [Validators.required]),
-        validity: new FormControl('20/03/2021', [Validators.required]),
+        name: new FormControl('', [Validators.required]),
+        validity: new FormControl('', [Validators.required]),
         attachment: new FormControl('', [Validators.required])
       })
     );
