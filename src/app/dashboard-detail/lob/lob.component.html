@@ -1,5 +1,4 @@
-<div class="location-sec-bdy" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
-    [scrollWindow]="false" (scrolled)="onScroll()">
+<div class="location-sec-bdy">
     <div class="row">
         <div class="col-xl-12">
             <div class="loc-heading">
@@ -22,7 +21,8 @@
             </div>
         </div>
     </div>
-    <div class="table-wrapper">
+    <div class="table-wrapper" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+        [scrollWindow]="false" (scrolled)="onScroll()">
         <div class="table-responsive">
             <table class="table table-tamplate-style table-user">
                 <thead>

@@ -120,6 +120,9 @@ export class CandidateDetailComponent {
         } else {
           this.candidateList.set([]);
         }
+      } else {
+        this.candidateList.set([]);
+        this.toastr.error(res['message'], "");
       }
     });
   }

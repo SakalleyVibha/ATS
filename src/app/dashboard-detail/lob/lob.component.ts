@@ -59,6 +59,9 @@ export class LobComponent {
         } else {
           this.lobList.set([]);
         }
+      } else {
+        this.lobList.set([]);
+        this.toastr.error(res['message'], "")
       }
     });
   }

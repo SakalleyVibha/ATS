@@ -334,14 +334,10 @@ export class ManageCandidateComponent {
       console.log('res: ', res);
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Candidate created successfully", "");
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Candidate created successfully", "");
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error(res.message || res.error, "");
+        this.toastr.error(res['message'], "");
       }
     });
   }
@@ -406,7 +402,7 @@ export class ManageCandidateComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("candidates/getcandidate", { account_id: this.account_id(), id: results.id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (res['data'] != true) {
+      if (res['error'] != true) {
         this.candidateId.set(res['data'].id)
         this.resCandidate.set(results.section);
         this.getCandidateData.set(res['data']);
@@ -518,6 +514,9 @@ export class ManageCandidateComponent {
             }
           }
         }
+      } else {
+        this.toastr.error(res['message'], "Something went wrong while fetching details.");
+        this.router.navigate(['dashboard-detail/candidate-detail']);
       }
 
     });
@@ -564,14 +563,11 @@ export class ManageCandidateComponent {
     this.api.allPostMethod('candidates/updateCompanyDetails', reqData).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
+
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -589,14 +585,10 @@ export class ManageCandidateComponent {
     this.api.allPostMethod('candidates/updateEducationDetails', req).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -613,14 +605,10 @@ export class ManageCandidateComponent {
     this.api.allPostMethod('candidates/addCertificates', reqData).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -638,14 +626,10 @@ export class ManageCandidateComponent {
       console.log('res: ', res);
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error(res.message || res.error, "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -670,14 +654,10 @@ export class ManageCandidateComponent {
       console.log('res: ', res);
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error(res.message || res.error, "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -690,20 +670,15 @@ export class ManageCandidateComponent {
       console.log('res: ', res);
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['error']) {
-          this.toastr.error("Something went wrong", "");
-        } else {
-          this.toastr.success("Deleted successfully", "");
-          this.setDataToEdit(this.determineSubmission());
-
-        }
+        this.toastr.success("Deleted successfully", "");
+        this.setDataToEdit(this.determineSubmission());
         console.log('res[data]: ', res['data']);
         // if (res['data']) {
         // } else {
         //   this.toastr.error("Something went wrong", "");
         // }
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })

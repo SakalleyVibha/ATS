@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonApiService } from '../../core/services/common-api.service';
 import { CommunicateService } from '../../core/services/communicate.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,7 +14,7 @@ export class UserProfileComponent {
   teamList = signal<any>([]);
   loader = signal<boolean>(false);
 
-  constructor(private api: CommonApiService, private communicate: CommunicateService) {
+  constructor(private api: CommonApiService, private communicate: CommunicateService, private toastr: ToastrService) {
 
   }
 
@@ -31,10 +32,11 @@ export class UserProfileComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("users/getUser", data).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      console.log('res: ', res);
       if (res['error'] != true) {
         this.userData.set(res['data']);
         console.log('this.userData: ', this.userData());
+      } else {
+        this.toastr.error(res['message'], "")
       }
     });
   }
@@ -47,6 +49,8 @@ export class UserProfileComponent {
       if (res['error'] != true) {
         console.log('res.data: ', res['data']);
         this.teamList.set(res['data']);
+      } else {
+        this.toastr.error(res['message'], "")
       }
     });
   }

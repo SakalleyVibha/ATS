@@ -60,6 +60,7 @@ export class TeamsComponent {
           this.teamList.set([]);
         }
       } else {
+        this.teamList.set([]);
         this.toastr.error(res['message'], "")
       }
     });
@@ -72,9 +73,7 @@ export class TeamsComponent {
         this.reqObj.pageNumber = 1;
         this.getTeamList();
         this.communicate.isLoaderLoad.next(false);
-        if (res.data && res.data > 0) {
-          this.toastr.success("Teams deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
-        }
+        this.toastr.success("Teams deleted successfully", "")
 
       } else {
         this.toastr.error(res['message'], "")
