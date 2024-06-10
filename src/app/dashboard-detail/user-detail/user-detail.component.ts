@@ -72,9 +72,7 @@ export class UserDetailComponent {
         this.reqObj.pageNumber = 1;
         this.user_list.set([]);
         this.getUserList();
-        if (res.data && res.data > 0) {
-          this.toastr.success("User deleted successfully", "", { closeButton: true}).onHidden.subscribe(() => { })
-        }
+        this.toastr.success("User deleted successfully", "")
       } else {
         this.toastr.error(res['message'], "");
       }

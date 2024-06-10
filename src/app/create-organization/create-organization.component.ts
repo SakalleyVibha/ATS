@@ -54,6 +54,7 @@ export class CreateOrganizationComponent {
     this.communicate.isLoaderLoad.next(true);
     let payload = { ...this.organizationForm.value, logo: this.imgURLBase64 }
     this.serviceApi.allPostMethod("accounts/account", payload).subscribe((response: any) => {
+      this.communicate.isLoaderLoad.next(false);
       if (response['error'] != true) {
         let shareData: any = localStorage.getItem('Shared_Data');
         shareData = JSON.parse(shareData);
@@ -61,15 +62,11 @@ export class CreateOrganizationComponent {
         this.importRoles(response['data']?.id);
         localStorage.setItem("Shared_Data", JSON.stringify(shareData));
         this.organizationForm.reset();
-        this.toastr.success("Form Submitted", "").onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          localStorage.setItem('isLocatioCreated', JSON.stringify(false));
-          this.router.navigate(['dashboard-detail', 'location-detail']);
-        });
+        this.toastr.success("Form Submitted", "")
+        localStorage.setItem('isLocatioCreated', JSON.stringify(false));
+        this.router.navigate(['dashboard-detail', 'location-detail']);
       } else {
-        this.toastr.error(response['message'], "").onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(response['message'], "")
       }
     });
   }

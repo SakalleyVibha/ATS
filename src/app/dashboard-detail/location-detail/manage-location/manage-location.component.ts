@@ -112,13 +112,8 @@ export class ManageLocationComponent {
           this.router.navigate(['/dashboard-detail/location-detail']);
         }
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "").onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
-      }
-      if (resp_location.message) {
-
-      } else {
+        this.toastr.error(resp_location['message'], "")
+        this.communicate.isLoaderLoad.next(false);
       }
     });
   }

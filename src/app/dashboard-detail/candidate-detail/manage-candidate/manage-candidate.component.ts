@@ -515,7 +515,7 @@ export class ManageCandidateComponent {
           }
         }
       } else {
-        this.toastr.error(res['message'], "Something went wrong while fetching details.");
+        this.toastr.error(res['message'], "");
         this.router.navigate(['dashboard-detail/candidate-detail']);
       }
 
@@ -672,11 +672,6 @@ export class ManageCandidateComponent {
       if (res['error'] != true) {
         this.toastr.success("Deleted successfully", "");
         this.setDataToEdit(this.determineSubmission());
-        console.log('res[data]: ', res['data']);
-        // if (res['data']) {
-        // } else {
-        //   this.toastr.error("Something went wrong", "");
-        // }
       } else {
         this.toastr.error(res['message'], "");
       }
