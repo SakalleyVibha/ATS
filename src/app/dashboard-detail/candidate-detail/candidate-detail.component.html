@@ -37,7 +37,7 @@
                         <th scope="col">List Of Users</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Status</th>
-                        @if(permissions.canEdit && permissions.canDelete){
+                        @if(permissions.canEdit || permissions.canDelete){
                             <th scope="col">Action</th>
                         }
                     </tr>
@@ -56,7 +56,7 @@
                             <div class="statuslabel deactive-bages" *ngIf="cand?.status == 0">Deactive </div>
                         </td>
 
-                        @if(permissions.canEdit && permissions.canDelete){
+                        @if(permissions.canEdit || permissions.canDelete){
                         <td class="action_button">
                             <div class="actiondelete-button">
 
