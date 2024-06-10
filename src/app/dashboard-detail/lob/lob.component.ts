@@ -73,9 +73,7 @@ export class LobComponent {
         this.reqObj.pageNumber = 1;
         this.getlobList();
         this.communicate.isLoaderLoad.next(false);
-        if (res.data && res.data > 0) {
-          this.toastr.success("Teams deleted successfully", "")
-        }
+        this.toastr.success("Teams deleted successfully", "")
       } else {
         this.toastr.error(res['message'], "")
       }

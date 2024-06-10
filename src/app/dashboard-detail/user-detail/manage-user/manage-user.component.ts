@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-manage-user',
@@ -94,21 +95,53 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }).subscribe((roles: any) => {
-      if (roles.data?.length > 0) {
-        this.user_roles = roles.data;
+    let payload = { account_id: acc_id, pageNumber: 1, pageSize: 10 };
+    forkJoin({
+      user: this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }),
+      location: this.api.allPostMethod('locations/locationlist', payload),
+      client: this.api.allPostMethod('clients/clientlist', payload)
+    }).subscribe({
+      next: (res: any) => {
+        // if (res['user'].error == true || res['location'].error == true || res['client'].error == true) {
+        //   this.toastr.error(res['user'].error == true ? res['user']['message'] : (res['location'].error == true ? res['location']['message'] : res['client']['message']), "");
+        // }
+        // console.log('res: ', res);
+        this.user_roles = res['user'].data;
+        this.user_location = res['location'].data;
+        this.client_list = res['client'].data;
+        // this.user_list = res.user?.data || [];
+        // this.user_list = this.user_list.filter((v:any)=> !v.is_owner);
+        // this.location_list = res.location?.data || [];
+        // let flag = !!(this.location_list.length && this.user_list.length);
+        // localStorage.setItem('isDashboardDetail',JSON.stringify(flag));
+        // this.communicate.isDetailSideShow.next(flag);
+        //  if(!this.location_list.length){
+        //   this.router.navigate(['dashboard-detail','location-detail']);
+        //   return;
+        // }
+        // if(this.location_list.length &&  !this.user_list.length){
+        //   this.router.navigate(['dashboard-detail','user-detail']);
+        //  }
+      }, error: (err) => {
+        console.log(err);
+        // <insert code for what to do on failure>
       }
     });
-    this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data?.length > 0) {
-        this.user_location = res.data;
-      }
-    });
-    this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data?.length > 0) {
-        this.client_list = res.data;
-      }
-    })
+    // this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }).subscribe((roles: any) => {
+    //   if (roles.data?.length > 0) {
+    //     this.user_roles = roles.data;
+    //   }
+    // });
+    // this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+    //   if (res.data?.length > 0) {
+    //     this.user_location = res.data;
+    //   }
+    // });
+    // this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+    //   if (res.data?.length > 0) {
+    //     this.client_list = res.data;
+    //   }
+    // })
   }
 
   onSubmit() {

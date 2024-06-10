@@ -72,15 +72,12 @@ export class SignupComponent {
     let payload = { ...formCopy, dob: date };
     console.log("PayLoad : ", payload);
     this.api.allPostMethod("users/signup", payload).subscribe((res: any) => {
-      if (!res.error) {
-        this.toastr.success("Sign up done successfully", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/login']);
-        });
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Sign up done successfully", "")
+        this.router.navigate(['/login']);
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(res['message'], "")
       }
     });
   }
