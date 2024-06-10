@@ -41,28 +41,7 @@ export class CreateOrganizationComponent {
     this.activerouter.queryParams.subscribe((response: any) => {
       let id = response.id
       if (id != null && id != undefined) {
-        this.communicate.isLoaderLoad.next(true);
-        this.forEdit.update(value => !value)
-        this.serviceApi.allgetMethod('accounts/account', {}).subscribe((res: any) => {
-          let accountDetail = res['data'].find((data: any) => data.id == id);
-          console.log(accountDetail);
-          this.organizationForm.patchValue({
-            name: accountDetail?.name,
-            about: accountDetail?.about,
-            website: accountDetail?.website,
-            phone: accountDetail?.phone,
-            mobile: accountDetail?.mobile,
-            fax: accountDetail?.fax,
-            street: accountDetail?.street,
-            city: accountDetail?.city,
-            country: accountDetail?.country,
-            state: accountDetail?.state,
-            zip: accountDetail?.zip,
-          })
-          this.imgURLBase64.set(accountDetail?.logo);
-          this.organizationForm.setControl('id', new FormControl(id));
-          this.communicate.isLoaderLoad.next(false);
-        })
+        this.setAccountValues(id);
       }
     })
   }
@@ -106,9 +85,8 @@ export class CreateOrganizationComponent {
       this.communicate.isLoaderLoad.next(false);
       if (response['error'] != true) {
         this.organizationForm.reset();
-        this.toastr.success("Form Submitted", "").onHidden.subscribe(() => {
-          this.router.navigate(['/dashboard-detail']);
-        });
+        this.toastr.success("Form Submitted", "")
+        this.router.navigate(['/dashboard-detail']);
       } else {
 
         this.toastr.error(response['message'], "");
@@ -155,5 +133,30 @@ export class CreateOrganizationComponent {
       console.log('response: ', response);
 
     });
+  }
+
+  setAccountValues(id: any) {
+    this.communicate.isLoaderLoad.next(true);
+    this.forEdit.update(value => !value)
+    this.serviceApi.allgetMethod('accounts/account', {}).subscribe((res: any) => {
+      let accountDetail = res['data'].find((data: any) => data.id == id);
+      console.log(accountDetail);
+      this.organizationForm.patchValue({
+        name: accountDetail?.name,
+        about: accountDetail?.about,
+        website: accountDetail?.website,
+        phone: accountDetail?.phone,
+        mobile: accountDetail?.mobile,
+        fax: accountDetail?.fax,
+        street: accountDetail?.street,
+        city: accountDetail?.city,
+        country: accountDetail?.country,
+        state: accountDetail?.state,
+        zip: accountDetail?.zip,
+      })
+      this.imgURLBase64.set(accountDetail?.logo);
+      this.organizationForm.setControl('id', new FormControl(id));
+      this.communicate.isLoaderLoad.next(false);
+    })
   }
 }

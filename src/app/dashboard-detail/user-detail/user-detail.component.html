@@ -23,7 +23,7 @@
     </div>
     <div class="table-wrapper" infiniteScroll [infiniteScrollDistance]="1" [scrollWindow]="false"
         [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
-        <div class="table-responsive" style="height: 631px">
+        <div class="table-responsive">
             <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
 
-                    <tr *ngFor="let user of user_list; let i = index">
+                    <tr *ngFor="let user of user_list(); let i = index">
 
                         <td class="fonts-n3 user-img-desc">
                             <span class="image-user"><img
@@ -78,7 +78,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="text-center" *ngIf="user_list && user_list.length == 0">
+                    <tr class="text-center" *ngIf="user_list() && user_list().length == 0">
                         <td colspan="7">
                             <button class="btn btn-add-doc" routerLink="add-user">No Record Found</button>
                         </td>

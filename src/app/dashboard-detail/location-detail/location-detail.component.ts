@@ -56,10 +56,19 @@ export class LocationDetailComponent {
     this.api.allPostMethod('locations/locationlist', this.reqObj).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data'] && res['data'].length > 0) {
-          this.location_list = [...this.location_list, ...res.data]
+        if ((res['data'] && res['data'].length > 0)) {
+          if (this.reqObj.pageNumber == 1) {
+            this.location_list = res['data']
+          } else {
+            this.location_list = [...this.location_list, ...res.data]
+          }
           this.totalPages = res['totalPages'];
+        } else {
+          this.location_list = [];
         }
+      } else {
+        this.location_list = [];
+        this.toastr.error(res['message'], "");
       }
     })
   }
@@ -72,12 +81,10 @@ export class LocationDetailComponent {
         this.reqObj.pageNumber = 1;
         this.location_list = [];
         this.getLocation();
-        if (res.data && res.data > 0) {
-          this.toastr.success("Location deleted successfully", "")
-        }
+        this.toastr.success("Location deleted successfully", "");
 
       } else {
-        this.toastr.error("Location deleted successfully", "")
+        this.toastr.error(res['message'], "")
       }
     });
 
