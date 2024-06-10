@@ -19,7 +19,7 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router, private communicate: CommunicateService) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required]]
     })
   }
 

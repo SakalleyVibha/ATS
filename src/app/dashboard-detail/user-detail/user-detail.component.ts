@@ -73,7 +73,7 @@ export class UserDetailComponent {
         this.user_list.set([]);
         this.getUserList();
         if (res.data && res.data > 0) {
-          this.toastr.success("User deleted successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => { })
+          this.toastr.success("User deleted successfully", "", { closeButton: true}).onHidden.subscribe(() => { })
         }
       } else {
         this.toastr.error(res['message'], "");
