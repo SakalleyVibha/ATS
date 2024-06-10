@@ -835,6 +835,17 @@ td.font15.location-items-bdy {
     padding: 0 !important;
 }
 
+/* for add edit button */
+.table.table-tamplate-style tbody tr .actiondelete-button .img-fluid.selected-white-icon {
+    display: none;
+}
+
+button.add-edit-btn {
+    background: none;
+    border: none;
+}
+/* ------------------------------ */
+
 .table.table-tamplate-style tbody tr .actiondelete-button a .img-fluid.selected-white-icon {
     display: none;
 }

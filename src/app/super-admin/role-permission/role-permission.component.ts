@@ -98,11 +98,11 @@ export class RolePermissionComponent {
     this.api.allPostMethod('rolepermission/addeditrolepermission',payload).subscribe({
       next: (res:any)=>{
            if(!res.error){
-            this.toastr.success(res.message,"",{closeButton:true,timeOut:2000}).onHidden.subscribe(()=>{
+            this.toastr.success(res.message,"",{closeButton:true,timeOut:200}).onHidden.subscribe(()=>{
               this.communicate.isLoaderLoad.next(false);
             });           
            }else{
-            this.toastr.error(res.message || res.error,"",{closeButton:true,timeOut:3000}).onHidden.subscribe(()=>{
+            this.toastr.error(res.message || res.error,"",{closeButton:true}).onHidden.subscribe(()=>{
               this.communicate.isLoaderLoad.next(false);
             });
            }
