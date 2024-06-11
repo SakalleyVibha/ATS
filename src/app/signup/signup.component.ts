@@ -19,11 +19,11 @@ export class SignupComponent {
   isconfrmpassshow: boolean = false;
   maxDOB: any;
 
-  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router,private communicate : CommunicateService) {
+  constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router, private communicate: CommunicateService) {
     this.signUp = this.fb.group({
-      f_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      l_name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      alias: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      f_name: ['', [Validators.required, Validators.minLength(2)]],
+      l_name: ['', [Validators.required, Validators.minLength(2)]],
+      alias: ['', [Validators.required]],
       dob: ['', [Validators.required]],
 
       email: ['', [Validators.required, Validators.email]],
@@ -32,10 +32,10 @@ export class SignupComponent {
       mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
       fax: ['', [, Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
 
-      street: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      city: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      country: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
-      state: ['', [Validators.required, Validators.pattern(/^(?!(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|ALTER|CREATE|TRUNCATE)|(['";\\])|(\b\d+\b)|(\/\*[\s\S]*?\*\/|--.*)|(AND|OR|NOT|XOR)|\b(?:SELECT|INSERT|UPDATE|DELETE|EXEC)\s*\(|(error|exception|warning))/i)]],
+      street: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      country: ['', [Validators.required]],
+      state: ['', [Validators.required]],
       zip: ['', [Validators.pattern('^[0-9]*$'), Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       password: ['', [Validators.required, Validators.pattern('(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=]).*$'), Validators.minLength(8)]],
       confirmpassword: ['', [Validators.required]],
@@ -69,18 +69,15 @@ export class SignupComponent {
     this.signUp.patchValue({ dob: date });
     const formCopy = Object.assign({}, this.signUp.getRawValue());
     delete formCopy.confirmpassword;
-    let payload = {...formCopy,dob: date};
-    console.log("PayLoad : ",payload);
+    let payload = { ...formCopy, dob: date };
+    console.log("PayLoad : ", payload);
     this.api.allPostMethod("users/signup", payload).subscribe((res: any) => {
-      if (!res.error) {
-        this.toastr.success("Sign up done successfully", "", { timeOut: 5000, closeButton: true }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/login']);
-        });
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Sign up done successfully", "")
+        this.router.navigate(['/login']);
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(()=>{
-          this.communicate.isLoaderLoad.next(false);          
-        });
+        this.toastr.error(res['message'], "")
       }
     });
   }

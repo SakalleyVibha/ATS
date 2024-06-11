@@ -14,8 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './manage-team.component.css'
 })
 export class ManageTeamComponent {
-  @ViewChild('imageModal') content: any;  
-  
+  @ViewChild('imageModal') content: any;
+
   imgURLBase64 = signal<ArrayBuffer | any>('');
   teamForm: FormGroup;
   assignUserForm!: FormGroup;
@@ -39,7 +39,7 @@ export class ManageTeamComponent {
     this.teamForm = this.formbuild.group({
       account_id: new FormControl(user_data?.account_id),
       name: new FormControl('', [Validators.required]),
-      about: new FormControl('', [Validators.required, Validators.maxLength(150), Validators.pattern(this.sql_validation())]),
+      about: new FormControl('', [Validators.required, Validators.maxLength(150)]),
       logo: new FormControl('', [Validators.required]),
       status: new FormControl('')
     });
@@ -68,6 +68,7 @@ export class ManageTeamComponent {
 
   onFormSubmit() {
     return new Promise((resolve, reject) => {
+      this.teamForm.value.logo = this.imgURLBase64();
       if (this.teamForm.invalid) {
         this.isFieldsValid.set(true);
         this.toastr.error("Kindly complete form.", "");
@@ -75,18 +76,14 @@ export class ManageTeamComponent {
         return;
       }
 
-      let token = { ...this.teamForm.value, logo: this.imgURLBase64(), status: Number(this.isActive()) };
+      let token = { ...this.teamForm.value, status: Number(this.isActive()) };
       this.api.allPostMethod("team/addTeam", token).subscribe((res: any) => {
         if (res['error'] != true) {
-          if (res['data']) {
-            this.team_id.set(res['data'].id);
-            this.toastr.success("Team created successfully", "")
-          } else {
-            this.toastr.error("Something went wrong", "");
-          }
+          this.team_id.set(res['data']?.id);
+          this.toastr.success("Team created successfully", "")
           resolve(true);
         } else {
-          this.toastr.error("Something went wrong", "");
+          this.toastr.error(res['message'], "");
           resolve(false);
         }
       });
@@ -108,15 +105,11 @@ export class ManageTeamComponent {
       payload = { ...this.teamForm.value, logo: (isBase64 ? this.imgURLBase64() : false), status: Number(this.isActive()) };
       this.api.allPostMethod("team/updateTeam", payload).subscribe((res: any) => {
         if (res['error'] != true) {
-          if (res.data.length > 0) {
-            this.team_id.set(this.teamForm.value.id);
-            this.toastr.success("Team updated successfully", "")
-          } else {
-            this.toastr.error("Something went wrong", "");
-          }
+          this.team_id.set(this.teamForm.value?.id);
+          this.toastr.success("Team updated successfully", "")
           resolve(true);
         } else {
-          this.toastr.error("Something went wrong", "");
+          this.toastr.error(res['message'], "");
           resolve(false);
         }
       });
@@ -167,9 +160,9 @@ export class ManageTeamComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("users/getUserList", this.userReqObj()).subscribe((response: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (response['error'] == false) {
-        response['data'] = response['data'].filter((data: any) => data.is_owner != true)
+      if (response['error'] != true) {
         if ((response['data'] && response['data'].length > 0)) {
+          response['data'] = response['data'].filter((data: any) => data.is_owner != true)
           if (this.userReqObj().pageNumber == 1) {
             this.user_list.set(response['data']);
           } else {
@@ -180,6 +173,8 @@ export class ManageTeamComponent {
         } else {
           this.user_list.set([]);
         }
+      } else {
+        this.toastr.error(response['message'], "");
       }
     })
   }
@@ -199,32 +194,40 @@ export class ManageTeamComponent {
       return;
     }
     this.communicate.isLoaderLoad.next(true);
+    let editTeam: any = false;
     if (this.Teamedit()) {
-      let editTeam = await this.onEditTeam();
+      editTeam = await this.onEditTeam();
     } else {
-      let editTeam = await this.onFormSubmit();
+      editTeam = await this.onFormSubmit();
     }
 
     this.assignUserForm.patchValue({
       team_id: this.team_id()
     });
 
-    this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
+    if (editTeam == true) {
+      this.api.allPostMethod('team/assingUser', this.assignUserForm.value).subscribe((response: any) => {
+        this.communicate.isLoaderLoad.next(false);
+        if (response['error'] == true) {
+          this.toastr.error(response['message'], "");
+        } else {
+          this.toastr.success("User assigned successfully.", "");
+          this.router.navigate(['dashboard-detail/team']);
+        }
+      });
+    } else {
       this.communicate.isLoaderLoad.next(false);
-      if (response['error'] == true) {
-        this.toastr.error("Something went wrong", "");
-      } else {
-        this.toastr.success("User assigned successfully.", "");
-        this.router.navigate(['dashboard-detail/team']);
-      }
-    });
+      return
+    }
+
   }
 
   getAllRoles() {
-    let get_roles = localStorage.getItem('role_list');
-    if (get_roles) {
-      this.role_list.set(JSON.parse(get_roles));
-    }
+    //  need to call api for getting role please see example at add user section
+    // let get_roles = localStorage.getItem('role_list');
+    // if (get_roles) {
+    //   this.role_list.set(JSON.parse(get_roles));
+    // }
   }
 
   onScroll() {
@@ -295,12 +298,12 @@ export class ManageTeamComponent {
     this.assignUserForm.value.userList.splice(idx, 1);
   }
 
-  viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm', backdrop: 'static', keyboard: false});  // Open the modal with template reference
+  viewImagePopup() {
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
-  
+
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal

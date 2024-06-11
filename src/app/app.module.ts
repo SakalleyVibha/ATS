@@ -18,6 +18,7 @@ import { SharedModule } from './shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SuperAdminModule } from './super-admin/super-admin.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     VerifyEmailComponent,
     CreateOrganizationComponent,
     PasswordChangeComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     CoreModule,

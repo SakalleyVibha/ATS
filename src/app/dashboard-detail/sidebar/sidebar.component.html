@@ -59,16 +59,19 @@
               </a>
             </div>
           </li>
-          <li>
-            <div class="dropdown btn-group">
-              <a routerLink="candidate-detail"
-                ><img
-                  src="assets/images/side-icon/client.svg"
-                  class="img-side-icon"
-                />Candidate
-              </a>
-            </div>
-          </li>
+          @if(permission.candidate){
+            <li>
+              <div class="dropdown btn-group">
+                <a routerLink="candidate-detail"
+                  ><img
+                    src="assets/images/side-icon/client.svg"
+                    class="img-side-icon"
+                  />Candidate
+                </a>
+              </div>
+            </li>
+          }
+          
           <!-- <li>
                             <div class="dropdown btn-group">
                                 <a routerLink="job"><img src="assets/images/side-icon/job.svg" class="img-side-icon">Job </a>
@@ -130,6 +133,12 @@
                 <!-- <img src="assets/images/down-arrow-open.svg" alt="icon" class="img-fluid img-drop-open"> -->
               </span>
               <ul class="dropdown-menu">
+                <li>
+                  <a routerLink="role">Role</a>
+                </li>
+                <li>
+                  <a routerLink="user-role-permission">Role Permission</a>
+                </li>
                 <li>
                   <a routerLink="lob-detail">LOB</a>
                 </li>

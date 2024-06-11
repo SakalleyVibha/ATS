@@ -133,11 +133,11 @@
                                     </div> -->
                                 </div>
                                 <div *ngIf="formData['logo'].invalid && (formData['logo'].dirty || formData['logo'].touched || isFormValid())"
-                                            class="required-txt-error">
-                                            <ng-container *ngIf="formData['logo'].errors?.['required']">
-                                                Location logo required.
-                                            </ng-container>
-                                        </div>
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['logo'].errors?.['required']">
+                                        Location logo required.
+                                    </ng-container>
+                                </div>
                             </div>
                             @if(imgURLBase64()){
                             <button class="btn btn-view" [ngClass]="!imgURLBase64() ? 'disabledImgSelect':''"
@@ -151,7 +151,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <img [src]="imgURLBase64()" *ngIf="imgURLBase64()" alt="Selected Image">
+                                    <img [src]="(this.imgURLBase64() != '') ?this.imgURLBase64(): this.addLocationForm.value.logo"
+                                        *ngIf="this.imgURLBase64() || (this.addLocationForm.value.logo != '')"
+                                        alt="Selected Image">
                                     <!-- <p *ngIf="!imgURLBase64()">No image selected.</p> -->
                                 </div>
                             </ng-template>
@@ -225,12 +227,22 @@
                                 <div *ngIf="formData['mobile'].invalid && (formData['mobile'].dirty || formData['mobile'].touched || isFormValid())"
                                     class="required-txt-error">
                                     <ng-container *ngIf="formData['mobile'].errors?.['required']">
-                                        Mobile required
+                                        Mobile number required
                                     </ng-container>
                                     <ng-container *ngIf="formData['mobile'].errors?.['pattern']">
-                                        Valid phone number required
+                                        Valid mobile number required
                                     </ng-container>
                                 </div>
+                                <!-- <div *ngIf="formData['mobile'].invalid && (formData['mobile'].dirty || formData['mobile'].touched || isFormValid())"
+                                    class="required-txt-error">
+                                    <ng-container *ngIf="formData['mobile'].errors?.['pattern']">
+                                        Mobile number required
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="formData['mobile'].errors?.['minlength'] || formData['mobile'].errors?.['maxlength']">
+                                        Valid mobile number
+                                    </ng-container>
+                                </div> -->
                             </div>
                         </div>
                     </div>

@@ -44,6 +44,9 @@ export class ManageCandidateComponent {
   selectedImageName: string = '';
   selectedAttachmentName: string = '';
   selectedResumeName: string = '';
+  getCandidateData = signal<any>([]);
+  number_validation = signal(environment.Phone_Mobile_valid);
+  date: any;
   constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
 
 
@@ -57,6 +60,9 @@ export class ManageCandidateComponent {
   }
 
   ngOnInit() {
+
+    this.date = new Date;
+
     this.activeRoute.url
       .pipe(
         combineLatestWith(this.activeRoute.queryParams),
@@ -71,6 +77,7 @@ export class ManageCandidateComponent {
           this.addSkills();
           this.addEducation();
           this.addCert();
+          this.addDoc();
         }
       });
   }
@@ -87,14 +94,14 @@ export class ManageCandidateComponent {
       relevant_experience: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
-      contact: new FormControl('', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]),
+      contact: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       alternate_contact: new FormControl(''),
       city: new FormControl('', [Validators.required]),
       state: new FormControl('', [Validators.required]),
       mode_of_hire: new FormControl('', [Validators.required]),
       visa_status: new FormControl('', [Validators.required]),
       salary_type: new FormControl('', [Validators.required]),
-      salary: new FormControl('', [Validators.required]),
+      salary: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+$/)]),
       employer_name: new FormControl('', [Validators.required]),
       visa_validity: new FormControl('', [Validators.required]),
       dob: new FormControl('', [Validators.required]),
@@ -103,11 +110,12 @@ export class ManageCandidateComponent {
       joining_availability: new FormControl('', [Validators.required]),
       graduation_completion_year: new FormControl('', [Validators.required]),
       resume_source: new FormControl('', [Validators.required]),
-      logo: new FormControl('', [Validators.required]),
+      profile_image: new FormControl('', [Validators.required]),
       notes: new FormControl('', [Validators.required]),
-      employment_history: this.fb.array([], Validators.required),
+      employment_history: this.fb.array([]),
       education_detail: this.fb.array([]),
       certificates: this.fb.array([]),
+      documents: this.fb.array([]),
     });
 
   }
@@ -122,6 +130,10 @@ export class ManageCandidateComponent {
 
   get certificates(): FormArray {
     return this.addCandidateForm.get("certificates") as FormArray
+  }
+
+  get documents(): FormArray {
+    return this.addCandidateForm.get("documents") as FormArray
   }
 
   addSkills() {
@@ -154,27 +166,66 @@ export class ManageCandidateComponent {
     );
   }
 
+  addDoc() {
+    this.documents.push(
+      this.fb.group({
+        docType: new FormControl('resume'),
+        name: new FormControl('', [Validators.required]),
+        doc: new FormControl('', [Validators.required]),
+        fileName: new FormControl('', [])
+      }
+      ))
+  }
+
   removeSkill(i: number) {
     if (this.determineSubmission().path == 'edit') {
       const control = this.employment_history.at(i) as FormGroup;
-      control.addControl('delete', new FormControl(true));
-      this.employmentDeletion.set(this.employment_history.value);
+      if (control.value.id == '' || control.value.id == null) {
+        this.employment_history.removeAt(i);
+      } else {
+        control.addControl('deleted', new FormControl(1));
+        control.get('company_name')?.clearValidators();
+        control.get('from_date')?.clearValidators();
+        control.get('to_date')?.clearValidators();
+        control.get('company_name')?.updateValueAndValidity();
+        control.get('from_date')?.updateValueAndValidity();
+        control.get('to_date')?.updateValueAndValidity();
+      }
+
+    } else {
+
+      this.employment_history.removeAt(i);
     }
-    console.log('this.employment_history.value: ', this.employment_history.value);
-    this.employment_history.removeAt(i);
+    // this.employment_history.removeAt(i);
   }
 
   removeEducation(i: number) {
     if (this.determineSubmission().path == 'edit') {
+
       const control = this.education_detail.at(i) as FormGroup;
-      control.addControl('delete', new FormControl(true));
-      this.educationDeletion.set(this.education_detail.value);
+      if (control.value.id == '' || control.value.id == null) {
+        this.education_detail.removeAt(i);
+      } else {
+        control.addControl('deleted', new FormControl(1));
+        control.get('qualification')?.clearValidators();
+        control.get('university')?.clearValidators();
+        control.get('course')?.clearValidators();
+        control.get('qualification')?.updateValueAndValidity();
+        control.get('university')?.updateValueAndValidity();
+        control.get('course')?.updateValueAndValidity();
+      }
+    } else {
+
+      this.education_detail.removeAt(i);
     }
-    this.education_detail.removeAt(i);
   }
 
   removeCertificate(i: number) {
     this.certificates.removeAt(i);
+  }
+
+  removeDocument(i: number) {
+    this.documents.removeAt(i);
   }
 
   convertImageToBase64(file_event: any) {
@@ -198,8 +249,8 @@ export class ManageCandidateComponent {
     this.selectedImageName = event.target.files[0]?.name;
     if (event.dataTransfer) {
       let file = event.dataTransfer.files
-      this.addCandidateForm.controls['logo'].removeValidators(Validators.required);
-      this.addCandidateForm.controls['logo'].updateValueAndValidity();
+      this.addCandidateForm.controls['profile_image'].removeValidators(Validators.required);
+      this.addCandidateForm.controls['profile_image'].updateValueAndValidity();
       let bs64Value = await this.convertImageToBase64(file[0]);
       return
     }
@@ -209,31 +260,26 @@ export class ManageCandidateComponent {
     }
   }
 
-  onAttachmentFileChange(event: any) {
-    this.selectedAttachmentName = event.target.files[0]?.name;
-  }
-  onResumeFileChange(event: any) {
-    this.selectedResumeName = event.target.files[0]?.name;
-  }
-
   CrossBtn() {
     this.imgURLBase64.set('');
-    this.addCandidateForm.get('logo')?.setValue('');
-    this.addCandidateForm.controls['logo'].addValidators(Validators.required);
-    this.addCandidateForm.controls['logo'].updateValueAndValidity();
+    this.addCandidateForm.get('profile_image')?.setValue('');
+    this.addCandidateForm.controls['profile_image'].addValidators(Validators.required);
+    this.addCandidateForm.controls['profile_image'].updateValueAndValidity();
   }
 
-  onFileChangePDF(event: any) {
+  onFileChangePDF(event: any, i: number) {
     this.selectedFiles = event.target.files;
-    this.convertFilesToBase64()
+    this.convertFilesToBase64(i)
+
   }
 
-  async convertFilesToBase64() {
+  async convertFilesToBase64(i: number) {
     console.log("Here");
 
     if (!this.selectedFiles) {
       return; // Handle no files selected case
     }
+    console.log(' this.document.value: ', this.documents.value);
 
     const base64Files: { [key: string]: string } = {};
     for (let i = 0; i < this.selectedFiles.length; i++) {
@@ -244,9 +290,10 @@ export class ManageCandidateComponent {
 
       reader.onload = (event: any) => {
         base64Files[file.name] = event.target.result.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        this.documentList().push({ docType: 'resume', doc: base64Files[file.name], fileName: file.name })
+        let control = this.documents.at(i) as FormGroup;
+        control.value.doc = base64Files[file.name]
+        control.value.fileName = file.name
       };
-      console.log("this.resumeFileNames() : ", this.resumeFileNames());
 
       reader.readAsDataURL(file);
     }
@@ -269,26 +316,28 @@ export class ManageCandidateComponent {
       this.addCandidateForm.controls['employer_name'].removeValidators(Validators.required);
       this.addCandidateForm.controls['employer_name'].updateValueAndValidity();
     }
-    this.addCandidateForm.value.logo = this.imgURLBase64();
+    this.addCandidateForm.value.profile_image = this.imgURLBase64();
+    console.log('this.addCandidateForm.value: ', this.addCandidateForm.value);
+    console.log('this.addCandidateForm: ', this.addCandidateForm);
+    // if (this.certificates.length == 0) {
+
+    // }
+    console.log('this.addCandidateForm.invalid: ', this.addCandidateForm.invalid);
     if (this.addCandidateForm.invalid) {
       this.isFieldsValid.set(true);
       return;
     }
-    let req = { ...this.addCandidateForm.value, documents: this.documentList() };
+    let req = { ...this.addCandidateForm.value };
     console.log('req: ', req);
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("candidates/addCandidate", req).subscribe((res: any) => {
       console.log('res: ', res);
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Candidate created successfully", "");
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Candidate created successfully", "");
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
     });
   }
@@ -332,13 +381,14 @@ export class ManageCandidateComponent {
     if (valueImg) {
       const cert = this.certificates.at(i) as FormGroup;
       cert.value.attachment = this.imgBs64()
+      cert.value['fileName'] = file.name;
     }
 
   }
 
   viewImagePopup() {
-  
-    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false } );  // Open the modal with template reference
+
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
@@ -352,9 +402,10 @@ export class ManageCandidateComponent {
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("candidates/getcandidate", { account_id: this.account_id(), id: results.id }).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
-      if (res['data'] != true) {
+      if (res['error'] != true) {
         this.candidateId.set(res['data'].id)
         this.resCandidate.set(results.section);
+        this.getCandidateData.set(res['data']);
         console.log('this.resCandidate: ', this.resCandidate());
         if (res['data']) {
           switch (results.section) {
@@ -402,32 +453,33 @@ export class ManageCandidateComponent {
               break;
             }
             case 'edit-cert': {
-              if (res['data'].candidate_certifications && res['data'].candidate_certifications.length > 0) {
-                res['data'].candidate_certifications.map((data: any, index: number) => {
-                  if (index > 0) {
-                    this.certificates.push(
-                      this.fb.group({
-                        name: new FormControl('', [Validators.required]),
-                        validity: new FormControl('', [Validators.required]),
-                        attachment: new FormControl('', [Validators.required])
-                      })
-                    );
-                  }
-                  this.certificates.at(index).patchValue({
-                    name: data?.name,
-                    validity: data?.validity,
-                    attachment: data?.attachment
-                  });
-                })
-              }
+              // this.getCandidateData.set(res['data']);
+              // if (res['data'].candidate_certifications && res['data'].candidate_certifications.length > 0) {
+              //   res['data'].candidate_certifications.map((data: any, index: number) => {
+              //     this.certificates.push(
+              //       this.fb.group({
+              //         name: new FormControl('', [Validators.required]),
+              //         validity: new FormControl('', [Validators.required]),
+              //         attachment: new FormControl('', [Validators.required]),
+              //         id: new FormControl('')
+              //       })
+              //     );
+              //     this.certificates.at(index).patchValue({
+              //       name: data?.name,
+              //       validity: data?.validity,
+              //       attachment: data?.attachment,
+              //       id: data?.id
+              //     });
+              //   })
+              // }
               break;
             }
             case 'edit-doc': {
-              if (res['data'].candidate_documents && res['data'].candidate_documents.length > 0) {
-                // res['data'].candidate_documents.map((data: any, index: number) => {
+              // if (res['data'].candidate_documents && res['data'].candidate_documents.length > 0) {
+              //   // res['data'].candidate_documents.map((data: any, index: number) => {
 
-                // })
-              }
+              //   // })
+              // }
               break;
             }
             default: {
@@ -455,13 +507,16 @@ export class ManageCandidateComponent {
                 joining_availability: res['data'].joining_availability,
                 graduation_completion_year: res['data'].graduation_completion_year,
                 resume_source: res['data'].resume_source,
-                logo: res['data'].logo,
+                profile_image: res['data'].profile_image,
                 notes: res['data'].notes
               });
               break;
             }
           }
         }
+      } else {
+        this.toastr.error(res['message'], "");
+        this.router.navigate(['dashboard-detail/candidate-detail']);
       }
 
     });
@@ -501,20 +556,18 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = { companyData: this.employmentDeletion() && this.employmentDeletion().length > 0 ? this.employmentDeletion() : this.employment_history.value, account_id: this.account_id(), candidate_id: this.candidateId() };
+
+    let reqData = { companyData: this.employment_history.value, account_id: this.account_id(), candidate_id: this.candidateId() };
     console.log('reqData: ', reqData);
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('candidates/updateCompanyDetails', reqData).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
+
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -525,19 +578,17 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let req = { educationList: this.educationDeletion() && this.educationDeletion().length > 0 ? this.educationDeletion() : this.education_detail.value, account_id: this.account_id(), candidate_id: this.candidateId() };
+    let req = { educationList: this.education_detail.value, account_id: this.account_id(), candidate_id: this.candidateId() };
+    console.log('req: ', req);
+
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod('candidates/updateEducationDetails', req).subscribe((res: any) => {
       this.communicate.isLoaderLoad.next(false);
       if (res['error'] != true) {
-        if (res['data']) {
-          this.toastr.success("Updated successfully", "")
-          this.router.navigate(['dashboard-detail/candidate-detail'])
-        } else {
-          this.toastr.error("Something went wrong", "");
-        }
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
       } else {
-        this.toastr.error("Something went wrong", "");
+        this.toastr.error(res['message'], "");
       }
 
     })
@@ -548,20 +599,83 @@ export class ManageCandidateComponent {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = this.employment_history.value
+    let reqData = { certificates: this.certificates.value, account_id: this.account_id(), id: this.candidateId() };
     console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/addCertificates', reqData).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
+      } else {
+        this.toastr.error(res['message'], "");
+      }
+
+    })
   }
 
   editDocumentSubmission() {
-    if (this.documentList() && this.documentList().length == 0) {
+    if (this.documents.invalid) {
       this.isFieldsValid.set(true);
       return;
     }
-    let reqData = this.employment_history.value
+    let reqData = { documents: this.documents.value, account_id: this.account_id(), id: this.candidateId() }
     console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/addResume', reqData).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
+      } else {
+        this.toastr.error(res['message'], "");
+      }
+
+    })
   }
 
   editCandidate() {
-    // this.addCandidateForm.get('employment_history')?.removeControl('address2');
+    if (this.addCandidateForm.value.mode_of_hire != 'c2c') {
+      this.addCandidateForm.controls['employer_name'].removeValidators(Validators.required);
+      this.addCandidateForm.controls['employer_name'].updateValueAndValidity();
+    }
+
+    this.addCandidateForm.value.profile_image = this.imgURLBase64();
+    if (this.addCandidateForm.invalid) {
+      this.isFieldsValid.set(true);
+      return;
+    }
+
+    let reqData = { ...this.addCandidateForm.value, account_id: this.account_id(), id: this.candidateId() }
+    console.log('reqData: ', reqData);
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/updateCandidate', reqData).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Updated successfully", "")
+        this.router.navigate(['dashboard-detail/candidate-detail'])
+      } else {
+        this.toastr.error(res['message'], "");
+      }
+
+    })
+
+  }
+
+  removePreCertificate(_id: number) {
+    this.communicate.isLoaderLoad.next(true);
+    this.api.allPostMethod('candidates/deleteCertificates', { account_id: this.account_id(), candidate_id: this.candidateId(), id: _id }).subscribe((res: any) => {
+      console.log('res: ', res);
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("Deleted successfully", "");
+        this.setDataToEdit(this.determineSubmission());
+      } else {
+        this.toastr.error(res['message'], "");
+      }
+
+    })
   }
 }

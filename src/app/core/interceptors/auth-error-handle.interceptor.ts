@@ -11,10 +11,12 @@ export const authErrorHandleInterceptor: HttpInterceptorFn = (req, next) => {
   const Route = inject(Router);
   let authToken = localStorage.getItem('token');
   let supertoken = localStorage.getItem('supertoken');
+  let permissiontoken = localStorage.getItem('permissiontoken');
   const authReq = req.clone({
     setHeaders: {
       'x-access-token': `${authToken}`,
-      'x-access-supertoken': `${supertoken}`
+      'x-access-supertoken': `${supertoken}`,
+      'x-access-permissiontoken': `${permissiontoken}`
     }
   });
   return next(authReq).pipe(

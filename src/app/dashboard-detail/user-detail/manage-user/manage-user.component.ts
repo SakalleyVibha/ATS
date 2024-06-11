@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-manage-user',
@@ -13,7 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './manage-user.component.css'
 })
 export class ManageUserComponent {
-  @ViewChild('imageModal') content: any;  
+  @ViewChild('imageModal') content: any;
   userForm!: FormGroup;
   isFormValid = signal(false);
   user_roles: any = [];
@@ -28,7 +29,7 @@ export class ManageUserComponent {
   number_validation = signal(environment.Phone_Mobile_valid);
   imgURLBase64 = signal<ArrayBuffer | any>('');
   modalRef: any;
-  selectedFileName : string = '';
+  selectedFileName: string = '';
 
   constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService, private modalService: NgbModal) {
     let user_data: any = localStorage.getItem('Shared_Data');
@@ -39,9 +40,9 @@ export class ManageUserComponent {
       location: 0
     }
     this.userForm = this.formBuild.group({
-      f_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
-      l_name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]),
-      alias: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      f_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      l_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      alias: new FormControl('', [Validators.required]),
       dob: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       website: new FormControl('', [Validators.required, Validators.pattern(this.website_validate())]),
@@ -49,10 +50,10 @@ export class ManageUserComponent {
       mobile: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       fax: new FormControl('', [Validators.minLength(10), Validators.pattern('^[0-9]*$'), Validators.maxLength(13)]),
       profile_img: ['', [Validators.required]],
-      street: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      city: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      country: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
-      state: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      street: new FormControl('', [Validators.required]),
+      city: new FormControl('', [Validators.required]),
+      country: new FormControl('', [Validators.required]),
+      state: new FormControl('', [Validators.required]),
       zip: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]),
       role_id: new FormControl('', [Validators.required]),
       account_id: new FormControl(user_data.account_id),
@@ -94,21 +95,53 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allgetMethod("role/roles", {}).subscribe((roles: any) => {
-      if (roles.data?.length > 0) {
-        this.user_roles = roles.data;
+    let payload = { account_id: acc_id, pageNumber: 1, pageSize: 10 };
+    forkJoin({
+      user: this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }),
+      location: this.api.allPostMethod('locations/locationlist', payload),
+      client: this.api.allPostMethod('clients/clientlist', payload)
+    }).subscribe({
+      next: (res: any) => {
+        // if (res['user'].error == true || res['location'].error == true || res['client'].error == true) {
+        //   this.toastr.error(res['user'].error == true ? res['user']['message'] : (res['location'].error == true ? res['location']['message'] : res['client']['message']), "");
+        // }
+        // console.log('res: ', res);
+        this.user_roles = res['user'].data;
+        this.user_location = res['location'].data;
+        this.client_list = res['client'].data;
+        // this.user_list = res.user?.data || [];
+        // this.user_list = this.user_list.filter((v:any)=> !v.is_owner);
+        // this.location_list = res.location?.data || [];
+        // let flag = !!(this.location_list.length && this.user_list.length);
+        // localStorage.setItem('isDashboardDetail',JSON.stringify(flag));
+        // this.communicate.isDetailSideShow.next(flag);
+        //  if(!this.location_list.length){
+        //   this.router.navigate(['dashboard-detail','location-detail']);
+        //   return;
+        // }
+        // if(this.location_list.length &&  !this.user_list.length){
+        //   this.router.navigate(['dashboard-detail','user-detail']);
+        //  }
+      }, error: (err) => {
+        console.log(err);
+        // <insert code for what to do on failure>
       }
     });
-    this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
-        this.user_location = res.data;
-      }
-    });
-    this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
-      if (res.data.length > 0) {
-        this.client_list = res.data;
-      }
-    })
+    // this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }).subscribe((roles: any) => {
+    //   if (roles.data?.length > 0) {
+    //     this.user_roles = roles.data;
+    //   }
+    // });
+    // this.api.allPostMethod('locations/locationlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+    //   if (res.data?.length > 0) {
+    //     this.user_location = res.data;
+    //   }
+    // });
+    // this.api.allPostMethod('clients/clientlist', { account_id: acc_id, pageNumber: 1, pageSize: 10 }).subscribe((res: any) => {
+    //   if (res.data?.length > 0) {
+    //     this.client_list = res.data;
+    //   }
+    // })
   }
 
   onSubmit() {
@@ -128,17 +161,14 @@ export class ManageUserComponent {
     });
     let payload = { ...this.userForm.value, dob: date, profile_img: this.imgURLBase64() }
     this.api.allPostMethod("users/addUser", payload).subscribe((response: any) => {
-      if (response.error == false) {
+      this.communicate.isLoaderLoad.next(false);
+      if (response['error'] != true) {
         this.userForm.reset();
-        this.toastr.success("User added succesfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.communicate.isDetailSideShow.next(true);
-          this.router.navigate(['/dashboard-detail/user-detail']);
-        });
+        this.toastr.success("User added succesfully", "")
+        this.communicate.isDetailSideShow.next(true);
+        this.router.navigate(['/dashboard-detail/user-detail']);
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(response['message'], "");
       }
     })
   }
@@ -152,32 +182,36 @@ export class ManageUserComponent {
         }
         this.communicate.isLoaderLoad.next(true);
         this.api.allPostMethod("users/getUser", data).subscribe((editData: any) => {
-          let editableData = editData['data'];
-          this.userForm.patchValue({
-            f_name: editableData?.f_name,
-            l_name: editableData?.l_name,
-            alias: editableData?.alias,
-            dob: editableData?.dob,
-            email: editableData?.email,
-            website: editableData?.website,
-            phone: editableData?.phone,
-            mobile: editableData?.mobile,
-            fax: editableData?.fax,
-            street: editableData?.street,
-            state: editableData?.state,
-            zip: editableData?.zip,
-            city: editableData?.city,
-            country: editableData?.country,
-          });
-          this.isActive = editableData?.status;
-          this.imgURLBase64.set(editableData?.profile_img);
-          this.userForm.controls['profile_img'].clearValidators();
-          this.userForm.controls['profile_img'].updateValueAndValidity();
-          this.userForm.addControl("id", new FormControl(editableData?.id));
-          this.userForm.removeControl('role_id');
-          this.userForm.removeControl('client_id');
-          this.userForm.removeControl('location_id');
           this.communicate.isLoaderLoad.next(false);
+          if (editData['error'] != true) {
+            let editableData = editData['data'];
+            this.userForm.patchValue({
+              f_name: editableData?.f_name,
+              l_name: editableData?.l_name,
+              alias: editableData?.alias,
+              dob: editableData?.dob,
+              email: editableData?.email,
+              website: editableData?.website,
+              phone: editableData?.phone,
+              mobile: editableData?.mobile,
+              fax: editableData?.fax,
+              street: editableData?.street,
+              state: editableData?.state,
+              zip: editableData?.zip,
+              city: editableData?.city,
+              country: editableData?.country,
+            });
+            this.isActive = editableData?.status;
+            this.imgURLBase64.set(editableData?.profile_img);
+            this.userForm.controls['profile_img'].clearValidators();
+            this.userForm.controls['profile_img'].updateValueAndValidity();
+            this.userForm.addControl("id", new FormControl(editableData?.id));
+            this.userForm.removeControl('role_id');
+            this.userForm.removeControl('client_id');
+            this.userForm.removeControl('location_id');
+          } else {
+
+          }
         })
         this.editUser = true;
       }
@@ -195,16 +229,13 @@ export class ManageUserComponent {
     // this.userForm.value = {...this.userForm.value, id : }
     let payload = { ...this.userForm.value, profile_img: (isBase64 ? this.imgURLBase64() : false) };
     this.api.allPostMethod("users/updateUserProfile", payload).subscribe((res: any) => {
-      console.log("After User update : ", res);
-      if (res && res?.error == false) {
-        this.toastr.success("User profile update successfully", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-          this.router.navigate(['/dashboard-detail/user-detail']);
-        });
+
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        this.toastr.success("User profile update successfully", "")
+        this.router.navigate(['/dashboard-detail/user-detail']);
       } else {
-        this.toastr.error("Something went wrong. Try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe((res: any) => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toastr.error(res['message'], "");
       }
     })
   }
@@ -248,12 +279,12 @@ export class ManageUserComponent {
     }
   }
 
-  viewImagePopup(){
-    this.modalRef = this.modalService.open(this.content, { centered: true , size:'sm', backdrop: 'static', keyboard: false});  // Open the modal with template reference
+  viewImagePopup() {
+    this.modalRef = this.modalService.open(this.content, { centered: true, size: 'sm', backdrop: 'static', keyboard: false });  // Open the modal with template reference
 
     // Handle modal dismiss reason (optional)
   }
-  
+
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal

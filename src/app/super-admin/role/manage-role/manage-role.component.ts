@@ -28,8 +28,8 @@ export class ManageRoleComponent {
   ){
 
     this.roleForm = this.formBuild.group({
-      name: new FormControl('',[Validators.required,Validators.minLength(2),Validators.pattern(communicate.queryValidator)]),
-      description: new FormControl('',[Validators.required,Validators.maxLength(150),Validators.pattern(communicate.queryValidator)]),
+      name: new FormControl('',[Validators.required,Validators.minLength(2)]),
+      description: new FormControl('',[Validators.required,Validators.maxLength(150)]),
       // status: new FormControl(true)
     });
   }

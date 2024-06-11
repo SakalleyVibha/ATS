@@ -20,7 +20,7 @@ export class ManageUserComponent {
   editUser: boolean = false;
   selected_details: any;
 
-  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute,private communicate:CommunicateService) {
+  constructor(private formBuild: FormBuilder, private api: CommonApiService, private router: Router, private toastr: ToastrService, private activeRouter: ActivatedRoute, private communicate: CommunicateService) {
     let user_data: any = localStorage.getItem('Shared_Data');
     user_data = JSON.parse(user_data);
 
@@ -59,8 +59,8 @@ export class ManageUserComponent {
     // this.getUserRole();
     let date = new Date();
     let today = date.getDate();
-    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today-1}` : `${today-1}` }`;
-     this.activeRouter.queryParams.subscribe((params: any) => {
+    this.maxDOB = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${today - 1}` : `${today - 1}`}`;
+    this.activeRouter.queryParams.subscribe((params: any) => {
       if (params.id != null || params.id != undefined) {
         this.editUser = true;
       }
@@ -84,7 +84,7 @@ export class ManageUserComponent {
   }
 
   getUserRole(acc_id: number) {
-    this.api.allgetMethod("role/roles",{}).subscribe((roles: any) => {
+    this.api.allPostMethod("userRole/getUsersRoles", { account_id: acc_id }).subscribe((roles: any) => {
       if (roles.data && roles.data.length > 0) {
         this.user_roles = roles.data;
       }
@@ -126,7 +126,7 @@ export class ManageUserComponent {
           this.router.navigate(['/create-user-location/user-detail']);
         });
       } else {
-        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(()=>{
+        this.toastr.error("Something went wrong, Please try again later", "", { closeButton: true, timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }

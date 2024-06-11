@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { superAdminGuard } from './guards/super-admin.guard';
 
 const routes: Routes = [{ path: '', component: SuperAdminComponent,children:[
+     {path: '',redirectTo:'dashboard',pathMatch: 'full'},
      {path: 'login',component: LoginComponent},
      { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),canActivate: [superAdminGuard] },
      { path: 'permission', loadChildren: () => import('./permission/permission.module').then(m => m.PermissionModule),canActivate: [superAdminGuard] },

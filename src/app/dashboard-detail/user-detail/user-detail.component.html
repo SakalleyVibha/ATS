@@ -11,7 +11,8 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="d-flex  search-filter-main" role="search">
                     <img src="assets/images/search-grey.svg" alt="icon" class="img-fluid">
-                    <input class="form-control" type="search" [(ngModel)]="searchValue" (ngModelChange)="searchData.next($event)" placeholder="Search here . . ." aria-label="Search">
+                    <input class="form-control" type="search" [(ngModel)]="searchValue"
+                        (ngModelChange)="searchData.next($event)" placeholder="Search here . . ." aria-label="Search">
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12 text-end" *ngIf="current_role?.id != 4">
@@ -20,31 +21,34 @@
             </div>
         </div>
     </div>
-    <div class="table-wrapper">
-        <div class="table-responsive" style="height: 631px" 
-        [scrollWindow]="false" infiniteScroll
-        [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="50"
-        (scrolled)="onScroll()">
-            <table class="table table-tamplate-style table-user" >
+    <div class="table-wrapper" infiniteScroll [infiniteScrollDistance]="1" [scrollWindow]="false"
+        [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+        <div class="table-responsive">
+            <table class="table table-tamplate-style table-user">
                 <thead>
                     <tr>
                         <th scope="col">List Of Users</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Last Updated</th>
-                        <th scope="col">Location </th>
+                        <th scope="col">Address </th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
-                    <tr *ngFor="let user of user_list; let i = index">
+
+                    <tr *ngFor="let user of user_list(); let i = index">
 
                         <td class="fonts-n3 user-img-desc">
-                            <span class="image-user"><img [ngSrc]="user?.profile_img ?? 'assets/images/avatar-3814049_1280.png'" alt="Profile image 1"
-                                class="user_img" height="50" width="50" placeholder="data:image/webp;base64,UklGRp4EAABXRUJQVlA4WAoAAAAgAAAA4AAA4AAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggsAIAANAiAJ0BKuEA4QA/OZzKXK8qqSSjUWkR4CcJZ27hc0DbG1t3VAnDOGiFvk1qLsKJZUhduJczO6rmIkEjTCrWThAWsueSyrdi+SJACtSh0GbGOUj1BVQYf+tnV2Gbnp/enfUad32m4QqfuLPeYXemFeBBQi9/ui+vl/IVJDD1V7/q4OZxU8KzLle/kLJKj2NlxVdgor9acuszKSrzHrIZaLCTXDIRc5fuRWxZH2sLnVRYaEz7xdDR4DkWnit4AwjU8B2HZ/i66ZlH0sRQCxsUaozdQciU0nH3BpdDsZ67D5Hvf7v1oJzSqcsTrsTdd46SSRyaSRJZXu8NYIkGufzpTYTvZe9EDRoZSAALORgCJe9Oo3zIzSg1WUnDQtvqauAAAP78SZ+V0iyOWCQfGtFcihejiTXDWiQmEaai0HBpJ1vDZYyNzuebCf7iYQ0yq71dIaWeqf6bCx/e8StKi3y3dXVZI5q2qFXBxjIEfB4cs/ixUL52AxgcWEQArTfVRb+XQYC9ehf1DElwf5Mp75ygj4AqUrqnT+J5AL533o0LvYe+lyJWc4fQcbcG35WptdKuLgKYhIUIbWr/JL6t7GxIzKpjp3jJJ91sDYThdxxXg1uKHVrWTB7DgLvjAz3EPwewsMUu1QPh/m5DkiJmYP4EJIbc0SmBFCPQ4QmNLMmNtm6208zJO6M4hOkN5MBqfJJseJzioI0dc1lF4LyQYYdu8jTCM5t74hGf9hL+4vAAc3dsb28DZbqnNxhkQcYqB0xIHw2Pdq7IGEpDU/XhX7SusKhGhcnKQiUrw5AAAL91SjddPD8IILXRl0kc4Lzz0cg5krkolMi/CNNdkSlRGUaimqOAvERvWDAcHjKwqM+E7IcZrSxtGcU68GcUnm9PhyknQ9QUmXCAAAAAAAXNmCkAAAA="></span>
+                            <span class="image-user"><img
+                                    [ngSrc]="user?.profile_img ?? 'assets/images/avatar-3814049_1280.png'"
+                                    alt="Profile image 1" class="user_img" height="50" width="50"
+                                    placeholder="data:image/webp;base64,UklGRp4EAABXRUJQVlA4WAoAAAAgAAAA4AAA4AAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggsAIAANAiAJ0BKuEA4QA/OZzKXK8qqSSjUWkR4CcJZ27hc0DbG1t3VAnDOGiFvk1qLsKJZUhduJczO6rmIkEjTCrWThAWsueSyrdi+SJACtSh0GbGOUj1BVQYf+tnV2Gbnp/enfUad32m4QqfuLPeYXemFeBBQi9/ui+vl/IVJDD1V7/q4OZxU8KzLle/kLJKj2NlxVdgor9acuszKSrzHrIZaLCTXDIRc5fuRWxZH2sLnVRYaEz7xdDR4DkWnit4AwjU8B2HZ/i66ZlH0sRQCxsUaozdQciU0nH3BpdDsZ67D5Hvf7v1oJzSqcsTrsTdd46SSRyaSRJZXu8NYIkGufzpTYTvZe9EDRoZSAALORgCJe9Oo3zIzSg1WUnDQtvqauAAAP78SZ+V0iyOWCQfGtFcihejiTXDWiQmEaai0HBpJ1vDZYyNzuebCf7iYQ0yq71dIaWeqf6bCx/e8StKi3y3dXVZI5q2qFXBxjIEfB4cs/ixUL52AxgcWEQArTfVRb+XQYC9ehf1DElwf5Mp75ygj4AqUrqnT+J5AL533o0LvYe+lyJWc4fQcbcG35WptdKuLgKYhIUIbWr/JL6t7GxIzKpjp3jJJ91sDYThdxxXg1uKHVrWTB7DgLvjAz3EPwewsMUu1QPh/m5DkiJmYP4EJIbc0SmBFCPQ4QmNLMmNtm6208zJO6M4hOkN5MBqfJJseJzioI0dc1lF4LyQYYdu8jTCM5t74hGf9hL+4vAAc3dsb28DZbqnNxhkQcYqB0xIHw2Pdq7IGEpDU/XhX7SusKhGhcnKQiUrw5AAAL91SjddPD8IILXRl0kc4Lzz0cg5krkolMi/CNNdkSlRGUaimqOAvERvWDAcHjKwqM+E7IcZrSxtGcU68GcUnm9PhyknQ9QUmXCAAAAAAAXNmCkAAAA="></span>
                             <span class="image-user-name">{{user?.f_name}} {{user?.l_name}}</span>
+                        </td>
+                        <td class="fonts-n3">
+                            <span class="txt-tb">{{user?.is_owner ? 'Owner' : (user?.account_role_master?.role_name ?? 'NA')}}</span>
                         </td>
                         <td class="fonts-n3">
                             <span class="txt-tb">{{user?.created_at | date:'dd-MM-yyyy'}}</span>
@@ -66,18 +70,18 @@
                         </td>
                         <td class="action_button">
                             <div class="actiondelete-button">
-                                <a routerLink="edit" [queryParams]="{id: user.id}">
+                                <button class="add-edit-btn" routerLink="edit" [queryParams]="{id: user.id}" [disabled]="user?.is_owner && !user_data?.is_owner">
                                     <img src="assets/images/edit-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/edit-2white.svg" class="img-fluid selected-white-icon">
-                                </a>
-                                <a (click)="deleteUser(user.id)" class="cursor-pointer" [class.disabled]="user.is_owner">
+                                </button>
+                                <button  class="add-edit-btn" (click)="deleteUser(user.id)" [disabled]="user?.is_owner">
                                     <img src="assets/images/trash-2.svg" class="img-fluid unselected-icon">
                                     <img src="assets/images/trash-2white.svg" class="img-fluid selected-white-icon">
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
-                    <tr class="text-center" *ngIf="user_list && user_list.length == 0">
+                    <tr class="text-center" *ngIf="user_list() && user_list().length == 0">
                         <td colspan="7">
                             <button class="btn btn-add-doc" routerLink="add-user">No Record Found</button>
                         </td>

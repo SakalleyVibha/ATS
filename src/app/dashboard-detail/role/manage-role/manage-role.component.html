@@ -1,0 +1,113 @@
+<div class="location-sec-bdy">
+    <form [formGroup]="roleForm">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="loc-heading clb">
+            <h3>{{ isEditForm ? "Edit" : "Create" }} Role</h3>
+            <!-- <div class="on-off-bdy">
+                <div class="inactact-pop-bdy">
+                  <label class="form-check-label inactive-txt">inactive</label>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="status"
+                      formControlName="status"
+                      role="switch"
+                      checked=""
+                    />
+                    <label class="form-check-label active-txt">Active</label>
+                  </div>
+                </div>
+              </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="create-md-content">
+        <div class="create-form-wrap">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="create-form-he">
+                <h2>General Information</h2>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label for="inlineFormInputGroupUsername">Name*</label>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="autoSizingInput"
+                    formControlName="name"
+                    placeholder="Enter name"
+                  />
+                  @if(formData['name'].invalid && (formData['name'].touched ||
+                  formData['name'].dirty || isFormValid)){
+                  <div class="required-txt-error">
+                    @if(formData['name'].errors?.['required']){
+                      <span>Name required</span>
+                    }
+                    @if(formData['name'].errors?.['minlength']){
+                      <span> Name atleast contain 2 characters</span>
+                    }
+                    @if(formData['name'].errors?.['pattern']){
+                      <span>Valid name required</span>
+                    }
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4 col-md-4 col-xl-4">
+              <div class="form-group-wrap">
+                <label for="inlineFormInputGroupUsername">Description</label>
+                <div class="form-group">
+                  <textarea
+                    rows="5"
+                    class="form-control"
+                    placeholder="Description here"
+                    formControlName="description"
+                  ></textarea>
+                  @if( formData['description'].invalid &&
+                  (formData['description'].touched ||
+                    formData['description'].dirty ||
+                    isFormValid)){
+                  <div class="required-txt-error">
+                    @if(formData['description'].errors?.['required']){
+                      <span>Description required</span>
+                    }
+                    @if(formData['description'].errors?.['maxlength']){
+                      <span>Maximum 150 characters allowed</span>
+                    }
+                    @if(formData['description'].errors?.['pattern']){
+                      <span>Valid description required</span>
+                    }
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-12">
+              <div class="role-height-space"></div>
+            </div>
+            <div class="col-xl-12">
+              <div class="form-group-btn-center">
+                <button
+                  class="btn btn-theme"
+                  (click)="isEditForm ? onEditForm() : onSubmitForm()"
+                  >{{ isEditForm ? "Edit" : "Save" }}</button
+                >
+                <button (click)="location.back()" class="btn btn-theme-two"
+                  >Cancel</button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  

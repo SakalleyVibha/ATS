@@ -27,19 +27,19 @@ export class ManageClientComponent {
     shareData = JSON.parse(shareData);
     // this.client_Form.value.account_id = shareData.account_id;
     this.client_Form = this.formbuilder.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(this.sql_validation())]],
+      name: ['', [Validators.required, Validators.minLength(2)]],
       website: ['', [Validators.required, Validators.pattern(this.website_validate())]],
       logo: ['', [Validators.required]],
       mobile: ['', [Validators.required, Validators.pattern(this.number_validation())]],
       phone: ['', [Validators.required, Validators.pattern(this.number_validation())]],
       fax: ['', [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
-      about: ['', [Validators.required, Validators.maxLength(150), Validators.pattern(this.sql_validation())]],
+      about: ['', [Validators.required, Validators.maxLength(150)]],
 
-      street: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
-      state: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
-      city: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
+      street: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      city: ['', [Validators.required]],
       zip: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
-      country: ['', [Validators.required, Validators.pattern(this.sql_validation())]],
+      country: ['', [Validators.required]],
 
       location_id: [''],
       account_id: Number(shareData.account_id),
@@ -92,7 +92,7 @@ export class ManageClientComponent {
             country: editableData?.country,
             state: editableData?.state,
             zip: editableData?.zip,
-            account_id:acc_id
+            account_id: acc_id
           });
           this.isActive.set(editableData?.status);
           this.imgURLBase64.set(editableData?.logo);
@@ -119,10 +119,12 @@ export class ManageClientComponent {
     //   location_id: Number(this.client_Form.value.location_id),
     //   status: Number(this.isActive()),
     // })
-    let payload = { ...this.client_Form.value, 
-      logo: this.imgURLBase64() , 
+    let payload = {
+      ...this.client_Form.value,
+      logo: this.imgURLBase64(),
       status: Number(this.isActive()),
-      location_id: Number(this.client_Form.value.location_id)}
+      location_id: Number(this.client_Form.value.location_id)
+    }
 
     this.api.allPostMethod("clients/client", payload).subscribe((afterAdd: any) => {
       if (afterAdd.message) {

@@ -62,7 +62,7 @@ span.resume-added {
     display: inline-flex;
     background: #d3e6f9;
     border-radius: 10px;
-    box-shadow:0 1.7px 1.4px rgb(139 139 139 / 2%), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgb(168 168 168 / 4%), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgb(168 168 168 / 5%), 0 60px 50px rgb(170 170 170 / 7%);
+    box-shadow: 0 1.7px 1.4px rgb(139 139 139 / 2%), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgb(168 168 168 / 4%), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgb(168 168 168 / 5%), 0 60px 50px rgb(170 170 170 / 7%);
     overflow: hidden;
     transform: rotate(0);
 }
@@ -134,11 +134,13 @@ button.btn.btn-view {
 
 span.resume-added {
     /* number of lines to show */
-    -webkit-line-clamp: 1; /* number of lines to show */
+    -webkit-line-clamp: 1;
+    /* number of lines to show */
     white-space: nowrap;
     display: flex;
 }
-span.resume-added > span.cross-icon {
+
+span.resume-added>span.cross-icon {
     color: #000;
     font-size: 20px;
     margin-left: 7px;
@@ -163,7 +165,7 @@ span.resume-added > span.cross-icon {
     margin-bottom: 20px;
 }
 
-.modal-body > img {
+.modal-body>img {
     width: -webkit-fill-available;
 }
 
@@ -179,7 +181,7 @@ button.close {
     border-radius: 14px;
 }
 
-button.close > span {
+button.close>span {
     color: #fff;
     font-size: 27px;
     font-weight: bolder;

@@ -27,8 +27,8 @@ export class ManageCustomFieldFormComponent {
     this.acc_id.set(user_data?.account_id);
     this.addCustomFieldForm = this.fb.group({
       account_id: new FormControl(user_data?.account_id),
-      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(this.sql_validation())]),
-      description: new FormControl('', [Validators.required, Validators.pattern(this.sql_validation())]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      description: new FormControl('', [Validators.required]),
       is_active: new FormControl(1),
       is_featured: new FormControl('1', [Validators.required])
     });
@@ -129,8 +129,8 @@ export class ManageCustomFieldFormComponent {
     });
   }
 
-  selectIsFeatured(event: any){
-    console.log('event',event.target.value)
+  selectIsFeatured(event: any) {
+    console.log('event', event.target.value)
   }
 
 }

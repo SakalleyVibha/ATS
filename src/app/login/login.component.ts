@@ -19,7 +19,7 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private api: CommonApiService, private toast: ToastrService, private router: Router, private communicate: CommunicateService) {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required]]
     })
   }
 
@@ -48,30 +48,27 @@ export class LoginComponent {
           }
         }
 
-        // localStorage.setItem('role', JSON.stringify({
-        //   id: 1, name: "Admin"
-        // }));
         localStorage.setItem('token', res.data['token']);
+        localStorage.setItem('permissiontoken', res.data['permissions']);
         localStorage.setItem('Shared_Data', JSON.stringify({
           is_email_valid: res.data['is_email_verified'],
           temp_pass: res.data['is_tempPassword'],
           user_id: res.data['id'],
           is_owner: res.data['is_owner'],
           email_add: res['data']?.email,
-          account_id: res['data']?.account_id
+          account_id: res['data']?.account_id,
         }));
-        this.toast.success("Login successfully", "Valid user", { timeOut: 500, closeButton: true }).onHidden.subscribe(() => {
-          this.login.reset();
-          this.communicate.isLoaderLoad.next(false);
-          if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
-            this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
-          } else {
-            this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail/profile']);
-          }
-        });
+        this.toast.success("Login successfully", "Valid user");
+        this.login.reset();
+        this.communicate.isLoaderLoad.next(false);
+        if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
+          this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
+        } else {
+          this.router.navigate([res['data'].is_tempPassword == true ? '/password-change' : '/dashboard-detail/profile']);
+        }
 
       } else {
-        this.toast.error(res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
+        this.toast.error(res.message || res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
           this.communicate.isLoaderLoad.next(false);
         });
       }
@@ -79,12 +76,12 @@ export class LoginComponent {
   }
 
   getAllRoles() {
-    this.api.allgetMethod('role/roles', {}).subscribe((res: any) => {
-      if (!res['error']) {
-        this.allRoles = res['data'];
-        localStorage.setItem("role_list", JSON.stringify(this.allRoles));
-      }
-    });
+    // this.api.allgetMethod('role/roles', {}).subscribe((res: any) => {
+    //   if (!res['error']) {
+    //     this.allRoles = res['data'];
+    //     localStorage.setItem("role_list", JSON.stringify(this.allRoles));
+    //   }
+    // });
   }
 
 }
