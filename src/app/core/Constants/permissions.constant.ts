@@ -13,6 +13,7 @@ export const PERMISSIONS = {
   Search_Candidate: 'Search Candidate',
 
   Delete_Candidate: 'Delete Candidate',
+  Read_Write_Pemission: 'R/W Permission'
 };
 
 
