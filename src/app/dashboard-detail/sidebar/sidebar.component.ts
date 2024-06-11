@@ -16,7 +16,8 @@ export class SidebarComponent {
   location_list: any;
   isDetailSide:boolean = true;
   permission = {
-    candidate: true
+    candidate: true,
+    rolePermission: true,
   }
 
   constructor(private api: CommonApiService, private router: Router,private communicate: CommunicateService) {
@@ -74,6 +75,7 @@ export class SidebarComponent {
       let permissiontoken = localStorage.getItem('permissiontoken');
       permissiontoken = this.communicate.decryptText(permissiontoken);
       this.permission['candidate'] = permissiontoken? permissiontoken.includes(PERMISSIONS.View_Candidate): false;
+      this.permission['rolePermission'] = permissiontoken? permissiontoken.includes(PERMISSIONS.Read_Write_Pemission): false;
   }
 
 }

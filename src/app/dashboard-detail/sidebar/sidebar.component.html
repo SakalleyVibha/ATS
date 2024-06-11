@@ -136,9 +136,11 @@
                 <li>
                   <a routerLink="role">Role</a>
                 </li>
-                <li>
-                  <a routerLink="user-role-permission">Role Permission</a>
-                </li>
+                @if(permission.rolePermission){
+                  <li>
+                    <a routerLink="user-role-permission">Role Permission</a>
+                  </li>
+                }
                 <li>
                   <a routerLink="lob-detail">LOB</a>
                 </li>
