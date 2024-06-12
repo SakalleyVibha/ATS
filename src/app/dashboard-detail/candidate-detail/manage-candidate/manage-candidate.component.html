@@ -221,6 +221,66 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">State*</label>
                                 <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter state" formControlName="state">
+                                    <div *ngIf="(formData['state'].invalid && (formData['state'].touched || formData['state'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['state'].errors?.['required']">
+                                            State required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Zip Code*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter zip code " formControlName="zipcode">
+                                    <div *ngIf="(formData['zipcode'].invalid && (formData['zipcode'].touched || formData['zipcode'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['zipcode'].errors?.['required']">
+                                            Zip code required
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['zipcode'].errors?.['minlength']">
+                                            Zip code must contain at least 2 numbers
+                                        </ng-container>
+                                        <ng-container *ngIf="formData['zipcode'].errors?.['maxlength']">
+                                            Zip code must contain maximum 6 numbers
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Address*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter address" formControlName="address">
+                                    <div *ngIf="(formData['address'].invalid && (formData['address'].touched || formData['address'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['address'].errors?.['required']">
+                                            Address required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Address 2*</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="autoSizingInput"
+                                        placeholder="Enter address" formControlName="address2">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">State*</label>
+                                <div class="form-group">
                                     <select class="form-control" formControlName="state">
                                         <option value="" hidden selected>
                                             Select Value</option>
@@ -236,7 +296,7 @@
                                     </ng-container>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -275,24 +335,6 @@
                                             Title must contain atleast 3 characters
                                         </ng-container>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
-                            <div class="form-group-wrap">
-                                <label for="inlineFormInputGroupUsername">Position*</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="autoSizingInput"
-                                        placeholder="Enter position" formControlName="position">
-                                </div>
-                                <div *ngIf="(formData['position'].invalid && (formData['position'].touched || formData['position'].dirty || isFieldsValid()))"
-                                    class="required-txt-error">
-                                    <ng-container *ngIf="formData['position'].errors?.['required']">
-                                        Position required
-                                    </ng-container>
-                                    <ng-container *ngIf="formData['position'].errors?.['minlength']">
-                                        Position must contain atleast 3 characters
-                                    </ng-container>
                                 </div>
                             </div>
                         </div>
@@ -518,29 +560,14 @@
                                 <label for="inlineFormInputGroupUsername">Date of Birth*</label>
                                 <div class="form-group">
                                     <input type="date" class="form-control" id="autoSizingInput" formControlName="dob"
-                                        max="{{date | date:'yyyy-MM-dd'}}">
+                                        (ngModelChange)="onDOBchange($event)" max="{{date | date:'yyyy-MM-dd'}}">
                                     <div *ngIf="(formData['dob'].invalid && (formData['dob'].touched || formData['dob'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
                                         <ng-container *ngIf="formData['dob'].errors?.['required']">
                                             Date of birth required
                                         </ng-container>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
-                            <div class="form-group-wrap">
-                                <label for="inlineFormInputGroupUsername">Highest Education Completion Year*</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="autoSizingInput"
-                                        placeholder="Enter year of completion"
-                                        formControlName="graduation_completion_year">
-
-                                    <div *ngIf="(formData['graduation_completion_year'].invalid && (formData['graduation_completion_year'].touched || formData['graduation_completion_year'].dirty || isFieldsValid()))"
-                                        class="required-txt-error">
-                                        <ng-container
-                                            *ngIf="formData['graduation_completion_year'].errors?.['required']">
-                                            Graduation completion year required
+                                        <ng-container *ngIf="formData['dob'].errors?.['mustBe18']">
+                                            You must be at least 18 years old.
                                         </ng-container>
                                     </div>
                                 </div>
@@ -561,6 +588,26 @@
                                         class="required-txt-error">
                                         <ng-container *ngIf="formData['resume_source'].errors?.['required']">
                                             Resume source required
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                            <div class="form-group-wrap">
+                                <label for="inlineFormInputGroupUsername">Status*</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="status">
+                                        <option value="" hidden selected>
+                                            Select Value</option>
+                                        @for(status of statusList(); track status.id){
+                                        <option [value]="status?.value">{{status?.title}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="(formData['status'].invalid && (formData['status'].touched || formData['status'].dirty || isFieldsValid()))"
+                                        class="required-txt-error">
+                                        <ng-container *ngIf="formData['status'].errors?.['required']">
+                                            Status required
                                         </ng-container>
                                     </div>
                                 </div>
@@ -758,6 +805,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Position*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="position"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter position name">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="employment.get('position')?.invalid && (employment.get('position')?.dirty || employment.get('position')?.touched || isFieldsValid())">
+                                                            <ng-container
+                                                                *ngIf="employment.get('position')?.errors?.['required']">
+                                                                Position required
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="employment.get('position')?.errors?.['minlength']">
+                                                                Position must contain atleast 3 characters
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-6 col-lg-3 col-md-6 col-xl-3 col-sm-12">
                                     <div class="row">
                                         <div class="col-6 col-lg-4 col-md-4 col-xl-6">
@@ -862,15 +938,44 @@
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="">
-                                                            <input type="text" formControlName="qualification"
-                                                                class="form-control" id="autoSizingInput"
-                                                                placeholder="Enter qualification">
+                                                            <select class="form-control" formControlName="qualification_id" (change)="selectedQualification($event, i)">
+                                                                <option value="" hidden selected>
+                                                                    Select Value</option>
+                                                                @for(qualificationName of qualificationList(); track qualificationName.id){
+                                                                <option [value]="qualificationName?.id">{{qualificationName?.qualification}}</option>
+                                                                }
+                                                            </select>
                                                         </div>
                                                         <div
                                                             *ngIf="education.get('qualification')?.invalid && (education.get('qualification')?.dirty || education.get('qualification')?.touched || isFieldsValid())">
                                                             <div *ngIf="education.get('qualification')?.errors?.['required']"
                                                                 class="required-txt-error">
                                                                 Qualification required.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-md-6 col-xl-4 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-4 col-md-4 col-xl-6">
+                                            <div class="form-group-wrap">
+                                                <label for="inlineFormInputGroupUsername">Completion Year*</label>
+                                                <div class="form-group">
+                                                    <div class="form">
+                                                        <div class="">
+                                                            <input type="text" formControlName="completion_year"
+                                                                class="form-control" id="autoSizingInput"
+                                                                placeholder="Enter Completion Year">
+                                                        </div>
+                                                        <div
+                                                            *ngIf="education.get('completion_year')?.invalid && (education.get('completion_year')?.dirty || education.get('completion_year')?.touched || isFieldsValid())">
+                                                            <div *ngIf="education.get('completion_year')?.errors?.['required']"
+                                                                class="required-txt-error">
+                                                                Completion year required.
                                                             </div>
                                                         </div>
                                                     </div>

@@ -43,7 +43,7 @@ export class ManageUserComponent {
       f_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
       l_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
       alias: new FormControl('', [Validators.required]),
-      dob: new FormControl('', [Validators.required]),
+      dob: new FormControl('', [Validators.required, this.mustBe18Validator]),
       email: new FormControl('', [Validators.required, Validators.email]),
       website: new FormControl('', [Validators.required, Validators.pattern(this.website_validate())]),
       phone: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
@@ -54,7 +54,7 @@ export class ManageUserComponent {
       city: new FormControl('', [Validators.required]),
       country: new FormControl('', [Validators.required]),
       state: new FormControl('', [Validators.required]),
-      zip: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]),
+      zip: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(6)]),
       role_id: new FormControl('', [Validators.required]),
       account_id: new FormControl(user_data.account_id),
       location_id: new FormControl(''),
@@ -288,6 +288,33 @@ export class ManageUserComponent {
   closeModal() {
     if (this.modalRef) {
       this.modalRef.dismiss('cross click'); // Dismiss the modal
+    }
+  }
+  mustBe18Validator(control: FormControl): { [key: string]: boolean } | null {
+    const dob = control.value;
+    if (dob) {
+      const selectedDate = new Date(dob);
+      const eighteenYearsAgo = new Date(selectedDate.getTime() + 18 * 365.25 * 24 * 60 * 60 * 1000);
+      const today = new Date();
+
+      if (eighteenYearsAgo > today) {
+        return { mustBe18: true }; // Return the custom error object
+      }
+    }
+    return null;
+  }
+
+  onDOBchange(dob:Date){
+    if (dob) {
+      const selectedDate = new Date(dob); // Convert the value to a Date object
+      const eighteenYearsAgo = new Date(selectedDate.getTime() + 18 * 365.25 * 24 * 60 * 60 * 1000);
+      const today = new Date();
+      if (eighteenYearsAgo > today) {
+        this.formData['dob'].setErrors({ mustBe18: true }); // Set custom error
+      } else {
+        // Remove the error if the user selects a valid date
+        this.formData['dob'].setErrors(null);
+      }
     }
   }
 

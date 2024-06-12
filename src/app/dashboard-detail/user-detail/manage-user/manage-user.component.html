@@ -375,12 +375,15 @@
                             <label for="inlineFormInputGroupUsername">Date of Birth</label>
                             <div class="form-group">
                                 <input type="date" class="form-control" id="autoSizingInput" [max]="maxDOB"
-                                    formControlName="dob">
+                                    formControlName="dob" (ngModelChange)="onDOBchange($event)">
                                 <div *ngIf="formData['dob'].invalid && (formData['dob'].touched || formData['dob'].dirty || isFormValid())"
                                     class="required-txt-error">
                                     <ng-container *ngIf="formData['dob'].errors?.['required']">
                                         Date of birth required
                                     </ng-container>
+                                    <ng-container *ngIf="formData['dob'].errors?.['mustBe18']">
+                                        You must be at least 18 years old.
+                                      </ng-container>
                                 </div>
                             </div>
                         </div>
@@ -466,14 +469,13 @@
                                 <div *ngIf="formData['zip'].invalid && (formData['zip'].touched || formData['zip'].dirty || isFormValid())"
                                     class="required-txt-error">
                                     <ng-container *ngIf="formData['zip'].errors?.['required']">
-                                        Zip required
+                                        Zip code required
                                     </ng-container>
-                                    <ng-container *ngIf="formData['zip'].errors?.['pattern']">
-                                        Zip required numbers
+                                    <ng-container *ngIf="formData['zip'].errors?.['minlength']">
+                                        Zip code must contain at least 2 numbers
                                     </ng-container>
-                                    <ng-container
-                                        *ngIf="formData['zip'].errors?.['minlength'] || formData['zip'].errors?.['maxlength']">
-                                        Valid zip required
+                                    <ng-container *ngIf="formData['zip'].errors?.['maxlength']">
+                                        Zip code must contain maximum 6 numbers
                                     </ng-container>
                                 </div>
                             </div>

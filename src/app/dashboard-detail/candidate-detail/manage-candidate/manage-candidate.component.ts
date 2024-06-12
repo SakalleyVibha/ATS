@@ -1,13 +1,13 @@
 import { Component, ViewChild, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, SALARY_TYPE, STATE_CONST, VISA_STATUS } from '../../../core/Constants/list.constant';
+import { EMPLOYER_NAME, MODE_OF_HIRE, PROJECT_STATUS, RELOCATION, RESUME_SOURCE, SALARY_TYPE, STATE_CONST, STATUS_LIST, VISA_STATUS } from '../../../core/Constants/list.constant';
 import { CommonApiService } from '../../../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommunicateService } from '../../../core/services/communicate.service';
 import { environment } from '../../../../environments/environment';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatestWith, map } from 'rxjs';
+import { combineLatestWith, filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -26,11 +26,13 @@ export class ManageCandidateComponent {
   visaStatus = signal<any>(VISA_STATUS);
   projectStatus = signal<any>(PROJECT_STATUS);
   resumeSource = signal<any>(RESUME_SOURCE);
+  statusList = signal<any>(STATUS_LIST);
   employerName = signal<any>(EMPLOYER_NAME);
   salaryType = signal<any>(SALARY_TYPE);
   imgURLBase64 = signal<any>('');
   selectedFiles: FileList | null = null;
   documentList = signal<any>([]);
+  qualificationList = signal<any>([]);
   resumeFileNames = signal<any>([]);
   imgBs64 = signal<string>('');
   sql_validation = signal(environment.SQL_validation);
@@ -56,7 +58,7 @@ export class ManageCandidateComponent {
       this.account_id.set(userData?.account_id);
     }
     this.createCandidateForm(userData?.account_id);
-
+    this.getQualificationList();
   }
 
   ngOnInit() {
@@ -89,26 +91,28 @@ export class ManageCandidateComponent {
       account_id: new FormControl(acc_id),
       name: new FormControl('', [Validators.required, Validators.minLength(2)]),
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      position: new FormControl('', [Validators.required, Validators.minLength(3)]),
       total_experience: new FormControl('', [Validators.required]),
       relevant_experience: new FormControl('', [Validators.required]),
+      status: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       linkedin: new FormControl(''),
       contact: new FormControl('', [Validators.required, Validators.pattern(this.number_validation())]),
       alternate_contact: new FormControl(''),
       city: new FormControl('', [Validators.required]),
       state: new FormControl('', [Validators.required]),
+      zipcode: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(6)]),
+      address: new FormControl('', [Validators.required]),
+      address2: new FormControl(''),
       mode_of_hire: new FormControl('', [Validators.required]),
       visa_status: new FormControl('', [Validators.required]),
       salary_type: new FormControl('', [Validators.required]),
       salary: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+$/)]),
       employer_name: new FormControl('', [Validators.required]),
       visa_validity: new FormControl('', [Validators.required]),
-      dob: new FormControl('', [Validators.required]),
+      dob: new FormControl('', [Validators.required, this.mustBe18Validator]),
       relocation: new FormControl('', [Validators.required]),
       current_project_status: new FormControl('', [Validators.required]),
       joining_availability: new FormControl('', [Validators.required]),
-      graduation_completion_year: new FormControl('', [Validators.required]),
       resume_source: new FormControl('', [Validators.required]),
       profile_image: new FormControl('', [Validators.required]),
       notes: new FormControl('', [Validators.required]),
@@ -140,6 +144,7 @@ export class ManageCandidateComponent {
     this.employment_history.push(
       this.fb.group({
         company_name: new FormControl('', [Validators.required]),
+        position: new FormControl('', [Validators.required, Validators.minLength(3)]),
         from_date: new FormControl('', [Validators.required]),
         to_date: new FormControl('', [Validators.required])
       })
@@ -150,6 +155,8 @@ export class ManageCandidateComponent {
     this.education_detail.push(
       this.fb.group({
         qualification: new FormControl('', [Validators.required]),
+        qualification_id: new FormControl('', [Validators.required]),
+        completion_year: new FormControl('', [Validators.required]),
         course: new FormControl('', [Validators.required]),
         university: new FormControl('', [Validators.required])
       })
@@ -185,9 +192,11 @@ export class ManageCandidateComponent {
       } else {
         control.addControl('deleted', new FormControl(1));
         control.get('company_name')?.clearValidators();
+        control.get('position')?.clearValidators();
         control.get('from_date')?.clearValidators();
         control.get('to_date')?.clearValidators();
         control.get('company_name')?.updateValueAndValidity();
+        control.get('position')?.updateValueAndValidity();
         control.get('from_date')?.updateValueAndValidity();
         control.get('to_date')?.updateValueAndValidity();
       }
@@ -208,9 +217,11 @@ export class ManageCandidateComponent {
       } else {
         control.addControl('deleted', new FormControl(1));
         control.get('qualification')?.clearValidators();
+        control.get('completion_year')?.clearValidators();
         control.get('university')?.clearValidators();
         control.get('course')?.clearValidators();
         control.get('qualification')?.updateValueAndValidity();
+        control.get('completion_year')?.updateValueAndValidity();
         control.get('university')?.updateValueAndValidity();
         control.get('course')?.updateValueAndValidity();
       }
@@ -415,6 +426,7 @@ export class ManageCandidateComponent {
                   this.employment_history.push(
                     this.fb.group({
                       company_name: new FormControl('', [Validators.required]),
+                      position: new FormControl('', [Validators.required, Validators.minLength(3)]),
                       from_date: new FormControl('', [Validators.required]),
                       to_date: new FormControl('', [Validators.required]),
                       id: new FormControl('')
@@ -422,6 +434,7 @@ export class ManageCandidateComponent {
                   );
                   this.employment_history.at(index).patchValue({
                     company_name: data?.company_name,
+                    position: data?.position,
                     from_date: data?.from_date,
                     to_date: data?.to_date,
                     id: data?.id
@@ -437,6 +450,7 @@ export class ManageCandidateComponent {
                   this.education_detail.push(
                     this.fb.group({
                       qualification: new FormControl('', [Validators.required]),
+                      completion_year: new FormControl('', [Validators.required]),
                       course: new FormControl('', [Validators.required]),
                       university: new FormControl('', [Validators.required]),
                       id: new FormControl(''),
@@ -444,6 +458,7 @@ export class ManageCandidateComponent {
                   );
                   this.education_detail.at(index).patchValue({
                     qualification: data?.qualification,
+                    completion_year: data?.completion_year,
                     course: data?.course,
                     university: data?.university,
                     id: data?.id
@@ -486,7 +501,6 @@ export class ManageCandidateComponent {
               this.addCandidateForm.patchValue({
                 name: res['data'].name,
                 title: res['data'].title,
-                position: res['data'].position,
                 total_experience: res['data'].total_experience,
                 relevant_experience: res['data'].relevant_experience,
                 email: res['data'].email,
@@ -495,6 +509,10 @@ export class ManageCandidateComponent {
                 alternate_contact: res['data'].alternate_contact,
                 city: res['data'].city,
                 state: res['data'].state,
+                zipcode: res['data'].zipcode,
+                status: res['data'].status,
+                address: res['data'].address,
+                address2: res['data'].address2,
                 mode_of_hire: res['data'].mode_of_hire,
                 visa_status: res['data'].visa_status,
                 salary_type: res['data'].salary_type,
@@ -505,7 +523,6 @@ export class ManageCandidateComponent {
                 relocation: res['data'].relocation,
                 current_project_status: res['data'].current_project_status,
                 joining_availability: res['data'].joining_availability,
-                graduation_completion_year: res['data'].graduation_completion_year,
                 resume_source: res['data'].resume_source,
                 profile_image: res['data'].profile_image,
                 notes: res['data'].notes
@@ -677,5 +694,67 @@ export class ManageCandidateComponent {
       }
 
     })
+  }
+
+  getQualificationList() {
+    this.communicate.isLoaderLoad.next(true);
+    let reqObj = {
+      "pageNumber": 1,
+      "pageSize": 10,
+      "keyword": ""
+    }
+    this.api.allPostMethod('education-qualification/getlist', reqObj).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false);
+      if (res['error'] != true) {
+        if ((res['data'] && res['data'].length > 0)) {
+          if (reqObj.pageNumber == 1) {
+            this.qualificationList.set(res['data']);
+          } else
+            this.qualificationList.update(x => {
+              return [...x, ...res['data']]
+            })
+          // this.totalPages = res['totalPages'];
+        } else {
+          this.qualificationList.set([]);
+        }
+      } else {
+        this.qualificationList.set([]);
+        this.toastr.error(res['message'], "");
+      }
+    });
+  }
+
+  mustBe18Validator(control: FormControl): { [key: string]: boolean } | null {
+    const dob = control.value;
+    if (dob) {
+      const selectedDate = new Date(dob);
+      const eighteenYearsAgo = new Date(selectedDate.getTime() + 18 * 365.25 * 24 * 60 * 60 * 1000);
+      const today = new Date();
+
+      if (eighteenYearsAgo > today) {
+        return { mustBe18: true }; // Return the custom error object
+      }
+    }
+    return null;
+  }
+
+  onDOBchange(dob: Date) {
+    if (dob) {
+      const selectedDate = new Date(dob); // Convert the value to a Date object
+      const eighteenYearsAgo = new Date(selectedDate.getTime() + 18 * 365.25 * 24 * 60 * 60 * 1000);
+      const today = new Date();
+      if (eighteenYearsAgo > today) {
+        this.formData['dob'].setErrors({ mustBe18: true }); // Set custom error
+      } else {
+        // Remove the error if the user selects a valid date
+        this.formData['dob'].setErrors(null);
+      }
+    }
+  }
+
+  selectedQualification(event:any, i:any){
+    const filteredItem = this.qualificationList().filter((item:any) => item?.id == event.target.value) 
+    let control = this.education_detail.at(i) as FormGroup;
+    control?.get('qualification')?.setValue(filteredItem[0]?.qualification);
   }
 }
