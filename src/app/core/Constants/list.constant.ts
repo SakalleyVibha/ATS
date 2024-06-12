@@ -56,3 +56,9 @@ export const RESUME_SOURCE = [
     { id: 7, title: 'Referral', value: 'referral' },
     { id: 8, title: 'Internal Database', value: 'internal database' }
 ]
+
+export const STATUS_LIST = [
+    {id: 1, value: 0, title: 'Inactive'},
+    {id: 2, value: 1, title: 'Active'},
+    {id: 3, value: 2, title: 'On hold'},
+]

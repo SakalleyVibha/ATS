@@ -323,11 +323,11 @@
                                                         <ng-container *ngIf="formField['zip'].errors?.['required']">
                                                             Zip required
                                                         </ng-container>
-                                                        <ng-container *ngIf="formField['zip'].errors?.['pattern']">
-                                                            Zip contain numbers only
+                                                        <ng-container *ngIf="formField['zip'].errors?.['minlength']">
+                                                            Zip must contain at least 2 numbers
                                                         </ng-container>
                                                         <ng-container *ngIf="formField['zip'].errors?.['minlength'] || formField['zip'].errors?.['maxlength']">
-                                                            Zip should be of 6 digit
+                                                            Zip must contain maximum 6 numbers
                                                         </ng-container>
                                                     </div>
                                             </div>

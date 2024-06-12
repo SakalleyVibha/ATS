@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmedValidator } from '../shared/confirm.validator';
 import { CommonApiService } from '../core/services/common-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CommunicateService } from '../core/services/communicate.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +19,7 @@ export class SignupComponent {
   ispasswordshow: boolean = false;
   isconfrmpassshow: boolean = false;
   maxDOB: any;
+  number_validation = signal(environment.Phone_Mobile_valid);
 
   constructor(private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private router: Router, private communicate: CommunicateService) {
     this.signUp = this.fb.group({
@@ -28,15 +30,15 @@ export class SignupComponent {
 
       email: ['', [Validators.required, Validators.email]],
       website: ['', [Validators.required, Validators.pattern('(^((http|https)://)|((www)[.]))[A-Za-z0-9_@./#!$%^:*&+-]+([\-\.]{1}[a-z0-9]+)*\.(?:com|net|in|org|io)$')]],
-      phone: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
-      mobile: ['', [Validators.required, Validators.pattern('[6-9][0-9]{12}')]],
+      phone: ['', [Validators.required, Validators.pattern(this.number_validation())]],
+      mobile: ['', [Validators.required, Validators.pattern(this.number_validation())]],
       fax: ['', [, Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(13)]],
 
       street: ['', [Validators.required]],
       city: ['', [Validators.required]],
       country: ['', [Validators.required]],
       state: ['', [Validators.required]],
-      zip: ['', [Validators.pattern('^[0-9]*$'), Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+      zip: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(6)]],
       password: ['', [Validators.required, Validators.pattern('(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=]).*$'), Validators.minLength(8)]],
       confirmpassword: ['', [Validators.required]],
     },

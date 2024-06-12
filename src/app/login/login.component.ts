@@ -36,6 +36,7 @@ export class LoginComponent {
     }
     this.communicate.isLoaderLoad.next(true);
     this.api.allPostMethod("application/login", this.login.value).subscribe((res: any) => {
+      this.communicate.isLoaderLoad.next(false); 
       if (!res.error) {
         let which_role: any;
         let role_idx: any;
@@ -60,7 +61,6 @@ export class LoginComponent {
         }));
         this.toast.success("Login successfully", "Valid user");
         this.login.reset();
-        this.communicate.isLoaderLoad.next(false);
         if (res['data']?.is_owner == true || role_idx?.name == 'Admin') {
           this.router.navigate([res['data'].is_email_verified == 0 ? '/verify-email' : (res['data'].account_id ? '/dashboard-detail' : '/create-organization')]);
         } else {
@@ -68,9 +68,7 @@ export class LoginComponent {
         }
 
       } else {
-        this.toast.error(res.message || res.error, "Something", { timeOut: 5000 }).onHidden.subscribe(() => {
-          this.communicate.isLoaderLoad.next(false);
-        });
+        this.toast.error(res.message || res.error, "Something")
       }
     });
   }
