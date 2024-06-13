@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatestWith, filter, map } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -49,7 +50,7 @@ export class ManageCandidateComponent {
   getCandidateData = signal<any>([]);
   number_validation = signal(environment.Phone_Mobile_valid);
   date: any;
-  constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal) {
+  constructor(private router: Router, private fb: FormBuilder, private api: CommonApiService, private toastr: ToastrService, private communicate: CommunicateService, private activeRoute: ActivatedRoute, private modalService: NgbModal, private datePipe: DatePipe) {
 
 
     let userData: any = localStorage.getItem('Shared_Data');
@@ -85,6 +86,10 @@ export class ManageCandidateComponent {
   }
 
   get formData() { return this.addCandidateForm.controls };
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 
   createCandidateForm(acc_id: number) {
     this.addCandidateForm = this.fb.group({
@@ -141,6 +146,11 @@ export class ManageCandidateComponent {
   }
 
   addSkills() {
+    const employmentGroup = this.employment_history.at(this.employment_history.length - 1) as FormGroup;
+    const toDateControl = employmentGroup?.get('to_date');
+    toDateControl?.setValue('');
+    toDateControl?.setValidators(Validators.required);
+    toDateControl?.updateValueAndValidity();
     this.employment_history.push(
       this.fb.group({
         company_name: new FormControl('', [Validators.required]),
@@ -149,6 +159,7 @@ export class ManageCandidateComponent {
         to_date: new FormControl('', [Validators.required])
       })
     );
+    this.calculateTotalExperience();
   }
 
   addEducation() {
@@ -156,7 +167,7 @@ export class ManageCandidateComponent {
       this.fb.group({
         qualification: new FormControl('', [Validators.required]),
         qualification_id: new FormControl('', [Validators.required]),
-        completion_year: new FormControl('', [Validators.required]),
+        completion_year: new FormControl('', [Validators.required, Validators.max(new Date().getFullYear())]),
         course: new FormControl('', [Validators.required]),
         university: new FormControl('', [Validators.required])
       })
@@ -176,7 +187,7 @@ export class ManageCandidateComponent {
   addDoc() {
     this.documents.push(
       this.fb.group({
-        docType: new FormControl('resume'),
+        docType: new FormControl(''),
         name: new FormControl('', [Validators.required]),
         doc: new FormControl('', [Validators.required]),
         fileName: new FormControl('', [])
@@ -204,6 +215,7 @@ export class ManageCandidateComponent {
     } else {
 
       this.employment_history.removeAt(i);
+      this.calculateTotalExperience();
     }
     // this.employment_history.removeAt(i);
   }
@@ -217,10 +229,12 @@ export class ManageCandidateComponent {
       } else {
         control.addControl('deleted', new FormControl(1));
         control.get('qualification')?.clearValidators();
+        control.get(' qualification_id')?.clearValidators();
         control.get('completion_year')?.clearValidators();
         control.get('university')?.clearValidators();
         control.get('course')?.clearValidators();
         control.get('qualification')?.updateValueAndValidity();
+        control.get(' qualification_id')?.updateValueAndValidity();
         control.get('completion_year')?.updateValueAndValidity();
         control.get('university')?.updateValueAndValidity();
         control.get('course')?.updateValueAndValidity();
@@ -295,13 +309,14 @@ export class ManageCandidateComponent {
     const base64Files: { [key: string]: string } = {};
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i];
+      let control = this.documents.at(i) as FormGroup;
+      control.get('name')?.patchValue(file.name);
       console.log('file: ', file);
       this.resumeFileNames().push(file.name);
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
         base64Files[file.name] = event.target.result.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        let control = this.documents.at(i) as FormGroup;
         control.value.doc = base64Files[file.name]
         control.value.fileName = file.name
       };
@@ -358,8 +373,12 @@ export class ManageCandidateComponent {
     const toDateControl = employmentGroup.get('to_date');
 
     if (event.target.checked) {
+      let date = new Date();
       toDateControl?.clearValidators();
+      toDateControl?.patchValue(this.datePipe.transform(date, 'yyyy-MM-dd'));
+      this.calculateTotalExperience()
     } else {
+      toDateControl?.setValue('');
       toDateControl?.setValidators(Validators.required);
     }
 
@@ -450,6 +469,7 @@ export class ManageCandidateComponent {
                   this.education_detail.push(
                     this.fb.group({
                       qualification: new FormControl('', [Validators.required]),
+                      qualification_id: new FormControl('', [Validators.required]),
                       completion_year: new FormControl('', [Validators.required]),
                       course: new FormControl('', [Validators.required]),
                       university: new FormControl('', [Validators.required]),
@@ -458,6 +478,7 @@ export class ManageCandidateComponent {
                   );
                   this.education_detail.at(index).patchValue({
                     qualification: data?.qualification,
+                    qualification_id: data?.qualification_id,
                     completion_year: data?.completion_year,
                     course: data?.course,
                     university: data?.university,
@@ -752,9 +773,51 @@ export class ManageCandidateComponent {
     }
   }
 
-  selectedQualification(event:any, i:any){
-    const filteredItem = this.qualificationList().filter((item:any) => item?.id == event.target.value) 
+  selectedQualification(event: any, i: any) {
+    const filteredItem = this.qualificationList().filter((item: any) => item?.id == event.target.value)
     let control = this.education_detail.at(i) as FormGroup;
     control?.get('qualification')?.setValue(filteredItem[0]?.qualification);
+  }
+
+  calculateTotalExperience() {
+    let totalMonths = 0;
+    this.employment_history.controls.forEach(control => {
+      let experience = this.calculateExperience(control.value);
+      totalMonths += experience;
+    });
+
+    // Calculate total years and remaining months (decimal)
+    const totalYears = Math.floor(totalMonths / 12);
+    const remainingMonths = totalMonths % 12;
+    this.addCandidateForm.get('total_experience')?.setValue(`${totalYears}.${remainingMonths}`)
+    // const test = Number(`${totalYears}.${remainingMonths}`)
+    // console.log((test))
+   
+
+  }
+
+  calculateExperience(entry: any) {
+    if (entry.to_date !== '' && entry.from_date !== '') {
+      let monthsFrom = 12 - (new Date(entry.from_date).getMonth() + 1);
+      let monthsTo = new Date(entry.to_date).getMonth()+1;
+
+      // Adjust months for 'to' date in the same year but before today (optional)
+      // if (new Date(entry.to_date).getFullYear() === new Date(entry.from_date).getFullYear() && new Date(entry.to_date) < new Date(entry.from_date)) {
+      //   monthsTo = 0;
+      // }
+      let totalMonths = monthsFrom + monthsTo;
+      const years = new Date(entry.to_date).getFullYear() - new Date(entry.from_date).getFullYear();
+      // Consider months exceeding a year
+      totalMonths += (years-1) * 12;
+      return totalMonths;
+    }
+    else {
+      return 0
+    }
+  }
+
+  triggerExperience(event: any) {
+    console.log(event.target.value);
+    this.calculateTotalExperience();
   }
 }

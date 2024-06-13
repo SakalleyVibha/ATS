@@ -342,7 +342,7 @@
                             <div class="form-group-wrap">
                                 <label for="inlineFormInputGroupUsername">Total Experience*</label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" id="autoSizingInput"
+                                    <input type="text" class="form-control" id="autoSizingInput"
                                         placeholder="Enter total year of experience" formControlName="total_experience">
                                     <div *ngIf="(formData['total_experience'].invalid && (formData['total_experience'].touched || formData['total_experience'].dirty || isFieldsValid()))"
                                         class="required-txt-error">
@@ -843,7 +843,7 @@
                                                     <div class="form">
                                                         <div class="">
                                                             <input type="date" class="form-control"
-                                                                formControlName="from_date" id="autoSizingInput">
+                                                                formControlName="from_date" id="autoSizingInput" [max]="getToday()">
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('from_date')?.invalid && (employment.get('from_date')?.dirty || employment.get('from_date')?.touched || isFieldsValid())">
@@ -867,13 +867,15 @@
                                                     <div class="form">
                                                         <div class="">
                                                             <input type="date" class="form-control"
-                                                                formControlName="to_date" id="autoSizingInput">
+                                                                formControlName="to_date" id="autoSizingInput" [max]="getToday()" (change)="triggerExperience($event)">
+                                                            @if((employment_history.controls.length-1) == i){
                                                             <div class="current-date">
                                                                 <p> Currently working </p>
                                                                 <input type="checkbox" id="curr_work"
                                                                     (change)="determineWorkStatus($event, i, 'required')"
                                                                     name="curr_work" />
                                                             </div>
+                                                            }
                                                         </div>
                                                         <div
                                                             *ngIf="employment.get('to_date')?.invalid && (employment.get('to_date')?.dirty || employment.get('to_date')?.touched || isFieldsValid())">
@@ -938,11 +940,15 @@
                                                 <div class="form-group">
                                                     <div class="form">
                                                         <div class="">
-                                                            <select class="form-control" formControlName="qualification_id" (change)="selectedQualification($event, i)">
+                                                            <select class="form-control"
+                                                                formControlName="qualification_id"
+                                                                (change)="selectedQualification($event, i)">
                                                                 <option value="" hidden selected>
                                                                     Select Value</option>
-                                                                @for(qualificationName of qualificationList(); track qualificationName.id){
-                                                                <option [value]="qualificationName?.id">{{qualificationName?.qualification}}</option>
+                                                                @for(qualificationName of qualificationList(); track
+                                                                qualificationName.id){
+                                                                <option [value]="qualificationName?.id">
+                                                                    {{qualificationName?.qualification}}</option>
                                                                 }
                                                             </select>
                                                         </div>
@@ -976,6 +982,10 @@
                                                             <div *ngIf="education.get('completion_year')?.errors?.['required']"
                                                                 class="required-txt-error">
                                                                 Completion year required.
+                                                            </div>
+                                                            <div *ngIf="education.get('completion_year')?.errors?.['max']"
+                                                                class="required-txt-error">
+                                                                Invalid completion year.
                                                             </div>
                                                         </div>
                                                     </div>
