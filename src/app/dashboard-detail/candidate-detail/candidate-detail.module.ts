@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule, DatePipe, NgOptimizedImage } from '@angular/common';
 
 import { CandidateDetailRoutingModule } from './candidate-detail-routing.module';
 import { CandidateDetailComponent } from './candidate-detail.component';
@@ -20,6 +20,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class CandidateDetailModule { }

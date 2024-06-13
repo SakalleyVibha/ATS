@@ -61,4 +61,5 @@ export const STATUS_LIST = [
     {id: 1, value: 0, title: 'Inactive'},
     {id: 2, value: 1, title: 'Active'},
     {id: 3, value: 2, title: 'On hold'},
+    {id: 4, value: 3, title: 'Draft'},
 ]

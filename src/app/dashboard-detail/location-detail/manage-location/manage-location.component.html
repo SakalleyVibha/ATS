@@ -362,14 +362,13 @@
                                 <div *ngIf="formData['zip'].invalid && (formData['zip'].dirty || formData['zip'].touched || isFormValid())"
                                     class="required-txt-error">
                                     <ng-container *ngIf="formData['zip'].errors?.['required']">
-                                        Zip required
+                                        Zip code required
                                     </ng-container>
-                                    <ng-container *ngIf="formData['zip'].errors?.['pattern']">
-                                        Zip required numbers
+                                    <ng-container *ngIf="formData['zip'].errors?.['minlength']">
+                                        Zip code must contain at least 2 numbers
                                     </ng-container>
-                                    <ng-container
-                                        *ngIf="formData['zip'].errors?.['maxlength'] || formData['zip'].errors?.['minlength']">
-                                        Valid zip required
+                                    <ng-container *ngIf="formData['zip'].errors?.['maxlength']">
+                                        Zip code must contain maximum 6 numbers
                                     </ng-container>
                                 </div>
                             </div>
